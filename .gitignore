@@ -1,0 +1,169 @@
+# C++ objects and libs
+*.slo
+*.lo
+*.o
+*.a
+*.la
+*.lai
+*.so
+*.so.*
+*.dll
+*.dylib
+
+# Qt-es
+object_script.*.Release
+object_script.*.Debug
+*_plugin_import.cpp
+/.qmake.cache
+/.qmake.stash
+*.pro.user
+*.pro.user.*
+*.qbs.user
+*.qbs.user.*
+*.moc
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+*.qmlc
+*.jsc
+Makefile*
+*build-*
+*.qm
+*.prl
+
+# Qt unit tests
+target_wrapper.*
+
+# QtCreator
+*.autosave
+
+# QtCreator Qml
+*.qmlproject.user
+*.qmlproject.user.*
+
+# QtCreator CMake
+CMakeLists.txt.user*
+
+# QtCreator 4.8< compilation database 
+compile_commands.json
+
+# QtCreator local machine specific files for imported projects
+*creator.user*
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Visual Studio
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+.vs/
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+*.swp
+*~.nib
+DerivedData/
+build/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+!default.pbxuser
+!default.mode1v3
+!default.mode2v3
+!default.perspectivev3
+xcuserdata/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+
+# Linux
+*~
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+# CMake
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+# Ignore everything in Executables
+Executables/*
+
+# Ignore all .DS_Store files
+*.DS_Store
+
+# Ignore all compiled files in imuSensor/SimpleBLE-main/simpleble
+Codebase/Experimental/imuExp/SimpleBLE-main/simpleble/install_*
+Codebase/Experimental/imuExp/SimpleBLE-main/simpleble/build_*
+
+# Ignore testing files
+ConfigFiles/Position/gen_*
+ConfigFiles/Position/run_*
+ConfigFiles/generated_*
+

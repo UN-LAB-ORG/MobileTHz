@@ -1,0 +1,14 @@
+{
+    "antennaType": "paramDefined",
+    "paramDefined": [
+        {
+            "halfpower_beamwidth_degrees": 1.6,
+            "maximum_gain": 40
+	}
+      ],
+    "csvDefined": [
+        {
+            "name": "NONE"
+	}
+    ]
+}

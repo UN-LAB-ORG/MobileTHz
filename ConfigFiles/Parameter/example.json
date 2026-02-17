@@ -1,0 +1,82 @@
+{
+  "engine_mode": "simulation",
+  "randomgen_seed": 1234,
+  "preset_position_enabled": false,
+  "preset_position_files": [],
+  "JIT_packet_min_snr_db": 9.59,
+  "JIT_packet_reception_delay_us": 10,
+  "link_min_snr_db": 18.8,
+  "engine_slot_time_microsec": 10,
+  "engine_max_time_sec": 10,
+  "engine_carrier_frequency": 130000000000,
+  "engine_bandwidth_frequency": 8000000000,
+  "engine_temperature_kelvin": 290,
+  "experimental": {
+    "role": "AP",
+    "observer_tcp_ip": "127.0.0.1",
+    "observer_tcp_port": 54321,
+    "Rotary_port_azimuth": "/dev/tty.usbserial-FTE8J4ID",
+    "Rotary_port_altitude": "/dev/tty.usbserial-FTE8ZM12",
+    "DSO_measurement_bandwidth": 1000,
+    "DSO_IF_frequency": 1000000000
+  },
+  "engine_unit": [
+    {
+      "label": "AP",
+      "components": {
+        "preset_antenna_enabled": true,
+        "preset_antenna_files": ["13deg21gain.json"],
+        "preset_algorithm_enabled": false,
+        "preset_algorithm_names": ["BASELINE"],
+        "IMU_enabled": true,
+        "RxChain_enabled": true,
+        "RxAntenna_enabled": true,
+        "TxAntenna_enabled": true,
+        "Rotary_enabled": true,
+        "Rotary_azimuth_velocity_degpersec": 720,
+        "Rotary_azimuth_acceleration_degpersecsq": 3600,
+        "Rotary_altitude_velocity_degpersec": 720,
+        "Rotary_altitude_acceleration_degpersecsq": 3600,
+        "IMU_accel_noise_density": 0,
+        "IMU_accel_initial_bias_mean": 0,
+        "IMU_accel_initial_bias_stddev": 0,
+        "IMU_gyro_initial_bias_mean": 0,
+        "IMU_gyro_initial_bias_stddev": 0,
+        "IMU_gyro_noise_density": 0,
+        "IMU_samplingDelay_microsec": 10000,
+        "RxChain_noise_factor": 14.83,
+        "RxChain_samplingDelay_microsec": 10,
+        "TxAntenna_transmitPower_dBm": 13
+      }
+    },
+    {
+      "label": "UE",
+      "algorithm": "baseline",
+      "components": {
+        "preset_antenna_enabled": true,
+        "preset_antenna_files": ["13deg21gain.json"],
+        "preset_algorithm_enabled": false,
+        "preset_algorithm_names": ["BASELINE"],
+        "IMU_enabled": true,
+        "RxChain_enabled": true,
+        "RxAntenna_enabled": true,
+        "TxAntenna_enabled": true,
+        "Rotary_enabled": true,
+        "Rotary_azimuth_velocity_degpersec": 720,
+        "Rotary_azimuth_acceleration_degpersecsq": 3600,
+        "Rotary_altitude_velocity_degpersec": 720,
+        "Rotary_altitude_acceleration_degpersecsq": 3600,
+        "IMU_accel_noise_density": 0,
+        "IMU_accel_initial_bias_mean": 0,
+        "IMU_accel_initial_bias_stddev": 0,
+        "IMU_gyro_initial_bias_mean": 0,
+        "IMU_gyro_initial_bias_stddev": 0,
+        "IMU_gyro_noise_density": 0,
+        "IMU_samplingDelay_microsec": 10000,
+        "RxChain_noise_factor": 14.83,
+        "RxChain_samplingDelay_microsec": 10,
+        "TxAntenna_transmitPower_dBm": 13
+      }
+    }
+  ]
+}

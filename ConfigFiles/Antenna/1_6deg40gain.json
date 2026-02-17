@@ -1,0 +1,14 @@
+{
+  "antennaType": "csvDefined",
+  "paramDefined": [
+    {
+      "halfpower_beamwidth_degrees": -99,
+      "maximum_gain": -99
+    }
+  ],
+  "csvDefined": [
+    {
+      "name": ["1_6deg40gain.csv"]
+    }
+  ]
+}

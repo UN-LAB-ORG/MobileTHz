@@ -1,0 +1,11 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/ICONS">
+        <file>neu.png</file>
+        <file>kth.png</file>
+        <file>unlab.png</file>
+	<file>loading.svg</file>
+        <file>checkmark.svg</file>
+        <file>error.svg</file>
+    </qresource>
+</RCC>

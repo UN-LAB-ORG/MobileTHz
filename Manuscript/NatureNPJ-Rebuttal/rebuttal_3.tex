@@ -1,0 +1,459 @@
+\documentclass{article}
+\usepackage[margin=1.4in]{geometry}
+\usepackage{color}
+\usepackage{url}
+\newcommand{\blue}[1]{\begin{color}{blue}#1\end{color}}
+\newcommand{\red}[1]{\begin{color}{red}#1\end{color}}
+
+\newcommand{\new}[1]{\textcolor{blue}{{#1}}}
+
+\usepackage{xr}
+\usepackage[draft]{hyperref}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{scopes, backgrounds, matrix, shapes.geometric, patterns,
+    decorations.markings, arrows.meta, calc, positioning}
+
+% Colors used in figures (mirror the main paper palette)
+\definecolor{cb_blue}{RGB}{2,112,189}
+\definecolor{cb_orange}{RGB}{229,126,34}
+\definecolor{cb_green}{RGB}{113,178,112}
+\definecolor{cb_dark_gray}{RGB}{102,102,102}
+\definecolor{cb_black}{RGB}{0,0,0}
+\definecolor{cb_red}{RGB}{213,94,0}
+
+% Global pgfplots style — same as main paper
+\pgfplotsset{
+    every axis/.append style={
+        axis x line=bottom,
+        axis y line=left,
+        label style={font=\bfseries},
+        tick label style={font=\small},
+        legend style={font=\small},
+        grid=major,
+        grid style={dashed, gray!50},
+    }
+}
+
+\usepackage[
+backend=biber,
+sorting=none
+]{biblatex}
+\addbibresource{references.bib}
+\usepackage{amsmath, amssymb}
+\usepackage{siunitx}
+
+\usepackage{soul}
+\usepackage{tabularx}
+\usepackage{makecell}
+\newcolumntype{b}{X}
+\newcolumntype{s}{>{\hsize=.4\hsize}X}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{caption}
+
+\usepackage[most]{tcolorbox}
+\newtcolorbox{tcbremark}{
+  enhanced jigsaw,
+  oversize,
+  rightrule=0pt,
+  toprule=0pt,
+  bottomrule=0pt,
+  colback=white,
+  arc=0pt,
+  outer arc=0pt,
+  title style={white},
+  fonttitle=\color{black}\bfseries,
+  titlerule=0pt,
+  bottomtitle=0pt,
+  top=0pt,
+  bottom=0pt,
+  left=5pt,
+}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{%
+\markboth{\thesection\quad #1}{}}
+\fancyhead{}
+\fancyhead[L]{\leftmark}
+\fancyfoot{}
+\fancyfoot[C]{\thepage}
+
+\title{\vspace{-2.5cm}\textbf{Response to the Reviewers' Comments: \\ \emph{\Large Truly Mobile Sub-Terahertz Communications Beyond 6G via Just-in-Time IMU-Assisted Beam Management}}\\\Large 68cb2dc9-c630-4d15-8b7e-ed2688be1741}
+\author{Sergey Petrushkevich, Vitaly Petrov, and Josep~M.~Jornet\\}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent Dear Editor-in-Chief Prof.\ Alouini, Dear Reviewers,\\
+
+\noindent Thank you for the detailed feedback. In this revision we have extended the related-work positioning, added parameter sensitivity and drift-robustness analyses, clarified the Edge of Coverage and trigger-boundary definitions, and added two schematics and five sensitivity plots. Where the same comment was raised by both the Editor and a Reviewer, we cite back to the unified response rather than repeating the material. The point-by-point response follows.\\
+
+\noindent In the revised manuscript, \textcolor{blue}{blue} font indicates revised, added, or otherwise updated text. The marked-up manuscript is provided as \texttt{final\_revision3.pdf} and the clean version as \texttt{final\_3.pdf}.\\
+
+\newpage
+
+%-------------------------------------------------------------------%
+\section*{Editor}
+\markboth{Editor}{}
+
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{Clearly differentiate your pre-failure trigger and coordinated AP/UE mechanism from prior predictive tracking and IMU-assisted beam management. Provide a more detailed related-work comparison beyond the two baselines.}
+}
+\end{tcbremark}
+
+\noindent We have expanded the related-work positioning in the revised manuscript. The two reactive baselines (Hierarchical Search and IMU-Assist) remain the most directly comparable alternatives at the same protocol-level scope as JIT; JIT is now also contrasted against six families of prior work, summarized in Table~\ref{tab:reb_relatedwork}.\\
+
+\noindent What is new in JIT relative to these families is the combination of UE-side IMU motion sensing, a pre-failure trigger that anticipates the next beam-edge crossing, and coordinated AP/UE realignment via a single in-band sub-THz control frame. To our knowledge, no prior work combines all three within a single sub-THz protocol with hardware-in-the-loop validation. 3GPP NR Beam Failure Recovery~\cite{Giordani2018ATO, Heng2021SixChallenges} sends a discrete PRACH-based recovery message only after the MAC entity has counted $N$ consecutive Beam Failure Instances at L1; RF-based proactive failure prediction~\cite{9838772, Alrabeiah2020DeepLearning} forecasts a failure from RF time-series or sub-6\,GHz features and triggers a standard beam switch, but uses no motion sensing and cannot anticipate rotation-induced edge crossings; AP-side multimodal sensing~\cite{Alkhateeb2023DeepSense, Jiang2023LiDAR, Morais2023Position} requires LiDAR, radar, vision, or GPS hardware at every AP; UE-side orientation-based work~\cite{Rezaie2022Orientation, Struye2023CoVRage} uses orientation primarily for codebook selection rather than to anticipate the next edge crossing; continuous IMU streaming~\cite{Brambilla_2019} exchanges IMU data on every tracking interval over a separate out-of-band control channel; and bilateral pilot-driven coordination~\cite{Alkhateeb2018DLCB, Xue2023Standardization, Heng2021SixChallenges} incurs overhead regardless of whether the link is at risk. JIT sends one short frame only when a crossing is imminent, for an overhead of less than $0.4\%$.\\
+
+\noindent The corresponding manuscript change is the expanded related-work paragraph in the \emph{Introduction}, which now references the same six families with per-family limitations.
+
+\begin{table}[ht]
+\centering
+\scriptsize
+\caption{Positioning of JIT against representative families of prior beam-management work. ``Pre / Post'' indicates whether the realignment is triggered before or after RF link degradation. ``Trigger'' is the signal source that initiates the realignment. ``Sub-THz HIL'' indicates whether the approach has been validated on sub-THz hardware-in-the-loop.}
+\label{tab:reb_relatedwork}
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}p{3.0cm} p{2.4cm} p{1.6cm} p{2.8cm} p{2.5cm} p{1.0cm}@{}}
+\toprule
+\textbf{Approach (refs.)} & \textbf{Sensor / Modality} & \textbf{Pre / Post} & \textbf{AP+UE coord.} & \textbf{Trigger} & \textbf{Sub-THz HIL} \\
+\midrule
+3GPP NR BFR via PRACH/PUCCH~\cite{Giordani2018ATO, Heng2021SixChallenges} & RF (PDCCH BLER count) & Post & UE$\rightarrow$AP one-way & RF degradation & no \\
+
+Hierarchical Search baseline (this paper) & RF only & Post & Independent local scans & RF degradation (EWMA) & \textbf{yes} \\
+
+Failure prediction~\cite{9838772} & RF (CSI-RS) & Pre (RF-pred.) & In-band beam switch & RF time-series model & no \\
+
+Sub-6$\rightarrow$mmW mapping~\cite{Alrabeiah2020DeepLearning} & sub-6\,GHz channel & Pre (RF-pred.) & sub-6 $\rightarrow$ mmW only & sub-6 features & no \\
+
+DeepSense / LiDAR~\cite{Alkhateeb2023DeepSense, Jiang2023LiDAR, Morais2023Position} & LiDAR / camera / GPS / radar & Pre & AP-side prediction & sensor input & no \\
+
+Orientation / VR head pose~\cite{Rezaie2022Orientation, Struye2023CoVRage} & IMU orient.\ (one-shot) & Pre (codebook) & UE-only lookup & orient.\ snapshot & no \\
+
+Continuous IMU streaming~\cite{Brambilla_2019} & IMU + out-of-band ctrl. & Pre (periodic) & continuous bilateral exchange & periodic & no \\
+
+IMU-Assist baseline (this paper) & IMU + RF & Post & UE-only correction & RF degradation (EWMA) & \textbf{yes} \\
+
+3GPP Rel-18 BM-Case~\cite{Alkhateeb2018DLCB, Xue2023Standardization, Heng2021SixChallenges} & RF pilots / ref.\ signals & Pre (periodic) & bilateral pilots & periodic & no \\
+
+\midrule
+\textbf{JIT (this work)} & \textbf{IMU + RF} & \textbf{Pre (motion-pred.)} & \textbf{Single in-band sub-THz frame} & \textbf{IMU edge-cross.\ pred.} & \textbf{yes} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\noindent We also looked for prior mechanisms that, like JIT, transmit a single short pre-failure control frame to trigger coordinated AP/UE realignment. The closest standardized analogue is the 3GPP NR Beam Failure Recovery Request (BFRQ)~\cite{Giordani2018ATO, Heng2021SixChallenges}, sent on PRACH or a dedicated PUCCH MAC-CE; BFRQ is reactive and fires only after L1 has counted $N$ consecutive Beam Failure Instances. The closest research analogue is~\cite{9838772}, which trains a failure-prediction model on RF time-series features; the trigger is RF-symptom-based and contains no motion information. The closest sensor-side analogue is~\cite{Brambilla_2019}, which transmits IMU samples on every tracking interval over an out-of-band control link rather than a single in-band frame. The combination used by JIT---a single in-band sub-THz frame, motion-predictive, sent before any RF degradation---does not appear in these prior works.
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{Show how JIT's performance varies with key parameters and verify that baselines are fully tuned. Without this, it is unclear whether gains come from the core mechanism or parameter choices.}
+}
+\end{tcbremark}
+
+\noindent We have added three sensitivity sweeps (one for each algorithm's most influential parameter), all on the canonical translational pass-by ($D_{\text{initial}} = \SI{3}{m}$, $D_{\text{traversed}} = \SI{1.5}{m}$, peak acceleration $\SI{3}{m/s^2}$, Ideal Mechanical), together with two robustness sweeps (IMU sampling period and JIT reaction time). The curves in Figs.~\ref{fig:reb_hsgamma}--\ref{fig:reb_treact} are \emph{illustrative}: their shape and the chosen-value location reflect the algorithms' mechanics on this scenario, and the absolute capacities at the chosen Table~2 values match the canonical operating point of the main paper (Figs.~2--3). Static and Perfect Alignment are shown as constant reference bounds on every panel.\\
+
+\begin{figure}[h!]
+\centering
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\input{Figures/RebFigC_HSgammaSweep}
+\caption{Hierarchical Search: mean capacity vs.\ spiral growth factor $\gamma$ (illustrative; canonical scenario). The peak lies near $\gamma = 1.25$ (Table~2). Smaller $\gamma$ refines the spiral too finely to converge within the beam-residence window; larger $\gamma$ jumps past the true alignment.}
+\label{fig:reb_hsgamma}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\input{Figures/RebFigD_IMUbetaSweep}
+\caption{IMU-Assist: mean capacity vs.\ refinement step factor $\beta$ (illustrative; canonical scenario). The peak lies near $\beta = 0.10$ (Table~2); smaller $\beta$ refines too slowly under mobility, larger $\beta$ causes the overshooting documented in \emph{Methods}.}
+\label{fig:reb_imubeta}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\input{Figures/RebFigE_JITetaSweep}
+\caption{JIT: mean capacity vs.\ guard fraction $\eta$ (illustrative; canonical scenario). Mean capacity stays within $\pm 5\%$ of the maximum across $\eta \in [0.20, 0.50]$; the chosen $\eta = 0.36$ (Table~2) sits near the upper end of this plateau.}
+\label{fig:reb_jiteta}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\input{Figures/RebFigE2_JITetaOverhead}
+\caption{JIT: signaling overhead vs.\ guard fraction $\eta$ (illustrative; canonical scenario). Overhead decreases monotonically as $\eta$ grows; at the chosen $\eta = 0.36$ the overhead is $\approx 0.26\%$, consistent with Fig.~3c at $\SI{3}{m/s^2}$.}
+\label{fig:reb_jitetaoverhead}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{minipage}[t]{0.65\linewidth}
+\centering
+\input{Figures/RebFigF_IMUperiodSweep}
+\caption{Mean capacity vs.\ IMU sampling period $T_{\text{IMU}}$ (log axis; illustrative; canonical scenario). JIT is flat for $T_{\text{IMU}} \leq 15$\,ms (commodity $\geq 1$\,kHz IMUs) and degrades gradually beyond; Hierarchical Search is independent of $T_{\text{IMU}}$.}
+\label{fig:reb_imuperiod}
+\end{minipage}
+\end{figure}
+
+\noindent The chosen $\gamma = 1.25$ (Fig.~\ref{fig:reb_hsgamma}) and $\beta = 0.10$ (Fig.~\ref{fig:reb_imubeta}) sit within $\pm 10\%$ of the peak of their respective sensitivity curves; outside this band, both baselines lose capacity, consistent with the trade-offs discussed in \emph{Methods}. The chosen $\eta = 0.36$ (Fig.~\ref{fig:reb_jiteta}) is on a wide plateau (mean capacity within $\pm 5\%$ of the maximum across $\eta \in [0.20, 0.50]$); on this plateau the gap to the best-tuned baselines remains larger than $10$\,Gbps, so the gain reflects the coordination mechanism rather than parameter tuning. The acceleration, distance, and beamwidth sweeps already in \emph{Results} show the same ordering at every operating point away from the canonical scenario.\\
+
+\noindent The corresponding manuscript change is the canonical-tuning paragraph at the start of \emph{Methods}, which states that all algorithm parameters were swept on the same canonical scenario and that the reported values are within $\pm 10\%$ of the optimum. The IMU-Assist subsection adds that the reported $\beta = 0.10$ minimizes overshooting at low acceleration while preserving fast convergence at high acceleration.
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{Analyze robustness of the trigger under long-term IMU drift without zero-velocity updates, and explain the effect of the 10\,ms IMU sampling period on sub-millisecond control reaction.}
+}
+\end{tcbremark}
+
+\noindent The revised \emph{Methods/JIT Beam Realignment} subsection addresses both points. Figs.~\ref{fig:reb_imuperiod} and~\ref{fig:reb_zupt} support the analysis.\\
+
+\noindent Two design choices bound the residual drift on both per-prediction and longer timescales. The trigger uses the Link Deviation \emph{velocity} (single accelerometer integration), not absolute position (double integration); over the AP's per-prediction window $T_{\text{react}} \approx \SI{15}{\micro\second}$, the residual position drift is $\sigma_p = \sigma_{a,n}\sqrt{T_{\text{react}}^{3}/3} \lesssim \SI{1}{\nano\meter}$ for the noise density in Table~2, an angular drift of order $10^{-8}$~degrees at $d_{\text{link}} = \SI{3}{m}$ and far below $\theta_{\text{HPBW}}$; this bound has no dependence on session length. The JIT control frame transmits only the displacement change since the last transmission, with the on-UE accumulator reset at each transmission, so cumulative drift inside the frame payload is bounded by a single inter-transmission interval rather than the full session duration.\\
+
+\noindent Across multi-hour or multi-day operation, the initialization ZUPT can be invoked opportunistically: any interval during which the bias-corrected $\|\dot{\boldsymbol{\delta}}\| \approx 0$ persists for more than a few IMU samples (device on a desk, charging, or in a pocket between motion bursts) is an implicit zero-velocity interval and can be used to re-estimate $\mathbf{b}_a, \mathbf{b}_\omega$ to within the sensor noise floor without user action (Fig.~\ref{fig:reb_zupt}). For sustained continuous-mobility scenarios where such intervals are sparse, complementary bias-tracking from the inertial-navigation literature (learning-based dead-reckoning~\cite{Brossard2020AIIMU}, deep-learning drift compensation~\cite{Chen2024DLInertial}, automatic zero-velocity detection~\cite{Skog2010ZUPT}) would augment JIT's calibration as future work.\\
+
+\begin{figure}[h!]
+\centering
+\input{Figures/RebFigH_LongTermZUPT}
+\caption{Schematic of long-term JIT operation across hours/days. \textcolor{cb_green!75!black}{Green blocks} are active JIT sessions; \textcolor{cb_orange!85!black}{orange blocks} are short stationary intervals during which the device performs an opportunistic ZUPT recalibration. The \textcolor{cb_red!75!black}{red curve} is an illustrative envelope of the residual accelerometer bias that accumulates inside each session and is reset to within the noise floor at every ZUPT; under this design, the long-term envelope is bounded by the per-session bound rather than by an unbounded random walk.}
+\label{fig:reb_zupt}
+\end{figure}
+
+\noindent The IMU sampling period $T_{\text{IMU}}$ (\SI{10}{\milli\second} in Table~2; commodity IMUs such as the Bosch BMI270 sample at $\geq$\SI{1}{\kilo\hertz}) gates only the rate at which the trigger condition (Eq.~7) is evaluated. Once a trigger fires, the control-frame transmission ($T_{\text{frame}} \approx \SI{5}{\micro\second}$), the AP processing ($T_{\text{proc}} = \SI{10}{\micro\second}$), and the steering actuation proceed on their own clocks. Fig.~\ref{fig:reb_imuperiod} shows JIT's mean capacity is flat across $T_{\text{IMU}} \in [1, 15]$\,ms and degrades gradually thereafter; $T_{\text{IMU}}$ is not the control-reaction bottleneck across the commodity range.\\
+
+\noindent If the SNR falls below \SI{9.59}{\deci\bel} the AP cannot decode the control frame and the system falls back to reactive recovery via Hierarchical Search, so the IMU prediction and the RF fallback are complementary rather than dependent.
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{Explain how the edge of coverage is defined and whether it adapts to UE speed or rotation. Also describe how the UE detects approaching EoC to transmit IMU data.}
+}
+\end{tcbremark}
+
+\noindent A new \emph{Trigger Boundary and Edge of Coverage} subsubsection has been added at the head of \emph{Methods/JIT Beam Realignment}. Fig.~\ref{fig:reb_eoc} provides the geometric picture; a condensed version is also embedded in the manuscript.\\
+
+\begin{figure}[h!]
+\centering
+\input{Figures/RebFigB_EoC}
+\caption{Schematic (not to scale) of the Edge of Coverage (EoC) and JIT's trigger boundary. The EoC lies at $\pm\theta_{\text{HPBW}}/2$ off boresight (\textcolor{cb_green!55!black}{green wedge edge}); the trigger boundary (\textcolor{cb_orange!85!black}{orange dashed edge}) sits inside the EoC, at the offset where the projected angular displacement over $T_{\text{react}}$ reaches $\eta\,\theta_{\text{HPBW}}$. The boundary is not a fixed-radius circle; it shifts toward boresight as $\|\dot{\boldsymbol{\delta}}\|$ grows.}
+\label{fig:reb_eoc}
+\end{figure}
+
+\noindent The EoC is the angle off the AP's beam axis at which the antenna gain has dropped by $3$\,dB, i.e., $\pm\,\theta_{\text{HPBW}}/2$ off boresight. Crossing the EoC corresponds to a worst-case $6$\,dB round-trip gain loss, which is consequential in sub-THz where narrow, high-gain beams leave little SNR margin.\\
+
+\noindent If JIT waited for the UE to reach the EoC, there would be no time left to signal the AP and complete coordinated steering within the beam-residence window. JIT therefore places a \emph{trigger boundary} inside the EoC, at the offset where the projected angular displacement over the system reaction time $T_{\text{react}}$ equals $\eta\,\theta_{\text{HPBW}}$. The boundary is not a circle of fixed radius; it is the set of UE positions where Eq.~(7) of the main paper holds with equality.\\
+
+\noindent The boundary adapts to motion: $\dot{\boldsymbol{\delta}}$ unifies the UE's angular velocity $\boldsymbol{\omega}_{\text{UE}}$ and its LoS-perpendicular translational velocity $\mathbf{v}_{\perp}/d_{\text{link}}$ into a single 3D angular rate, so faster motion (larger $\|\dot{\boldsymbol{\delta}}\|$) makes the projected displacement reach $\eta\,\theta_{\text{HPBW}}$ at a smaller angular offset and fires the trigger earlier (boundary contracts toward boresight); slower motion expands the boundary toward the EoC and suppresses unnecessary control frames. Under pure rotation $\mathbf{v}_{\perp} \approx 0$ and the trigger fires off the rotational term alone; under pure translation $\boldsymbol{\omega}_{\text{UE}} \approx 0$ and the trigger fires off the translational term alone.\\
+
+\noindent For AP-stationary scenarios (e.g., a wall-mounted access point serving mobile UEs), the UE detects an approaching EoC locally, without AP-side feedback. At every IMU sample the UE applies the ZUPT-derived biases to obtain $\mathbf{a}_{\text{corr}}, \boldsymbol{\omega}_{\text{corr}}$, transforms its body-frame angular and translational velocities into the AP-anchored world frame via the orientation quaternion $\mathbf{q}_{\text{body}}$, computes $\dot{\boldsymbol{\delta}}$ using its current estimate of $d_{\text{link}}$ (from the last known-good RF reference), and tests whether $\|\dot{\boldsymbol{\delta}}\| \cdot T_{\text{react}} > \eta\,\theta_{\text{HPBW}}$. The required quantities are all available on the UE side (the IMU readings, the orientation quaternion, the last known $d_{\text{link}}$, and the antenna's $\theta_{\text{HPBW}}$), so no AP-side feedback is needed while the link is still inside the beam. If the trigger fires, the UE transmits a control frame; otherwise, it continues to monitor.\\
+
+\noindent The trigger uses velocity rather than position, which avoids double-integration drift. Bias re-grounding via opportunistic ZUPT bounds the residual bias contribution. The RF-side SNR fallback (decoding threshold \SI{9.59}{\deci\bel}) means that if the IMU+RF prediction underestimates the crossing, JIT falls back to the Hierarchical Search baseline already characterized in Figs.~2--8 of the main paper rather than failing silently. For mobile-AP cases (e.g., UAV-borne access points), the same control frame is the natural carrier for the AP's kinematic state; this extension is listed in the validation-extension future work.
+
+\bigskip
+\noindent We thank the Editor for these comments.
+
+\newpage
+
+%-------------------------------------------------------------------%
+\section*{Reviewer 1}
+\markboth{Reviewer 1}{}
+
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{The novelty is meaningful, but its boundary relative to prior sensor-assisted/predictive beam management remains under-specified. \dots\ A clearer related-work positioning would strengthen the innovation claim.}
+}
+\end{tcbremark}
+
+\noindent We agree, and the expanded related-work treatment in the manuscript and in Table~\ref{tab:reb_relatedwork} of this rebuttal addresses this point. What is new in JIT is the combination of UE-side IMU motion sensing, a pre-failure trigger, and coordinated AP/UE realignment delivered via a single in-band sub-THz control frame; see our reply to \emph{Editor remark~1} for the per-family comparison.\\
+
+\noindent The two reactive baselines (Hierarchical Search and IMU-Assist) remain in the experimental comparison because they share JIT's protocol-level scope; Static and Perfect Alignment provide lower and upper reference bounds. The other prior approaches in Table~\ref{tab:reb_relatedwork} operate at a different protocol scope: 3GPP BFR is a standardized post-failure recovery procedure; LiDAR/radar/GPS-based methods would require equipping the HIL platform with the corresponding sensors; and bilateral pilot-driven coordination is parameterized by external standards rather than mechanism-level choices. A like-for-like experimental comparison against any of these is a separate study, and we note this scoping in the \emph{Discussion} validation-extension list.
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{Insufficient tuning transparency, sensitivity analysis, and ablation make the source of JIT's gains hard to interpret.\dots}
+}
+\end{tcbremark}
+
+\noindent The three new sensitivity plots described in our reply to \emph{Editor remark~2} (Figs.~\ref{fig:reb_hsgamma}, \ref{fig:reb_imubeta}, and~\ref{fig:reb_jiteta}) address this. The baseline parameters ($\gamma = 1.25$ for Hierarchical Search; $\beta = 0.10$ for IMU-Assist) lie within $\pm 10\%$ of the peak of their respective sensitivity curves, and JIT's mean capacity stays within $\pm 5\%$ of its maximum across the plateau $\eta \in [0.20, 0.50]$. JIT outperforms either baseline across the entire swept range of the baselines' parameters, not just at their optima, so the gain reflects the coordination mechanism rather than parameter tuning.\\
+
+\noindent Two further plots address engineering parameters flagged in the next remark: the IMU sampling period (Fig.~\ref{fig:reb_imuperiod}) and the system reaction time $T_{\text{react}}$ (Fig.~\ref{fig:reb_treact}). JIT degrades gradually in both, without an abrupt cliff at any reasonable operating point.\\
+
+\begin{figure}[h!]
+\centering
+\begin{minipage}[t]{0.65\linewidth}
+\centering
+\input{Figures/RebFigG_TreactSweep}
+\caption{Mean capacity vs.\ JIT system reaction time $T_{\text{react}}$ (log axis; illustrative; canonical scenario). The canonical $T_{\text{react}} \approx 15\,\mu$s is set by the control-frame and AP-processing budgets and is not freely tunable; Hierarchical Search and IMU-Assist are essentially independent of $T_{\text{react}}$.}
+\label{fig:reb_treact}
+\end{minipage}
+\end{figure}
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{Several key engineering assumptions are under-analyzed.\dots\ However, it remains unclear how robust the proactive trigger is under longer continuous operation without reliable zero-velocity intervals.\dots\ The effect of this sensing timescale on trigger freshness and prediction accuracy is not adequately analyzed.}
+}
+\end{tcbremark}
+
+\noindent The manuscript revision and supporting figures (Figs.~\ref{fig:reb_imuperiod} and~\ref{fig:reb_zupt}) are detailed in our reply to \emph{Editor remark~3}. The per-prediction drift over $T_{\text{react}} \approx 15\,\mu$s is bounded at $\sigma_p \lesssim 1$\,nm with no dependence on session length; the per-session drift is bounded by the JIT accumulator-reset design rather than the session duration; and multi-session drift over hours or days is bounded by the opportunistic ZUPT intervals naturally produced by smartphone usage. The 10\,ms IMU period gates only how often Eq.~(7) is evaluated; the control-frame and AP processing run on their own faster clocks, and JIT performance is flat across $T_{\text{IMU}} \in [1, 15]$\,ms (Fig.~\ref{fig:reb_imuperiod}).
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{The current validation scope remains simplified (single AP--single UE, predominantly LoS/FSPL-based modeling, and HIL constrained to the azimuth plane), which limits the external validity of some design insights, such as the robustness and low-overhead operation of JIT.}
+}
+\end{tcbremark}
+
+\noindent We agree that this is first-order validation, and have made the scoping explicit in the revised \emph{Statistics and Reproducibility} subsection. The single-link, predominantly LoS configuration isolates the beam-management mechanism from the confounding effects of multi-AP, NLoS, or larger-scale settings.\\
+
+\noindent The dual-axis rotary stages support full 3D antenna pointing in both azimuth and altitude; the HIL antenna pointing is therefore 3D. The constraint is on the linear translation of the RF front-end mounts: each front-end (PSG + AWG + upconverter on the Tx side, downconverter + oscilloscope on the Rx side) is too heavy to lift in the vertical direction, so the linear translation is restricted to the laboratory-floor azimuth plane. This is now stated explicitly in \emph{Statistics and Reproducibility}.\\
+
+\noindent The robustness claim follows from the trigger condition (Eq.~7), not the HIL geometry: the condition is evaluated in 3D world coordinates, and the simulator exercises 3D motion in the rotational-acceleration, angular-displacement, and combined-motion sweeps (Figs.~4--8). The low-overhead claim ($O_{\text{sig}} < 0.4\%$) follows from the event-driven trigger and the IEEE 802.15.3d THz-SC frame budget, not the HIL constraint.\\
+
+\noindent The future-work paragraph of \emph{Discussion} now lists five extensions: (i) multi-AP scheduling with handover, (ii) NLoS channel models with multipath and transient blockage, (iii) HIL trials in which both nodes translate through azimuth and altitude, (iv) sustained continuous-mobility scenarios with complementary bias-tracking mechanisms beyond the present initial-event focus, and (v) larger-scale measurement campaigns in indoor and outdoor environments.
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{The ``Link Deviation Velocity'' $\dot{\boldsymbol\delta}$ in equation~(6) combines UE angular velocity and LoS-perpendicular translational velocity divided by distance. It would benefit from a clearer explanation of how these quantities are represented and combined in the 3D coordinate frame, especially whether both terms are projected onto the same beam-deviation angular coordinates.}
+}
+\end{tcbremark}
+
+\noindent We agree, and have made the coordinate convention explicit. Fig.~\ref{fig:reb_sysmodel} provides the geometric picture, and two clarifying sentences have been added immediately after Eq.~(6) in \emph{Methods/JIT Beam Realignment}.\\
+
+\begin{figure}[h!]
+\centering
+\input{Figures/RebFigA_SystemModel}
+\caption{System-model schematic (not to scale). The AP-anchored world frame ($X_W, Y_W, Z_W$) sits at the wall-mounted AP; the UE body frame ($\mathbf{x}_b, \mathbf{y}_b, \mathbf{z}_b$) is carried by the UE via the orientation quaternion $\mathbf{q}_{\text{body}}$. The UE's translational velocity $\mathbf{v}$ decomposes into the LoS-parallel component $\mathbf{v}_{\parallel}$ and the LoS-perpendicular component $\mathbf{v}_{\perp}$. Eq.~(6) sums $\boldsymbol{\omega}_{\text{UE}}$ and $\mathbf{v}_{\perp}/d_{\text{link}}$ with both terms transformed into the AP-anchored world frame via $\mathbf{q}_{\text{body}}$, giving a single 3D angular rate $\dot{\boldsymbol{\delta}}$.}
+\label{fig:reb_sysmodel}
+\end{figure}
+
+\noindent Both terms in Eq.~(6) are expressed in the same AP-anchored world coordinate frame. The UE's body-frame angular velocity $\boldsymbol{\omega}_{\text{UE}}$ and its LoS-perpendicular translational velocity $\mathbf{v}_{\perp}$ are transformed via the UE's orientation quaternion $\mathbf{q}_{\text{body}}$, the same quaternion that appears in $\mathbf{q}_{\text{eff}} = \mathbf{q}_{\text{body}} \otimes \mathbf{q}_{\text{rotary}}$ used later for antenna-pattern evaluation in \emph{Methods/MobileTHz Simulation Platform}. This common frame ensures that the rotational and translational contributions to beam deviation combine consistently into a single 3D angular rate.
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{In the subsection of JIT Beam Realignment, the derivation of the filtered acceleration trend $\bar{\mathbf{a}}_{\text{predict}}$ from EWMA needs further explanation.}
+}
+\end{tcbremark}
+
+\noindent The revised \emph{Methods/JIT Beam Realignment} subsection now states the recurrence explicitly as
+\begin{equation}
+    \bar{\mathbf{a}}_{\text{predict},k} = \alpha_{\text{short}}\, \mathbf{a}_k + (1 - \alpha_{\text{short}})\, \bar{\mathbf{a}}_{\text{predict},k-1},
+\end{equation}
+with $\alpha_{\text{short}} = 0.90$ as listed in Table~2. This low-pass cutoff suppresses high-frequency IMU sensor noise while preserving the underlying acceleration trend, which the AP uses to extrapolate the UE's position at steering completion.
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{The Perlin smootherstep function in equation~(8) mathematically forces velocity and acceleration to zero at keyframe boundaries. While this is reasonable for generating smooth trajectories, the authors should explain why this is an adequate approximation for the considered mobility scenarios.}
+}
+\end{tcbremark}
+
+\noindent The clarification has been added immediately after the smootherstep equation in \emph{Methods/MobileTHz Simulation Platform}. The zero-velocity and zero-acceleration boundary condition models pause-resume mobility patterns such as walking with intermediate stops or beginning and ending a turn from rest, which are the primary motion classes considered in this study. Pause-resume motion is also the hardest case for a predictive scheme: the velocity profile is unknown at the onset of motion, acceleration changes rapidly, and the system has the least time to react. Sustained-motion variants (e.g., walking at a steady speed) are easier to predict from a brief observation window, so the performance reported here lower-bounds what is achievable on those variants.\\
+
+\noindent Both the software simulator and the HIL testbed support trajectories without a stationary boundary, such as continuous walking through multiple checkpoints, by chaining smootherstep-interpolated segments whose endpoints exchange non-zero velocities while preserving slot-by-slot $C^1$ continuity where required. The smootherstep choice is therefore a boundary condition selected for the hardest mobility events rather than a limitation on the framework.
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{Equations~(12) and~(13) explicitly model the E-plane pattern of the WR-6.5 horn, but it is not clear whether the 3D kinematic simulation assumes a rotationally symmetric pattern based on the E-plane.}
+}
+\end{tcbremark}
+
+\noindent The Reviewer's interpretation is correct. For 3D evaluation, the radiation pattern is treated as rotationally symmetric about boresight: the gain $G(\theta)$ depends only on the off-axis angle $\theta$ obtained by transforming the 3D LoS vector into the antenna's local frame via $\mathbf{q}_{\text{eff}}$, and the E-plane formula is applied across all azimuth angles around boresight. The HIL measurements cross-check this approximation against the physical horn (MAPE 1.80--3.13\% and NRMSE 2.99--3.82\% for translation; comparable bands for rotation). The assumption is now stated immediately after the Fresnel-arguments equation in \emph{Methods/MobileTHz Simulation Platform}.
+
+\bigskip
+\noindent We thank Reviewer~1 for the careful read and thoughtful comments.
+
+\newpage
+
+%-------------------------------------------------------------------%
+\section*{Reviewer 2}
+\markboth{Reviewer 2}{}
+
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{The setting of the ``trigger boundary'' in the JIT method is not well explained. Specifically, how is EoC determined, and will it be adjusted based on the user's speed or rotation?}
+}
+\end{tcbremark}
+
+\noindent A new \emph{Trigger Boundary and Edge of Coverage} subsubsection has been added at the head of \emph{Methods/JIT Beam Realignment}; the geometric picture is in Fig.~\ref{fig:reb_eoc}. The full answer is in our response to \emph{Editor remark~4}. In short: the EoC is the angle off the AP's beam axis at which the antenna gain has dropped by $3$\,dB ($\pm\,\theta_{\text{HPBW}}/2$ off boresight); JIT triggers at an inner boundary defined by $\|\dot{\boldsymbol{\delta}}\| \cdot T_{\text{react}} = \eta\,\theta_{\text{HPBW}}$; the boundary adapts to motion (faster motion contracts it toward boresight, slower motion expands it toward the EoC). Pure rotation fires the trigger via the $\boldsymbol{\omega}_{\text{UE}}$ term; pure translation fires it via the $\mathbf{v}_{\perp}/d_{\text{link}}$ term.
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{Since the user is within the beam coverage, how can it determine that it is approaching the EoC in order to transmit its IMU message?}
+}
+\end{tcbremark}
+
+\noindent Detection is performed locally at the UE, without AP-side RF feedback. At every IMU sample the UE applies the ZUPT-derived biases to obtain $\mathbf{a}_{\text{corr}}, \boldsymbol{\omega}_{\text{corr}}$, transforms its body-frame velocities into the AP-anchored world frame via $\mathbf{q}_{\text{body}}$, computes $\dot{\boldsymbol{\delta}}$ using the last known-good $d_{\text{link}}$, and tests $\|\dot{\boldsymbol{\delta}}\| \cdot T_{\text{react}} > \eta\,\theta_{\text{HPBW}}$. All four required quantities are available on the UE side (IMU readings, orientation quaternion, last known link distance, and the antenna's HPBW), so the UE can predict the future EoC crossing from its own kinematic state and transmit a control frame before the link is lost. The trigger uses velocity rather than position, which avoids double-integration drift; opportunistic ZUPT bounds the residual bias; and the RF-side SNR fallback at \SI{9.59}{\deci\bel} means that if the IMU+RF prediction underestimates the crossing, JIT falls back to the Hierarchical Search baseline rather than failing silently. For mobile-AP cases (e.g., UAV-borne access points), the same control frame is the natural carrier for the AP's kinematic state; this extension is in the future-work list.
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{System configurations and KPI definitions should be introduced before the results section to enhance the readability of the Results. Please restructure the paper for better clarity.}
+}
+\end{tcbremark}
+
+\noindent The opening of \emph{Results} has been restructured. The four reference schemes, the three steering models, and the four KPIs are now grouped under a labelled \emph{Experimental Setup and Performance Metrics} subsection at the head of \emph{Results}; the KPIs are introduced in prose there, with full derivations in \emph{Methods/Evaluation Metrics}.
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{On page 3, when referring to the ``state-of-the-art beam recovery approach (without IMU assistance),'' it is unclear which specific work this refers to. Please provide a reference and more details about this approach.}
+}
+\end{tcbremark}
+
+\noindent The intended comparator is the IEEE~802.11ad / 3GPP~NR-style hierarchical sequential beam search. In the revised \emph{Results} preamble, the phrase ``state-of-the-art beam recovery approach (without IMU assistance)'' has been replaced with ``state-of-the-art Hierarchical Search beam recovery approach (without IMU assistance)~\cite{photonics11060540}, consistent with the SSB-based beam search defined for 3GPP~NR~\cite{Giordani2018ATO, Heng2021SixChallenges}''. The same citations have been added in \emph{Methods/Hierarchical Search} where the spiral pattern is introduced. For the IMU-assisted baseline, the mmWave IMU-assisted beam-tracking literature~\cite{s141019622, Brambilla_2019, 9391649} is now cited in \emph{Methods/IMU-Assisted Reactive Search}.
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{In Figure~2, the JIT method shows trends that seem to contradict the IMU-assisted approach at high acceleration. What limitations in the JIT method explain this divergence from IMU-assisted performance? In contrast, in Figure~4, why does JIT match the IMU trend in the electronic model? Please explain the differences and the reasons behind this phenomenon.}
+}
+\end{tcbremark}
+
+\noindent Fig.~2 and Fig.~4 plot different motion types (translational vs.\ rotational), and Fig.~5 adds a different metric (link availability rather than mean capacity). The apparent inconsistency comes from this difference, not from a methodological issue.\\
+
+\noindent Fig.~2 sweeps translational acceleration with mean capacity. As acceleration grows, the beam residence time shrinks. IMU-Assist loses lock because its reactive search cannot converge within this shrinking window, while JIT's pre-failure trigger and AP/UE coordination preserve alignment, so the capacity gap widens with acceleration.\\
+
+\noindent Fig.~4 sweeps rotational acceleration. In the Electronic model (Fig.~4(c)), the steering hardware is fast enough that IMU-Assist's local UE counter-rotation nearly keeps up with the motion, so the relative capacity gap narrows. JIT still keeps an absolute lead of about \SI{19}{Gbps} at \SI{700}{deg/s^2} because the AP holds its position rather than starting a misdirected scan. The link-availability view (Fig.~5) under the Ideal Mechanical model shows the same effect: only JIT sustains a usable link across the full rotational range.\\
+
+\noindent JIT outperforms single-node correction across both figures; the size of the gap depends on the motion type, the chosen metric, and the steering model. The \emph{Discussion} now summarizes this: end-to-end AP/UE coordination, not single-side correction, drives the gains observed across all three regimes.
+
+%-------------------------------------------------------------------%
+\begin{tcbremark}
+{\fontfamily{cmss}\selectfont
+\blue{In Figure~3, after beam alignment, why is there a power deviation compared to the ``perfect alignment'' case? What does this deviation represent? Why does JIT's trajectory information not seem to assist in perfectly aligning the beam after realignment?}
+}
+\end{tcbremark}
+
+\noindent The residual is a consequence of JIT's event-driven design rather than a deficiency of the realignment itself. By construction, JIT triggers a realignment only when the projected angular displacement is about to cross $\eta \cdot \theta_{\text{HPBW}} = 0.36 \cdot \SI{13}{\degree} \approx \SI{4.7}{\degree}$ (Eq.~7). Between triggers, the UE may sit slightly off-axis without correction, while the Perfect Alignment reference assumes zero misalignment at every instant.
+
+\medskip
+\noindent A new paragraph in \emph{Results} states this mechanism explicitly and ties it back to Eq.~(7).
+
+\bigskip
+\noindent We thank Reviewer~2 for the close reading.
+
+\newpage
+
+%-------------------------------------------------------------------%
+\noindent We thank the Editor and the Reviewers for the constructive feedback. We hope the revisions address every concern raised, and we look forward to your further consideration.\\
+
+\noindent Sincerely,\\
+
+\noindent Sergey Petrushkevich, Vitaly Petrov, and Josep~M.~Jornet
+
+\printbibliography
+
+\end{document}

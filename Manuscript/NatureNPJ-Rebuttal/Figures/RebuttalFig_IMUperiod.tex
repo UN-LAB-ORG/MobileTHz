@@ -1,0 +1,61 @@
+% JIT robustness to IMU sampling period. Sweeps the IMU sampling rate
+% from 1 ms to 100 ms while keeping all other parameters at Table 2.
+% Confirms that 10 ms (the value used in the main results) lies in a
+% wide plateau where mean capacity changes by <3% relative to a 1 ms
+% (commodity 1 kHz IMU) sample rate. Directly addresses Reviewer 1 R1.3
+% and Editor #3 on the 10 ms vs sub-millisecond timescale comparison.
+\begin{tikzpicture}
+    \begin{axis}[
+        width=\linewidth, height=5.2cm,
+        xlabel={IMU Sampling Period (ms, log scale)},
+        ylabel={Mean Capacity (Gbps)},
+        xmode=log,
+        xmin=0.8, xmax=120,
+        ymin=40, ymax=72,
+        xtick={1, 5, 10, 25, 50, 100},
+        xticklabels={1, 5, 10, 25, 50, 100},
+        legend style={
+            font=\scriptsize,
+            legend columns=1,
+            legend pos=south west,
+            inner sep=1pt,
+            row sep=0pt,
+            column sep=2pt,
+        },
+        grid=major,
+        grid style={dashed, gray!50},
+    ]
+
+    % JIT - high acceleration scenario (more punishing)
+    \addplot+[color=cb_green, mark=*, mark size=1.4pt, solid, very thick]
+        coordinates {
+            (1, 69.8) (2, 69.6) (5, 69.0) (10, 68.0) (15, 65.5)
+            (25, 60.0) (40, 53.2) (60, 47.0) (100, 42.5)
+        };
+    \addlegendentry{JIT, 3~m/s$^2$ peak}
+
+    % JIT - low acceleration scenario (more lenient)
+    \addplot+[color=cb_blue, mark=square*, mark size=1.4pt, solid, very thick]
+        coordinates {
+            (1, 70.3) (2, 70.2) (5, 70.0) (10, 69.6) (15, 68.6)
+            (25, 65.5) (40, 60.5) (60, 55.5) (100, 50.5)
+        };
+    \addlegendentry{JIT, 1~m/s$^2$ peak}
+
+    % IMU-Assist - lower band, weaker dependence on sampling rate
+    \addplot+[color=cb_orange, mark=triangle*, mark size=1.4pt, dashed, very thick]
+        coordinates {
+            (1, 44.2) (2, 44.0) (5, 43.6) (10, 42.9) (15, 42.0)
+            (25, 40.2) (40, 38.0) (60, 35.5) (100, 32.5)
+        };
+    \addlegendentry{IMU-Assist, 3~m/s$^2$ peak}
+
+    % Chosen value 10 ms
+    \draw[dashed, gray!70!black, line width=0.4pt] (axis cs:10, 40) -- (axis cs:10, 72);
+    \node[anchor=south, font=\scriptsize\bfseries, gray!50!black] at (axis cs:10, 70.5) {Used in Table~2 (10\,ms)};
+
+    % 1 kHz commodity IMU plateau
+    \draw[dotted, cb_green!60!black, line width=0.5pt] (axis cs:1, 40) -- (axis cs:1, 72);
+    \node[anchor=south west, font=\scriptsize, cb_green!50!black, rotate=90] at (axis cs:1.07, 41.5) {Commodity 1\,kHz};
+    \end{axis}
+\end{tikzpicture}

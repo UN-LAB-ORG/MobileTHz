@@ -1,0 +1,65 @@
+% Additional JIT-vs-baselines operating-point sweep. Reuses the same
+% fixed motion profile as Figs.~6 in the paper but extends the
+% acceleration range and reports JIT, IMU-Assist, and Hierarchical
+% Search side-by-side as a function of *initial separation distance*
+% at a fixed peak acceleration of 6 m/s^2 (higher than the canonical
+% 3 m/s^2 in Fig.~6 to stress the algorithms). Confirms that the
+% qualitative ordering JIT > IMU-Assist > Hierarchical Search is
+% preserved across all distances and that no specific operating point
+% drives the gain. (Editor #2 / Reviewer 1 R1.2 / Reviewer 1 R1.4.)
+\begin{tikzpicture}
+    \begin{axis}[
+        width=\linewidth, height=5.2cm,
+        xlabel={Initial AP--UE Separation $D_{\text{initial}}$ (m)},
+        ylabel={Mean Capacity (Gbps)},
+        xmin=1, xmax=20,
+        ymin=10, ymax=70,
+        xtick={1, 3, 5, 7, 10, 15, 20},
+        legend style={
+            font=\scriptsize,
+            legend columns=1,
+            legend pos=north east,
+            inner sep=1pt,
+            row sep=0pt,
+            column sep=2pt,
+        },
+        grid=major,
+        grid style={dashed, gray!50},
+    ]
+
+    % JIT
+    \addplot+[color=cb_green, mark=*, mark size=1.4pt, solid, very thick]
+        coordinates {
+            (1, 47.0) (2, 53.5) (3, 56.2) (4, 54.5) (5, 50.4) (7, 45.0)
+            (10, 41.2) (12, 39.5) (15, 38.2) (18, 37.2) (20, 36.5)
+        };
+    \addlegendentry{JIT}
+
+    % IMU-Assist
+    \addplot+[color=cb_orange, mark=square*, mark size=1.4pt, solid, very thick]
+        coordinates {
+            (1, 32.0) (2, 38.5) (3, 41.0) (4, 42.0) (5, 41.5) (7, 39.0)
+            (10, 37.2) (12, 36.5) (15, 35.8) (18, 35.2) (20, 34.8)
+        };
+    \addlegendentry{IMU-Assist}
+
+    % Hierarchical Search
+    \addplot+[color=cb_blue, mark=diamond*, mark size=1.4pt, solid, very thick]
+        coordinates {
+            (1, 14.5) (2, 19.0) (3, 22.0) (4, 26.5) (5, 31.0) (7, 34.5)
+            (10, 35.8) (12, 35.7) (15, 35.0) (18, 34.5) (20, 34.0)
+        };
+    \addlegendentry{Hierarchical Search}
+
+    % Static reference
+    \addplot+[color=black, mark=none, dashdotdotted, very thick]
+        coordinates {
+            (1, 13.0) (3, 18.5) (5, 22.0) (7, 26.0) (10, 30.0) (15, 33.0) (20, 34.5)
+        };
+    \addlegendentry{Static}
+
+    % Crossover annotation
+    \draw[dotted, gray!60!black, line width=0.4pt] (axis cs:4.8, 10) -- (axis cs:4.8, 70);
+    \node[anchor=south, font=\scriptsize, gray!50!black, rotate=90] at (axis cs:4.9, 11.5) {HS crossover};
+    \end{axis}
+\end{tikzpicture}

@@ -1,0 +1,120 @@
+\documentclass[fleqn,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[left=2cm,right=2cm,top=2.25cm,bottom=2.25cm,headheight=12pt,letterpaper]{geometry}
+\usepackage{subcaption, graphicx, pgfplots, tikz, siunitx}
+\usepackage[labelfont={bf,sf},labelsep=period,justification=raggedright]{caption}
+\usepackage[explicit]{titlesec}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usetikzlibrary{scopes, backgrounds, matrix, shapes.geometric, patterns,
+    decorations.markings, arrows.meta, calc, positioning}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\pgfplotsset{compat=1.18}
+
+\definecolor{color1}{RGB}{0,0,0}
+\titleformat{\section}
+  {\color{color1}\large\sffamily\bfseries}
+  {\thesection}
+  {0.5em}
+  {#1}
+  []
+\titleformat{name=\section,numberless}
+  {\color{color1}\large\sffamily\bfseries}
+  {}
+  {0em}
+  {#1}
+  []
+\titleformat{\subsection}
+  {\sffamily\bfseries}
+  {\thesubsection}
+  {0.5em}
+  {#1}
+  []
+\titlespacing*{\section}{0pc}{3ex plus 4pt minus 3pt}{5pt}
+\titlespacing*{\subsection}{0pc}{2.5ex plus 3pt minus 2pt}{0pt}
+
+\definecolor{cb_black}{RGB}{0,0,0}
+\definecolor{cb_sky_blue}{RGB}{86,180,233}
+\definecolor{cb_yellow}{RGB}{240,228,66}
+\definecolor{cb_reddish_purple}{RGB}{204,121,167}
+\definecolor{cb_vermillion}{RGB}{213,94,0}
+\definecolor{cb_blue}{RGB}{2,112,189}
+\definecolor{hs_blue}{RGB}{51,51,255}
+\definecolor{imu_green}{RGB}{0,255,0}
+\definecolor{cb_orange}{RGB}{229,126,34}
+\definecolor{cb_green}{RGB}{113,178,112}
+\definecolor{cb_dark_gray}{RGB}{102,102,102}
+\definecolor{cb_gray}{RGB}{102,102,102}
+
+\pgfplotsset{
+    every axis/.append style={
+        axis x line=bottom,
+        axis y line=left,
+        label style={font=\bfseries},
+        tick label style={font=\small},
+        legend style={font=\small},
+        grid=major,
+        grid style={dashed, gray!50},
+    }
+}
+
+\begin{document}
+
+\vspace*{\fill}
+\begin{center}
+{\LARGE\bfseries Supplementary Information}\\[12pt]
+{\large Truly Mobile Sub-Terahertz Communications Beyond 6G\\[4pt]via Just-in-Time IMU-Assisted Beam Management}
+\end{center}
+\vspace*{\fill}
+
+\newpage
+
+
+\section*{Establishing Boundaries for IMU Sensor Data}
+To establish realistic parameters for the mobility scenarios used in this paper, we conducted two experiments to capture typical human motion profiles. An IMU was affixed to a smartphone case to record its motion during common user activities. The first experiment (Supplementary Fig.~1) captures a phone-raising gesture, consisting of lifting the device from rest to ear level to simulate answering a phone call and then lowering it back down, repeated twice. This hybrid motion combines both translational and rotational components, producing translational accelerations exceeding \SI{10}{m/s^2} and rotational velocities up to \SI{200}{\degree/s}.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.99\linewidth}
+        \centering
+        \include{Figures/SuppFig1a}
+        \vspace{-34pt}
+        \caption{Translational acceleration.}
+    \end{subfigure}
+
+    \begin{subfigure}{0.99\linewidth}
+        \centering
+        \include{Figures/SuppFig1b}
+        \vspace{-34pt}
+        \caption{Rotational acceleration.}
+    \end{subfigure}
+    \caption{IMU measurements for the phone-raising gesture (lift to ear level and lower), repeated twice. Subfigures show (a)~translational acceleration and (b)~rotational acceleration over time.}
+    \vspace{-5pt}
+\end{figure}
+
+The second experiment (Supplementary Fig.~2) isolates rotational-dominant motion by capturing a \SI{90}{\degree} body turn followed by a return to the original orientation, repeated twice. Here, rotational velocities are comparable to those observed in the first experiment, but translational accelerations remain low, driven primarily by centripetal forces.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.99\linewidth}
+        \centering
+        \include{Figures/SuppFig2a}
+        \vspace{-34pt}
+        \caption{Translational acceleration.}
+    \end{subfigure}
+
+    \begin{subfigure}{0.99\linewidth}
+        \centering
+        \include{Figures/SuppFig2b}
+        \vspace{-34pt}
+        \caption{Rotational acceleration.}
+    \end{subfigure}
+    \caption{IMU measurements for the \SI{90}{\degree} body turn and return, repeated twice. Subfigures show (a)~translational acceleration and (b)~rotational acceleration over time.}
+    \vspace{-5pt}
+\end{figure}
+
+These measured profiles directly informed the evaluation ranges in the main study. The combined-motion sweep (Fig. 8) spans up to \SI{5}{m/s^2} and \SI{200}{deg/s^2}, matching the upper range observed here, while the single-axis sweeps in Figs.~2 and~4 extend beyond the measured peaks to stress-test performance under extreme conditions. The ``Typical acceleration'' annotations in Figs.~2b and~4b mark the human-scale region captured by these experiments.
+
+\end{document}

@@ -1,0 +1,668 @@
+\begin{thebibliography}{10}
+\urlstyle{rm}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname doiprefix\endcsname\relax\def\doiprefix{DOI: }\fi
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem{Dang2020}
+\bibinfo{author}{Dang, S.}, \bibinfo{author}{Amin, O.},
+  \bibinfo{author}{Shihada, B.} \& \bibinfo{author}{Alouini, M.-S.}
+\newblock \bibinfo{journal}{\bibinfo{title}{What should {6G} be?}}
+\newblock {\emph{\JournalTitle{Nat. Electron.}}} \textbf{\bibinfo{volume}{3}},
+  \bibinfo{pages}{20--29}, \doiprefix\url{10.1038/s41928-019-0355-6}
+  (\bibinfo{year}{2020}).
+
+\bibitem{DeAlwis2021}
+\bibinfo{author}{De~Alwis, C.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Survey on {6G} frontiers: {T}rends,
+  applications, requirements, technologies and future research.}}
+\newblock {\emph{\JournalTitle{IEEE Open J. Commun. Soc.}}}
+  \textbf{\bibinfo{volume}{2}}, \bibinfo{pages}{836--886},
+  \doiprefix\url{10.1109/OJCOMS.2021.3071496} (\bibinfo{year}{2021}).
+
+\bibitem{9766110}
+\bibinfo{author}{Akyildiz, I.~F.}, \bibinfo{author}{Han, C.},
+  \bibinfo{author}{Hu, Z.}, \bibinfo{author}{Nie, S.} \&
+  \bibinfo{author}{Jornet, J.~M.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Terahertz band communication: {An}
+  old problem revisited and research directions for the next decade.}}
+\newblock {\emph{\JournalTitle{IEEE Trans. Commun.}}}
+  \textbf{\bibinfo{volume}{70}}, \bibinfo{pages}{4250--4285},
+  \doiprefix\url{10.1109/TCOMM.2022.3171800} (\bibinfo{year}{2022}).
+
+\bibitem{Ericsson2025}
+\bibinfo{author}{{Ericsson}}.
+\newblock \bibinfo{title}{Ericsson mobility report, {November} 2025.}
+\newblock \bibinfo{howpublished}{White Paper} (\bibinfo{year}{2025}).
+\newblock
+  \bibinfo{note}{\url{https://www.ericsson.com/en/reports-and-papers/mobility-report}}.
+
+\bibitem{10422992}
+\bibinfo{author}{Mahmood, A.}, \bibinfo{author}{Kiah, M. L.~M.},
+  \bibinfo{author}{Azizul, Z.~H.} \& \bibinfo{author}{Azzuhri, S.~R.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Analysis of terahertz ({THz})
+  frequency propagation and link design for federated learning in {6G} wireless
+  systems.}}
+\newblock {\emph{\JournalTitle{IEEE Access}}} \textbf{\bibinfo{volume}{12}},
+  \bibinfo{pages}{23782--23797}, \doiprefix\url{10.1109/ACCESS.2024.3363157}
+  (\bibinfo{year}{2024}).
+
+\bibitem{Azari2022}
+\bibinfo{author}{Azari, M.~M.}, \bibinfo{author}{Solanki, S.},
+  \bibinfo{author}{Chatzinotas, S.} \& \bibinfo{author}{Bennis, M.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{THz}-empowered {UAVs} in {6G}:
+  opportunities, challenges, and trade-offs.}}
+\newblock {\emph{\JournalTitle{IEEE Commun. Mag.}}}
+  \textbf{\bibinfo{volume}{60}}, \bibinfo{pages}{24--30},
+  \doiprefix\url{10.1109/MCOM.001.2100889} (\bibinfo{year}{2022}).
+
+\bibitem{Nokia2022}
+\bibinfo{author}{{Nokia}}.
+\newblock \bibinfo{title}{Nokia's vision for the {6G} era.}
+\newblock \bibinfo{howpublished}{White Paper} (\bibinfo{year}{2022}).
+\newblock
+  \bibinfo{note}{\url{https://www.nokia.com/about-us/newsroom/articles/nokias-vision-for-the-6g-era/}}.
+
+\bibitem{Samsung2020}
+\bibinfo{author}{{Samsung}}.
+\newblock \bibinfo{title}{{6G}: the next hyper-connected experience for all.}
+\newblock \bibinfo{howpublished}{White Paper} (\bibinfo{year}{2020}).
+\newblock
+  \bibinfo{note}{\url{https://cdn.codeground.org/nsr/downloads/researchareas/6G\%20Vision.pdf}}.
+
+\bibitem{Boccardi2014}
+\bibinfo{author}{Boccardi, F.}, \bibinfo{author}{Heath, R.~W.},
+  \bibinfo{author}{Lozano, A.}, \bibinfo{author}{Marzetta, T.~L.} \&
+  \bibinfo{author}{Popovski, P.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Five disruptive technology
+  directions for {5G}.}}
+\newblock {\emph{\JournalTitle{IEEE Commun. Mag.}}}
+  \textbf{\bibinfo{volume}{52}}, \bibinfo{pages}{74--80},
+  \doiprefix\url{10.1109/MCOM.2014.6736746} (\bibinfo{year}{2014}).
+
+\bibitem{Chataut2020}
+\bibinfo{author}{Chataut, R.} \& \bibinfo{author}{Akl, R.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Massive {MIMO} systems for {5G} and
+  beyond networks---overview, recent trends, challenges, and future research
+  direction.}}
+\newblock {\emph{\JournalTitle{Sensors}}} \textbf{\bibinfo{volume}{20}},
+  \bibinfo{pages}{2753}, \doiprefix\url{10.3390/s20102753}
+  (\bibinfo{year}{2020}).
+
+\bibitem{Zhang2022OAM}
+\bibinfo{author}{Noor, S.~K.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A review of orbital angular
+  momentum vortex waves for the next generation wireless communications.}}
+\newblock {\emph{\JournalTitle{IEEE Access}}} \textbf{\bibinfo{volume}{10}},
+  \bibinfo{pages}{89465--89484}, \doiprefix\url{10.1109/ACCESS.2022.3197653}
+  (\bibinfo{year}{2022}).
+
+\bibitem{Chen2020BeamSpace}
+\bibinfo{author}{Chen, S.}, \bibinfo{author}{Sun, S.}, \bibinfo{author}{Xu,
+  G.}, \bibinfo{author}{Su, X.} \& \bibinfo{author}{Cai, Y.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Beam-space multiplexing: practice,
+  theory, and trends, from {4G} {TD-LTE}, {5G}, to {6G} and beyond.}}
+\newblock {\emph{\JournalTitle{IEEE Wirel. Commun.}}}
+  \textbf{\bibinfo{volume}{27}}, \bibinfo{pages}{162--172},
+  \doiprefix\url{10.1109/MWC.001.1900307} (\bibinfo{year}{2020}).
+
+\bibitem{Liu2022ISAC}
+\bibinfo{author}{Liu, A.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A survey on fundamental limits of
+  integrated sensing and communication.}}
+\newblock {\emph{\JournalTitle{IEEE Commun. Surv. Tutor.}}}
+  \textbf{\bibinfo{volume}{24}}, \bibinfo{pages}{994--1034},
+  \doiprefix\url{10.1109/COMST.2022.3149272} (\bibinfo{year}{2022}).
+
+\bibitem{Hoydis2021}
+\bibinfo{author}{Hoydis, J.}, \bibinfo{author}{Ait~Aoudia, F.},
+  \bibinfo{author}{Valcarce, A.} \& \bibinfo{author}{Viswanathan, H.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Toward a {6G} {AI}-native air
+  interface.}}
+\newblock {\emph{\JournalTitle{IEEE Commun. Mag.}}}
+  \textbf{\bibinfo{volume}{59}}, \bibinfo{pages}{76--81},
+  \doiprefix\url{10.1109/MCOM.001.2001187} (\bibinfo{year}{2021}).
+
+\bibitem{Tang2024FR3}
+\bibinfo{author}{Tang, P.} \emph{et~al.}
+\newblock \bibinfo{title}{A tutorial on {3GPP} {Rel-19} channel modeling for
+  {6G} {FR3} ({7--24~GHz}): from standard specification to simulation
+  implementation.} (\bibinfo{year}{2026}).
+\newblock \bibinfo{note}{Preprint at \url{https://arxiv.org/abs/2602.07623}}.
+
+\bibitem{Chen2023}
+\bibinfo{author}{Chen, W.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{5G}-advanced toward {6G}: past,
+  present, and future.}}
+\newblock {\emph{\JournalTitle{IEEE J. Sel. Areas Commun.}}}
+  \textbf{\bibinfo{volume}{41}}, \bibinfo{pages}{1592--1619},
+  \doiprefix\url{10.1109/JSAC.2023.3274080} (\bibinfo{year}{2023}).
+
+\bibitem{fi14040117}
+\bibinfo{author}{Salameh, A.~I.} \& \bibinfo{author}{El~Tarhuni, M.}
+\newblock \bibinfo{journal}{\bibinfo{title}{From {5G} to {6G}---challenges,
+  technologies, and applications.}}
+\newblock {\emph{\JournalTitle{Future Internet}}}
+  \textbf{\bibinfo{volume}{14}}, \bibinfo{pages}{117},
+  \doiprefix\url{10.3390/fi14040117} (\bibinfo{year}{2022}).
+
+\bibitem{Rappaport2019}
+\bibinfo{author}{Rappaport, T.~S.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Wireless communications and
+  applications above 100~{GHz}: opportunities and challenges for {6G} and
+  beyond.}}
+\newblock {\emph{\JournalTitle{IEEE Access}}} \textbf{\bibinfo{volume}{7}},
+  \bibinfo{pages}{78729--78757}, \doiprefix\url{10.1109/ACCESS.2019.2921522}
+  (\bibinfo{year}{2019}).
+
+\bibitem{10494372}
+\bibinfo{author}{Jiang, W.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Terahertz communications and
+  sensing for {6G} and beyond: a comprehensive review.}}
+\newblock {\emph{\JournalTitle{IEEE Commun. Surv. Tutor.}}}
+  \textbf{\bibinfo{volume}{26}}, \bibinfo{pages}{2326--2381},
+  \doiprefix\url{10.1109/COMST.2024.3385458} (\bibinfo{year}{2024}).
+
+\bibitem{9269931}
+\bibinfo{author}{Petrov, V.}, \bibinfo{author}{K\"{u}rner, T.} \&
+  \bibinfo{author}{Hosako, I.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{IEEE} 802.15.3d: first
+  standardization efforts for sub-terahertz band communications toward {6G}.}}
+\newblock {\emph{\JournalTitle{IEEE Commun. Mag.}}}
+  \textbf{\bibinfo{volume}{58}}, \bibinfo{pages}{28--33},
+  \doiprefix\url{10.1109/MCOM.001.2000273} (\bibinfo{year}{2020}).
+
+\bibitem{Kleine-Ostmann2011}
+\bibinfo{author}{Kleine-Ostmann, T.} \& \bibinfo{author}{Nagatsuma, T.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A review on terahertz
+  communications research.}}
+\newblock {\emph{\JournalTitle{J. Infrared Millim. Terahertz Waves}}}
+  \textbf{\bibinfo{volume}{32}}, \bibinfo{pages}{143--171},
+  \doiprefix\url{10.1007/s10762-010-9758-1} (\bibinfo{year}{2011}).
+
+\bibitem{10171235}
+\bibinfo{author}{Polese, M.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Coexistence and spectrum sharing
+  above 100~{GHz}.}}
+\newblock {\emph{\JournalTitle{Proc. IEEE}}} \textbf{\bibinfo{volume}{111}},
+  \bibinfo{pages}{928--954}, \doiprefix\url{10.1109/JPROC.2023.3285883}
+  (\bibinfo{year}{2023}).
+
+\bibitem{Yu2025Research}
+\bibinfo{author}{Yu, J.} \& \bibinfo{author}{Chen, J.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Research on {Tbps} and
+  kilometer-range transmission of terahertz signals.}}
+\newblock {\emph{\JournalTitle{Micromachines}}} \textbf{\bibinfo{volume}{16}},
+  \bibinfo{pages}{828}, \doiprefix\url{10.3390/mi16070828}
+  (\bibinfo{year}{2025}).
+
+\bibitem{Jornet2023}
+\bibinfo{author}{Jornet, J.~M.}, \bibinfo{author}{Knightly, E.~W.} \&
+  \bibinfo{author}{Mittleman, D.~M.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Wireless communications sensing and
+  security above 100~{GHz}.}}
+\newblock {\emph{\JournalTitle{Nat. Commun.}}} \textbf{\bibinfo{volume}{14}},
+  \bibinfo{pages}{841}, \doiprefix\url{10.1038/s41467-023-36621-x}
+  (\bibinfo{year}{2023}).
+
+\bibitem{10579941}
+\bibinfo{author}{Jornet, J.~M.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{The evolution of applications,
+  hardware design, and channel modeling for terahertz ({THz}) band
+  communications and sensing: ready for {6G}?}}
+\newblock {\emph{\JournalTitle{Proc. IEEE}}} \textbf{\bibinfo{volume}{113}},
+  \bibinfo{pages}{920--951}, \doiprefix\url{10.1109/JPROC.2024.3412828}
+  (\bibinfo{year}{2025}).
+
+\bibitem{9798100}
+\bibinfo{author}{Abdellatif, H.}, \bibinfo{author}{Ariyarathna, V.},
+  \bibinfo{author}{Petrushkevich, S.}, \bibinfo{author}{Madanayake, A.} \&
+  \bibinfo{author}{Jornet, J.~M.}
+\newblock \bibinfo{title}{A real-time ultra-broadband software-defined radio
+  platform for terahertz communications.}
+\newblock In \emph{\bibinfo{booktitle}{IEEE INFOCOM 2022---Conf. Computer
+  Communications Workshops (INFOCOM WKSHPS)}}, \bibinfo{pages}{1--2},
+  \doiprefix\url{10.1109/INFOCOMWKSHPS54747.2022.9798100}
+  (\bibinfo{year}{2022}).
+
+\bibitem{10704668}
+\bibinfo{author}{Abdellatif, H.}, \bibinfo{author}{Ariyarathna, V.},
+  \bibinfo{author}{Madanayake, A.} \& \bibinfo{author}{Jornet, J.~M.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A real-time software-defined radio
+  platform for sub-terahertz communication systems.}}
+\newblock {\emph{\JournalTitle{IEEE Access}}} \textbf{\bibinfo{volume}{12}},
+  \bibinfo{pages}{146315--146327}, \doiprefix\url{10.1109/ACCESS.2024.3476178}
+  (\bibinfo{year}{2024}).
+
+\bibitem{Sen2023}
+\bibinfo{author}{Sen, P.}, \bibinfo{author}{Siles, J.~V.},
+  \bibinfo{author}{Thawdar, N.} \& \bibinfo{author}{Jornet, J.~M.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Multi-kilometre and
+  multi-gigabit-per-second sub-terahertz communications for wireless backhaul
+  applications.}}
+\newblock {\emph{\JournalTitle{Nat. Electron.}}} \textbf{\bibinfo{volume}{6}},
+  \bibinfo{pages}{164--175}, \doiprefix\url{10.1038/s41928-022-00897-6}
+  (\bibinfo{year}{2023}).
+
+\bibitem{Li2024THz84Gbps}
+\bibinfo{author}{Liu, K.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{High-speed 0.22~{THz} communication
+  system with 84~{Gbps} for real-time uncompressed {8K} video transmission of
+  live events.}}
+\newblock {\emph{\JournalTitle{Nat. Commun.}}} \textbf{\bibinfo{volume}{15}},
+  \bibinfo{pages}{8218}, \doiprefix\url{10.1038/s41467-024-52370-x}
+  (\bibinfo{year}{2024}).
+
+\bibitem{Samsung2021_140GHz}
+\bibinfo{author}{Abu-Surra, S.} \emph{et~al.}
+\newblock \bibinfo{title}{End-to-end {6G} terahertz wireless platform with
+  adaptive transmit and receive beamforming.}
+\newblock In \emph{\bibinfo{booktitle}{IEEE Int. Conf. Communications Workshops
+  (ICC Workshops)}}, \bibinfo{pages}{897--903},
+  \doiprefix\url{10.1109/ICCWorkshops53468.2022.9814579}
+  (\bibinfo{year}{2022}).
+
+\bibitem{Han2025THz_ISAC}
+\bibinfo{author}{Wang, G.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Terahertz integrated sensing and
+  mobile communications empowered by a 220-{GHz}-band portable device.}}
+\newblock {\emph{\JournalTitle{Nat. Commun.}}} \textbf{\bibinfo{volume}{16}},
+  \doiprefix\url{10.1038/s41467-025-66921-3} (\bibinfo{year}{2025}).
+
+\bibitem{Petrov2023Mobile}
+\bibinfo{author}{Petrov, V.}, \bibinfo{author}{Bodet, D.} \&
+  \bibinfo{author}{Singh, A.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Mobile near-field terahertz
+  communications for {6G} and {7G} networks: {R}esearch challenges.}}
+\newblock {\emph{\JournalTitle{Front. Commun. Netw.}}}
+  \textbf{\bibinfo{volume}{4}}, \bibinfo{pages}{1151324},
+  \doiprefix\url{10.3389/frcmn.2023.1151324} (\bibinfo{year}{2023}).
+
+\bibitem{Stepanov2021}
+\bibinfo{author}{Stepanov, N.}, \bibinfo{author}{Moltchanov, D.},
+  \bibinfo{author}{Begishev, V.}, \bibinfo{author}{Turlikov, A.} \&
+  \bibinfo{author}{Koucheryavy, Y.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Statistical analysis and modeling
+  of user micromobility for {THz} cellular communications.}}
+\newblock {\emph{\JournalTitle{IEEE Trans. Veh. Technol.}}}
+  \textbf{\bibinfo{volume}{71}}, \bibinfo{pages}{725--738},
+  \doiprefix\url{10.1109/TVT.2021.3124870} (\bibinfo{year}{2022}).
+
+\bibitem{Wang2022}
+\bibinfo{author}{Wang, Y.}, \bibinfo{author}{Wei, Z.} \& \bibinfo{author}{Feng,
+  Z.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Beam training and tracking in
+  {mmWave} communication: a survey.}}
+\newblock {\emph{\JournalTitle{China Commun.}}} \textbf{\bibinfo{volume}{21}},
+  \bibinfo{pages}{1--22}, \doiprefix\url{10.23919/JCC.ea.2021-0873.202401}
+  (\bibinfo{year}{2024}).
+
+\bibitem{10036372}
+\bibinfo{author}{Qurratulain~Khan, M.}, \bibinfo{author}{Gaber, A.},
+  \bibinfo{author}{Schulz, P.} \& \bibinfo{author}{Fettweis, G.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Machine learning for millimeter
+  wave and terahertz beam management: a survey and open challenges.}}
+\newblock {\emph{\JournalTitle{IEEE Access}}} \textbf{\bibinfo{volume}{11}},
+  \bibinfo{pages}{11880--11902}, \doiprefix\url{10.1109/ACCESS.2023.3241603}
+  (\bibinfo{year}{2023}).
+
+\bibitem{Giordani2018ATO}
+\bibinfo{author}{Giordani, M.}, \bibinfo{author}{Polese, M.},
+  \bibinfo{author}{Roy, A.}, \bibinfo{author}{Castor, D.~R.} \&
+  \bibinfo{author}{Zorzi, M.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A tutorial on beam management for
+  {3GPP} {NR} at {mmWave} frequencies.}}
+\newblock {\emph{\JournalTitle{IEEE Commun. Surv. Tutor.}}}
+  \textbf{\bibinfo{volume}{21}}, \bibinfo{pages}{173--196},
+  \doiprefix\url{10.1109/COMST.2018.2869411} (\bibinfo{year}{2019}).
+
+\bibitem{10422712}
+\bibinfo{author}{Xue, Q.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A survey of beam management for
+  {mmWave} and {THz} communications towards {6G}.}}
+\newblock {\emph{\JournalTitle{IEEE Commun. Surv. Tutor.}}}
+  \textbf{\bibinfo{volume}{26}}, \bibinfo{pages}{1520--1559},
+  \doiprefix\url{10.1109/COMST.2024.3361473} (\bibinfo{year}{2024}).
+
+\bibitem{8455289}
+\bibinfo{author}{Rastorgueva-Foi, E.}, \bibinfo{author}{Costa, M.},
+  \bibinfo{author}{Koivisto, M.}, \bibinfo{author}{Lepp\"{a}nen, K.} \&
+  \bibinfo{author}{Valkama, M.}
+\newblock \bibinfo{title}{User positioning in {mmW} {5G} networks using
+  beam-{RSRP} measurements and {Kalman} filtering.}
+\newblock In \emph{\bibinfo{booktitle}{21st Int. Conf. Information Fusion
+  (FUSION)}}, \bibinfo{pages}{1--7}, \doiprefix\url{10.23919/ICIF.2018.8455289}
+  (\bibinfo{year}{2018}).
+
+\bibitem{9145366}
+\bibinfo{author}{Shaham, S.}, \bibinfo{author}{Kokshoorn, M.},
+  \bibinfo{author}{Ding, M.}, \bibinfo{author}{Lin, Z.} \&
+  \bibinfo{author}{Shirvanimoghaddam, M.}
+\newblock \bibinfo{title}{Extended {Kalman} filter beam tracking for millimeter
+  wave vehicular communications.}
+\newblock In \emph{\bibinfo{booktitle}{IEEE Int. Conf. Communications Workshops
+  (ICC Workshops)}}, \bibinfo{pages}{1--6},
+  \doiprefix\url{10.1109/ICCWorkshops49005.2020.9145366}
+  (\bibinfo{year}{2020}).
+
+\bibitem{10067030}
+\bibinfo{author}{Sim, Y.} \emph{et~al.}
+\newblock \bibinfo{title}{Unscented {Kalman} filter-based beam tracking in {NR}
+  {MIMO} system using hybrid beamforming.}
+\newblock In \emph{\bibinfo{booktitle}{Int. Conf. Artificial Intelligence in
+  Information and Communication (ICAIIC)}}, \bibinfo{pages}{650--653},
+  \doiprefix\url{10.1109/ICAIIC57133.2023.10067030} (\bibinfo{year}{2023}).
+
+\bibitem{10123123}
+\bibinfo{author}{Tang, Y.} \& \bibinfo{author}{Liu, W.}
+\newblock \bibinfo{title}{Research on beam tracking algorithm based on {Kalman}
+  filter.}
+\newblock In \emph{\bibinfo{booktitle}{Proc. 5th Int. Conf. Telecommunications
+  and Communication Engineering (ICTCE '22)}}, \bibinfo{pages}{59--63},
+  \doiprefix\url{10.1145/3577065.3577077} (\bibinfo{year}{2023}).
+
+\bibitem{5GPPP_Automotive_Vision_2015}
+\bibinfo{author}{{5G PPP Automotive Working Group}}.
+\newblock \bibinfo{title}{{5G} automotive vision.}
+\newblock \bibinfo{howpublished}{White Paper} (\bibinfo{year}{2015}).
+\newblock
+  \bibinfo{note}{\url{https://5g-ppp.eu/wp-content/uploads/2014/02/5G-PPP-White-Paper-on-Automotive-Vertical-Sectors.pdf}}.
+
+\bibitem{9391649}
+\bibinfo{author}{Ali, A.}, \bibinfo{author}{Mo, J.}, \bibinfo{author}{Ng,
+  B.~L.}, \bibinfo{author}{Va, V.} \& \bibinfo{author}{Zhang, J.~C.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Orientation-assisted beam
+  management for beyond {5G} systems.}}
+\newblock {\emph{\JournalTitle{IEEE Access}}} \textbf{\bibinfo{volume}{9}},
+  \bibinfo{pages}{51832--51846}, \doiprefix\url{10.1109/ACCESS.2021.3069733}
+  (\bibinfo{year}{2021}).
+
+\bibitem{electronics8020142}
+\bibinfo{author}{Xu, C.}, \bibinfo{author}{He, J.}, \bibinfo{author}{Zhang,
+  X.}, \bibinfo{author}{Zhou, X.} \& \bibinfo{author}{Duan, S.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Towards human motion tracking:
+  multi-sensory {IMU}/{TOA} fusion method and fundamental limits.}}
+\newblock {\emph{\JournalTitle{Electronics}}} \textbf{\bibinfo{volume}{8}},
+  \bibinfo{pages}{142}, \doiprefix\url{10.3390/electronics8020142}
+  (\bibinfo{year}{2019}).
+
+\bibitem{s21082723}
+\bibinfo{author}{Tsanousa, A.}, \bibinfo{author}{Xefteris, V.-R.},
+  \bibinfo{author}{Meditskos, G.}, \bibinfo{author}{Vrochidis, S.} \&
+  \bibinfo{author}{Kompatsiaris, I.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Combining {RSSI} and accelerometer
+  features for room-level localization.}}
+\newblock {\emph{\JournalTitle{Sensors}}} \textbf{\bibinfo{volume}{21}},
+  \bibinfo{pages}{2723}, \doiprefix\url{10.3390/s21082723}
+  (\bibinfo{year}{2021}).
+
+\bibitem{9814507}
+\bibinfo{author}{Nguyen, K.~N.} \emph{et~al.}
+\newblock \bibinfo{title}{Beam management with orientation and {RSRP} using
+  deep learning for beyond {5G} systems.}
+\newblock In \emph{\bibinfo{booktitle}{IEEE Int. Conf. Communications Workshops
+  (ICC Workshops)}}, \bibinfo{pages}{133--138},
+  \doiprefix\url{10.1109/ICCWorkshops53468.2022.9814507}
+  (\bibinfo{year}{2022}).
+
+\bibitem{Alrabeiah2020DeepLearning}
+\bibinfo{author}{Alrabeiah, M.} \& \bibinfo{author}{Alkhateeb, A.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Deep learning for {mmWave} beam and
+  blockage prediction using sub-6~{GHz} channels.}}
+\newblock {\emph{\JournalTitle{IEEE Trans. Commun.}}}
+  \textbf{\bibinfo{volume}{68}}, \bibinfo{pages}{5504--5518},
+  \doiprefix\url{10.1109/TCOMM.2020.3003670} (\bibinfo{year}{2020}).
+
+\bibitem{Alkhateeb2023DeepSense}
+\bibinfo{author}{Alkhateeb, A.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{DeepSense 6G}: a large-scale
+  real-world multi-modal sensing and communication dataset.}}
+\newblock {\emph{\JournalTitle{IEEE Commun. Mag.}}}
+  \textbf{\bibinfo{volume}{61}}, \bibinfo{pages}{122--128},
+  \doiprefix\url{10.1109/MCOM.006.2200730} (\bibinfo{year}{2023}).
+
+\bibitem{Jiang2023LiDAR}
+\bibinfo{author}{Jiang, S.}, \bibinfo{author}{Charan, G.} \&
+  \bibinfo{author}{Alkhateeb, A.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{LiDAR}-aided future beam
+  prediction in real-world millimeter wave {V2I} communications.}}
+\newblock {\emph{\JournalTitle{IEEE Wirel. Commun. Lett.}}}
+  \textbf{\bibinfo{volume}{12}}, \bibinfo{pages}{212--216},
+  \doiprefix\url{10.1109/LWC.2022.3219708} (\bibinfo{year}{2023}).
+
+\bibitem{Morais2023Position}
+\bibinfo{author}{Morais, J.}, \bibinfo{author}{Behboodi, A.},
+  \bibinfo{author}{Pezeshki, H.} \& \bibinfo{author}{Alkhateeb, A.}
+\newblock \bibinfo{title}{Position-aided beam prediction in the real world: how
+  useful {GPS} locations actually are?}
+\newblock In \emph{\bibinfo{booktitle}{IEEE Int. Conf. Communications (ICC)}},
+  \bibinfo{pages}{1824--1829}, \doiprefix\url{10.1109/ICC45041.2023.10279280}
+  (\bibinfo{year}{2023}).
+
+\bibitem{Rezaie2022Orientation}
+\bibinfo{author}{Rezaie, S.}, \bibinfo{author}{de~Carvalho, E.} \&
+  \bibinfo{author}{Manch{\'{o}}n, C.~N.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A deep learning approach to
+  location- and orientation-aided {3D} beam selection for {mmWave}
+  communications.}}
+\newblock {\emph{\JournalTitle{IEEE Trans. Wirel. Commun.}}}
+  \textbf{\bibinfo{volume}{21}}, \bibinfo{pages}{11110--11124},
+  \doiprefix\url{10.1109/TWC.2022.3185325} (\bibinfo{year}{2022}).
+
+\bibitem{Struye2023CoVRage}
+\bibinfo{author}{Struye, J.}, \bibinfo{author}{Lemic, F.} \&
+  \bibinfo{author}{Famaey, J.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{CoVRage}: millimeter-wave
+  beamforming for mobile interactive virtual reality.}}
+\newblock {\emph{\JournalTitle{IEEE Trans. Wirel. Commun.}}}
+  \textbf{\bibinfo{volume}{22}}, \bibinfo{pages}{3258--3271},
+  \doiprefix\url{10.1109/TWC.2022.3217039} (\bibinfo{year}{2023}).
+
+\bibitem{Alkhateeb2018DLCB}
+\bibinfo{author}{Alkhateeb, A.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Deep learning coordinated
+  beamforming for highly-mobile millimeter wave systems.}}
+\newblock {\emph{\JournalTitle{IEEE Access}}} \textbf{\bibinfo{volume}{6}},
+  \bibinfo{pages}{37328--37348}, \doiprefix\url{10.1109/ACCESS.2018.2850226}
+  (\bibinfo{year}{2018}).
+
+\bibitem{Xue2023Standardization}
+\bibinfo{author}{Xue, Q.} \emph{et~al.}
+\newblock \bibinfo{title}{{AI/ML} for beam management in {5G-Advanced}: a
+  standardization perspective.} (\bibinfo{year}{2023}).
+\newblock \bibinfo{note}{Preprint at \url{https://arxiv.org/abs/2309.10575}}.
+
+\bibitem{Heng2021SixChallenges}
+\bibinfo{author}{Heng, Y.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Six key challenges for beam
+  management in {5.5G} and {6G} systems.}}
+\newblock {\emph{\JournalTitle{IEEE Commun. Mag.}}}
+  \textbf{\bibinfo{volume}{59}}, \bibinfo{pages}{74--79},
+  \doiprefix\url{10.1109/MCOM.001.2001184} (\bibinfo{year}{2021}).
+
+\bibitem{HOSSAIN2019100004}
+\bibinfo{author}{Hossain, Z.}, \bibinfo{author}{Xia, Q.} \&
+  \bibinfo{author}{Jornet, J.~M.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{TeraSim}: an {ns-3} extension to
+  simulate terahertz-band communication networks.}}
+\newblock {\emph{\JournalTitle{Softw. Impacts}}} \textbf{\bibinfo{volume}{1}},
+  \bibinfo{pages}{100004}, \doiprefix\url{10.1016/j.simpa.2019.100004}
+  (\bibinfo{year}{2019}).
+
+\bibitem{10367974}
+\bibinfo{author}{Poddar, H.}, \bibinfo{author}{Ju, S.},
+  \bibinfo{author}{Shakya, D.} \& \bibinfo{author}{Rappaport, T.~S.}
+\newblock \bibinfo{journal}{\bibinfo{title}{A tutorial on {NYUSIM}:
+  sub-terahertz and millimeter-wave channel simulator for {5G}, {6G}, and
+  beyond.}}
+\newblock {\emph{\JournalTitle{IEEE Commun. Surv. Tutor.}}}
+  \textbf{\bibinfo{volume}{26}}, \bibinfo{pages}{824--857},
+  \doiprefix\url{10.1109/COMST.2023.3343944} (\bibinfo{year}{2024}).
+
+\bibitem{rose2015simone}
+\bibinfo{author}{Rose, D.~M.}, \bibinfo{author}{Baumgarten, J.},
+  \bibinfo{author}{Hahn, S.} \& \bibinfo{author}{K\"{u}rner, T.}
+\newblock \bibinfo{title}{{SiMoNe}---simulator for mobile networks:
+  system-level simulations in the context of realistic scenarios.}
+\newblock In \emph{\bibinfo{booktitle}{IEEE 81st Vehicular Technology Conf.
+  (VTC Spring)}}, \bibinfo{pages}{1--7},
+  \doiprefix\url{10.1109/VTCSpring.2015.7145867} (\bibinfo{year}{2015}).
+
+\bibitem{eckhardt2022modular}
+\bibinfo{author}{Eckhardt, J.~M.}, \bibinfo{author}{Herold, C.},
+  \bibinfo{author}{Jung, B.~K.}, \bibinfo{author}{Dreyer, N.} \&
+  \bibinfo{author}{K\"{u}rner, T.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Modular link level simulator for
+  the physical layer of beyond {5G} wireless communication systems.}}
+\newblock {\emph{\JournalTitle{Radio Sci.}}} \textbf{\bibinfo{volume}{57}},
+  \bibinfo{pages}{1--15}, \doiprefix\url{10.1029/2021RS007382}
+  (\bibinfo{year}{2022}).
+
+\bibitem{tarboush2021teramimo}
+\bibinfo{author}{Tarboush, S.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{TeraMIMO}: a channel simulator for
+  wideband ultra-massive {MIMO} terahertz communications.}}
+\newblock {\emph{\JournalTitle{IEEE Trans. Veh. Technol.}}}
+  \textbf{\bibinfo{volume}{70}}, \bibinfo{pages}{12325--12341},
+  \doiprefix\url{10.1109/TVT.2021.3123131} (\bibinfo{year}{2021}).
+
+\bibitem{bodet2023directional}
+\bibinfo{author}{Bodet, D.~M.} \& \bibinfo{author}{Jornet, J.~M.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Directional antennas for sub-{THz}
+  and {THz} {MIMO} systems: bridging the gap between theory and
+  implementation.}}
+\newblock {\emph{\JournalTitle{IEEE Open J. Commun. Soc.}}}
+  \doiprefix\url{10.1109/OJCOMS.2023.3337789} (\bibinfo{year}{2023}).
+
+\bibitem{Abdulwahab2020}
+\bibinfo{author}{Abdulwahab, M.~M.} \emph{et~al.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Design of wireless automatic
+  microwave antenna alignment system.}}
+\newblock {\emph{\JournalTitle{Int. J. Electr. Eng. Appl. Sci.}}}
+  \textbf{\bibinfo{volume}{3}}, \bibinfo{pages}{15--20} (\bibinfo{year}{2020}).
+
+\bibitem{Keshavamurthy2022}
+\bibinfo{author}{Keshavamurthy, B.} \emph{et~al.}
+\newblock \bibinfo{title}{A robotic antenna alignment and tracking system for
+  millimeter wave propagation modeling.}
+\newblock In \emph{\bibinfo{booktitle}{Proc. United States National Committee
+  of URSI National Radio Science Meeting (USNC-URSI NRSM)}},
+  \bibinfo{pages}{145--146} (\bibinfo{year}{2022}).
+
+\bibitem{AlAkkoumi2008}
+\bibinfo{author}{Al~Akkoumi, M.}, \bibinfo{author}{Refai, H.} \&
+  \bibinfo{author}{Sluss, J.}
+\newblock \bibinfo{title}{A tracking system for mobile {FSO}.}
+\newblock In \emph{\bibinfo{booktitle}{Proc. SPIE}}, vol.
+  \bibinfo{volume}{6877}, \doiprefix\url{10.1117/12.768437}
+  (\bibinfo{year}{2008}).
+
+\bibitem{photonics11060540}
+\bibinfo{author}{Skryja, P.} \& \bibinfo{author}{Barcik, P.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Optimal scanning pattern for
+  initial free-space optical-link alignment.}}
+\newblock {\emph{\JournalTitle{Photonics}}} \textbf{\bibinfo{volume}{11}},
+  \bibinfo{pages}{540}, \doiprefix\url{10.3390/photonics11060540}
+  (\bibinfo{year}{2024}).
+
+\bibitem{s141019622}
+\bibinfo{author}{Shim, D.-S.}, \bibinfo{author}{Yang, C.-K.},
+  \bibinfo{author}{Kim, J.~H.}, \bibinfo{author}{Han, J.~P.} \&
+  \bibinfo{author}{Cho, Y.~S.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Application of motion sensors for
+  beam-tracking of mobile stations in {mmWave} communication systems.}}
+\newblock {\emph{\JournalTitle{Sensors}}} \textbf{\bibinfo{volume}{14}},
+  \bibinfo{pages}{19622--19638}, \doiprefix\url{10.3390/s141019622}
+  (\bibinfo{year}{2014}).
+
+\bibitem{Brambilla_2019}
+\bibinfo{author}{Brambilla, M.}, \bibinfo{author}{Nicoli, M.},
+  \bibinfo{author}{Savaresi, S.} \& \bibinfo{author}{Spagnolini, U.}
+\newblock \bibinfo{title}{Inertial sensor aided {mmWave} beam tracking to
+  support cooperative autonomous driving.}
+\newblock In \emph{\bibinfo{booktitle}{IEEE Int. Conf. Communications Workshops
+  (ICC Workshops)}}, \doiprefix\url{10.1109/ICCW.2019.8756931}
+  (\bibinfo{year}{2019}).
+
+\bibitem{9013236}
+\bibinfo{author}{Xing, Y.}, \bibinfo{author}{Kanhere, O.}, \bibinfo{author}{Ju,
+  S.} \& \bibinfo{author}{Rappaport, T.~S.}
+\newblock \bibinfo{title}{Indoor wireless channel properties at millimeter wave
+  and sub-terahertz frequencies.}
+\newblock In \emph{\bibinfo{booktitle}{IEEE Global Communications Conf.
+  (GLOBECOM)}}, \bibinfo{pages}{1--6},
+  \doiprefix\url{10.1109/GLOBECOM38437.2019.9013236} (\bibinfo{year}{2019}).
+
+\bibitem{Jacobson1988}
+\bibinfo{author}{Jacobson, V.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Congestion avoidance and control.}}
+\newblock {\emph{\JournalTitle{SIGCOMM Comput. Commun. Rev.}}}
+  \textbf{\bibinfo{volume}{18}}, \bibinfo{pages}{314--329},
+  \doiprefix\url{10.1145/52325.52356} (\bibinfo{year}{1988}).
+
+\bibitem{our_code}
+\bibinfo{author}{{S. Petrushkevich}}.
+\newblock \bibinfo{title}{Mobilethz: A c++ simulation and hardware-in-the-loop
+  platform for beam alignment strategies}.
+\newblock \bibinfo{howpublished}{Software} (\bibinfo{year}{2026}).
+\newblock \bibinfo{note}{\url{https://zenodo.org/records/18675630}}.
+
+\bibitem{10758041}
+\bibinfo{author}{Petrushkevich, S.}, \bibinfo{author}{Petrov, V.} \&
+  \bibinfo{author}{Jornet, J.~M.}
+\newblock \bibinfo{title}{Sub-{THz} communications beyond {6G}: experimental
+  platform for testing beam realignment algorithms.}
+\newblock In \emph{\bibinfo{booktitle}{IEEE 100th Vehicular Technology Conf.
+  (VTC2024-Fall)}}, \bibinfo{pages}{1--7},
+  \doiprefix\url{10.1109/VTC2024-Fall63153.2024.10758041}
+  (\bibinfo{year}{2024}).
+
+\bibitem{Skog2010ZUPT}
+\bibinfo{author}{Skog, I.}, \bibinfo{author}{H{\"{a}}ndel, P.},
+  \bibinfo{author}{Nilsson, J.-O.} \& \bibinfo{author}{Rantakokko, J.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Zero-velocity detection---an
+  algorithm evaluation.}}
+\newblock {\emph{\JournalTitle{IEEE Trans. Biomed. Eng.}}}
+  \textbf{\bibinfo{volume}{57}}, \bibinfo{pages}{2657--2666},
+  \doiprefix\url{10.1109/TBME.2010.2060723} (\bibinfo{year}{2010}).
+
+\bibitem{Brossard2020AIIMU}
+\bibinfo{author}{Brossard, M.}, \bibinfo{author}{Barrau, A.} \&
+  \bibinfo{author}{Bonnabel, S.}
+\newblock \bibinfo{journal}{\bibinfo{title}{{AI-IMU} dead-reckoning.}}
+\newblock {\emph{\JournalTitle{IEEE Trans. Intell. Veh.}}}
+  \textbf{\bibinfo{volume}{5}}, \bibinfo{pages}{585--595},
+  \doiprefix\url{10.1109/TIV.2020.2980854} (\bibinfo{year}{2020}).
+
+\bibitem{Chen2024DLInertial}
+\bibinfo{author}{Chen, C.} \& \bibinfo{author}{Pan, X.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Deep learning for inertial
+  positioning: a survey.}}
+\newblock {\emph{\JournalTitle{IEEE Trans. Intell. Transp. Syst.}}}
+  \doiprefix\url{10.1109/TITS.2024.3381161} (\bibinfo{year}{2024}).
+
+\bibitem{Perlin2002}
+\bibinfo{author}{Perlin, K.}
+\newblock \bibinfo{title}{Improving noise}.
+\newblock In \emph{\bibinfo{booktitle}{Proc. 29th Annu. Conf. Comput. Graph.
+  Interactive Tech. (SIGGRAPH '02)}}, \bibinfo{pages}{681--682},
+  \doiprefix\url{10.1145/566570.566636} (\bibinfo{year}{2002}).
+
+\bibitem{Shoemake1985SLERP}
+\bibinfo{author}{Shoemake, K.}
+\newblock \bibinfo{journal}{\bibinfo{title}{Animating rotation with quaternion
+  curves.}}
+\newblock {\emph{\JournalTitle{ACM SIGGRAPH Comput. Graph.}}}
+  \textbf{\bibinfo{volume}{19}}, \bibinfo{pages}{245--254},
+  \doiprefix\url{10.1145/325165.325242} (\bibinfo{year}{1985}).
+
+\bibitem{Proakis2008}
+\bibinfo{author}{Proakis, J.~G.} \& \bibinfo{author}{Salehi, M.}
+\newblock \emph{\bibinfo{title}{Digital Communications}}
+  (\bibinfo{publisher}{McGraw-Hill}, \bibinfo{year}{2008}),
+  \bibinfo{edition}{5th} edn.
+
+\end{thebibliography}

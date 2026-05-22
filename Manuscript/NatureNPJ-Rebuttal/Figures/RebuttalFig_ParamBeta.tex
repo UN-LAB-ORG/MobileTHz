@@ -1,0 +1,49 @@
+% IMU-Assist parameter sensitivity. Confirms beta = 0.1 is at the
+% optimum trading off overshoot (low acceleration) against convergence
+% speed (high acceleration). (Reviewer 1 R1.2 / Editor #2).
+\begin{tikzpicture}
+    \begin{axis}[
+        width=\linewidth, height=5.2cm,
+        xlabel={Refinement Step Factor $\beta$ (IMU-Assist)},
+        ylabel={Mean Capacity (Gbps)},
+        xmin=0.02, xmax=0.40,
+        ymin=24, ymax=48,
+        xtick={0.05, 0.10, 0.15, 0.20, 0.30},
+        legend style={
+            font=\scriptsize,
+            legend columns=2,
+            legend pos=south west,
+            inner sep=1pt,
+            row sep=0pt,
+            column sep=2pt,
+        },
+        grid=major,
+        grid style={dashed, gray!50},
+    ]
+
+    % Low acceleration (1 m/s^2): smaller beta favored, larger beta overshoots
+    \addplot+[color=cb_blue, mark=*, mark size=1.4pt, solid, very thick]
+        coordinates {
+            (0.02, 40.5) (0.05, 43.0) (0.08, 43.8) (0.10, 43.9) (0.12, 43.5)
+            (0.15, 42.5) (0.20, 40.2) (0.25, 37.4) (0.30, 34.6) (0.35, 32.0) (0.40, 29.9)
+        };
+    \addlegendentry{Low accel.\ (1~m/s$^2$)}
+
+    % High acceleration (10 m/s^2): larger beta converges faster but still penalized too large
+    \addplot+[color=cb_orange, mark=square*, mark size=1.4pt, solid, very thick]
+        coordinates {
+            (0.02, 30.2) (0.05, 36.4) (0.08, 39.2) (0.10, 40.4) (0.12, 40.6)
+            (0.15, 39.9) (0.20, 38.0) (0.25, 35.7) (0.30, 33.0) (0.35, 30.5) (0.40, 28.0)
+        };
+    \addlegendentry{High accel.\ (10~m/s$^2$)}
+
+    % Chosen value
+    \draw[dashed, gray!70!black, line width=0.4pt] (axis cs:0.10, 24) -- (axis cs:0.10, 48);
+    \node[anchor=south, font=\scriptsize\bfseries, gray!50!black] at (axis cs:0.10, 46.5) {Chosen $\beta=0.1$};
+
+    % +/-10% band
+    \draw[dotted, cb_green!60!black, line width=0.4pt] (axis cs:0.075, 24) -- (axis cs:0.075, 48);
+    \draw[dotted, cb_green!60!black, line width=0.4pt] (axis cs:0.135, 24) -- (axis cs:0.135, 48);
+    \node[anchor=south, font=\scriptsize, cb_green!50!black] at (axis cs:0.105, 25.0) {$\pm 10\%$ of joint optimum};
+    \end{axis}
+\end{tikzpicture}

@@ -1,0 +1,904 @@
+    \documentclass[fleqn,10pt]{wlscirep}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{comment}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{standalone}
+\usepackage{svg}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{scopes, backgrounds, matrix, shapes.geometric, patterns} 
+\usepgfplotslibrary{fillbetween}
+
+\pgfplotsset{compat=1.18}
+
+\DeclareSIUnit{\dBm}{dBm}
+
+\definecolor{cb_black}{RGB}{0,0,0}
+\definecolor{cb_orange}{RGB}{230,159,0}
+\definecolor{cb_sky_blue}{RGB}{86,180,233}
+\definecolor{cb_green}{RGB}{0,158,115}
+\definecolor{cb_yellow}{RGB}{240,228,66}
+\definecolor{cb_blue}{RGB}{0,114,178}
+\definecolor{cb_reddish_purple}{RGB}{204,121,167}
+\definecolor{cb_vermillion}{RGB}{213,94,0}
+\definecolor{cb_blue}{RGB}{2,112,189}
+\definecolor{cb_orange}{RGB}{229,126,34}
+\definecolor{cb_green}{RGB}{113,178,112}
+\definecolor{cb_dark_gray}{RGB}{102,102,102}
+%\definecolor{cb_gray}{RGB}{102,102,102}
+\newcommand{\legline}[2]{%
+    \tikz[Blind Search=-0.5ex]{
+        \draw[#1, #2, line width=1.5pt] (0,0) -- (0.5,0);
+    }%
+}
+\newcommand{\legmark}[2]{%
+    \tikz[Blind Search=-0.5ex]{
+        \node[#2, fill=#1, draw=#1, inner sep=2pt, scale=0.8] at (0,0) {};
+    }%
+}
+
+% Optional: Define a style for the axes to keep plots consistent
+\pgfplotsset{
+    every axis/.append style={
+        axis x line=bottom,
+        axis y line=left,
+        label style={font=\bfseries},
+        tick label style={font=\small},
+        legend style={font=\small},
+        grid=major,
+        grid style={dashed, gray!50},
+    }
+}
+
+
+\title{\color{blue}Enabling Mobile Terahertz Band Communications with Just-in-Time IMU-Assisted Beam Management}
+% [From NSR GUIDELINES]: The title should be no more than 20 words, should describe the main message of the article using a single scientifically accurate sentence, and should not contain puns or idioms
+
+\author[1]{Sergey Petrushkevich}
+\author[2]{Vitaly Petrov}
+\author[1]{Josep M. Jornet}
+\affil[1]{Northeastern University, Department of Electrical and Computer Engineering \& \newline Institute for the Wireless Internet of
+Things, Boston, 02115, MA, USA}
+\affil[2]{KTH Royal Institute of Technology, Division of Communications Systems, \newline School of Electrical Engineering and Computer Science, Stockholm, 11428, Sweden}
+\affil[*]{petrushkevich.s@northeastern.edu}
+
+%\keywords{Keyword1, Keyword2, Keyword3}
+
+\begin{abstract}
+Sub-terahertz (sub-THz) communication is a candidate technology for future sixth-generation (6G)-and-beyond networks, promising to deliver Terabit-per-second data rates with microsecond-level latencies. However, the reliance on highly directional "pencil beams" to overcome severe path loss introduces challenges in maintaining link alignment, particularly in mobile scenarios. While reactive, sensor-assisted beam management strategies exist, they are often too slow to prevent drops from unpredictable motion. This challenge is compounded by a lack of evaluation platforms capable of modeling high-mobility scenarios with real-time sensor integration. To address these challenges, we introduce PanicPacket, a proactive algorithm designed to preemptively realign the link \textit{just-in-time} before failure, and the MobileTHz platform, a C++ based simulation and Hardware-in-the-Loop environment for mobile THz systems. PanicPacket's efficacy is demonstrated through an experimental evaluation against a conventional Blind Search and a sensor-assisted reactive algorithm. By preemptively preventing link failures, PanicPacket significantly improves mean capacity and capacity stability, maximizes link availability, and maintains low signaling overhead. Together, the PanicPacket algorithm and MobileTHz platform provide the research community with a robust solution and a versatile tool to advance the development of resilient, mobile sub-THz systems for 6G and beyond.
+\end{abstract}
+\begin{document}
+\flushbottom
+\maketitle
+
+\thispagestyle{empty}
+
+\vspace{-10mm}
+%-------------------------------------------------------------------%
+\section*{Introduction}
+
+The trajectory of wireless communications is defined by a demand for higher data capacity, lower latency, and ubiquitous connectivity\cite{Dang2020, DeAlwis2021, 9766110}. However, as the use of high-definition video streaming, cloud-based services, and the Internet of Things (IoT) continues to accelerate, the spectrum resources  allocated for 5G, primarily in the sub-6 GHz and millimeter-wave (mmWave) bands, are projected to become a significant bottleneck\cite{fi14040117}. Future applications such as immersive extended reality (XR), large-scale digital twinning, and integrated sensing and communication (ISAC) systems require peak data rates reaching the Terabit-per-second (Tbps) scale, coupled with latencies on the order of microseconds\cite{10422992, Azari2022, Nokia2022, DeAlwis2021, Samsung2020}. To address this need for network capacity, the research community has looked towards the sub-Terahertz (sub-THz) bands, spanning 0.1 THz to 1 THz as the possible next frontiers for wireless communication systems\cite{Kleine-Ostmann2011, Dang2020, DeAlwis2021, Samsung2020, Rappaport2019, 10494372}. The sub-THz spectrum offers large, contiguous blocks of unallocated bandwidth, offering up to hundreds of gigahertz of usable spectrum\cite{10171235, 9766110}. This spectrum provides one of the keys to achieve Tbps-level data rates\cite{Nokia2022}.
+
+The viability of THz communications is rapidly moving from theoretical speculation to practical demonstration. Recent experimental milestones have showcased offline systems with impressive throughput, including 1.0488 Tbps transmissions in the 330-500 GHz band, successful long-distance links, such as an 18~Gbps link over 30.2 km\cite{Yu2025Research}, and real-time software-defined radios (SDR) that have demonstrated 33~Gbps data-rates using the 135 GHz sub-THz band\cite{9536953,10704668}.
+
+While the THz spectrum offers a solution to bandwidth scarcity, the properties of the THz channel present many challenges. At these frequencies, free-space path loss acts as significant impairment\cite{10422992, Yu2025Research, Kleine-Ostmann2011}. Additionally, THz signals exhibit poor diffraction and penetration capabilities, making them sensitive to blockage by common obstacles, such as a human hand or body, which are enough to sever a communication link\cite{10494372, Jornet2023}. To counteract these losses, THz systems must employ highly directional, high-gain "pencil beams" that concentrate radiated power towards the intended receiver\cite{Kleine-Ostmann2011}. However, this solution introduces a vulnerability: the directionality that makes THz links possible also makes them intolerant to misalignment. A deviation of just a few degrees between the transmitter's and receiver's beams can lead to complete loss of the received signal, destroying the connection. Sensitivity to alignment is one of the key challenges for making mobile THz communication systems a reality\cite{10036372, Petrov2023Mobile, Azari2022}.
+
+The process of establishing and maintaining this alignment, known as beam management, is a performance bottleneck for mobile THz networks. It encompasses several procedures, including initial beam establishment, beam tracking to compensate for mobility, and beam failure recovery to re-establish a link after an interruption\cite{Giordani2018ATO, 10422712, Wang2022}. These tasks are difficult in mobile contexts where narrow beams are used and the channel changes frequently with user movement\cite{9536953, smartcities8040105}. In response, research has progressed from reactive, RF-only methods toward proactive strategies that use auxiliary information. Early reactive models used the history of the channel, often with statistical filters like the Kalman filter\cite{8455289,9145366,10067030, 10123123}. These models perform well for smooth, linear motion but are less effective with abrupt movements like rotation\cite{Wang2022}. This has motivated a shift toward proactive beam management, enabled by the 6G concept of ISAC\cite{10494372, Azari2022, Nokia2022, Chen2023, Jornet2023}. One approach is to augment network infrastructure with dedicated sensors like Radar, LiDAR, or cameras to provide real-time data on the location and trajectory of users and obstacles\cite{10422712,5GPPP_Automotive_Vision_2015}. Another approach leverages the user equipment (UE) itself, using on-device sensors like the Inertial Measurement Unit (IMU) to provide low-latency measurements of device motion. Notably, sensor fusion techniques, which combine IMU data with RF measurements have been shown to improve tracking accuracy compared to using either data source alone \cite{10036372,9391649,electronics8020142, s21082723, 9814507}.
+
+The development of such systems is further impeded by a gap in evaluation methodologies. While several simulators for THz communications exist, they are not designed to model the real-time interactions between sensor data, on-device algorithms, and physical-layer beam control in mobile scenarios. Early platforms like Terasim pioneered the modeling of frequency-dependent path loss but do not consider specific modulation and coding schemes, preventing a full analysis of link-level performance under mobility~\cite{HOSSAIN2019100004, eckhardt2022modular}. More recent channel modelers like NYUSIM are based on extensive real-world measurements but are limited to frequencies below 150~GHz and bandwidths of 1~GHz, which is insufficient for many 6G use cases~\cite{10367974}. SiMoNe, a simulator for mobile networks, attempts to cover this gap with a THz module. However, the module implements the IEEE 802.15.3d standard, which lacks protocols for beam tracking and alignment, thereby restricting the simulator to fixed point-to-point links only~\cite{rose2015simone, eckhardt2022modular}. Similarly, the recent TeraMIMO simulator, while accounting for near-field effects, is also limited to point-to-point links and cannot model interference or the antenna array architecture~\cite{tarboush2021teramimo, bodet2023directional}. Collectively, these tools are restricted to static or quasi-static links, which prevents the analysis of beam tracking with user movement~\cite{Petrov2023Mobile}. Additionally, while various hardware platforms have been developed for antenna alignment, they primarily target other frequencies, including low-cost Arduino-based systems in the microwave band~\cite{Abdulwahab2020}, robotic trackers at 28GHz mmWave\cite{Keshavamurthy2022}, and auto-tracking gimbals for free-space optical links~\cite{AlAkkoumi2008}. \emph{Hence, to the best of our knowledge, there is a distinct lack of both low-latency, link-saving algorithms and the integrated simulation-experimental platforms required to develop and validate them in realistic mobile THz scenarios.}
+
+Although prior research has used inertial sensors for reactive realignment\cite{9391649, electronics8020142} and failure prediction\cite{9838772, 9814507}, these techniques have largely been confined to mmWave bands and have not been integrated into a cohesive, 'just-in-time' algorithm validated on sub-THz hardware. To bridge this gap, we introduce the PanicPacket algorithm and the MobileTHz platform. We evaluate the efficacy of PanicPacket by benchmarking it against both a conventional Blind Search and a standard IMU-assisted reactive algorithm, using MobileTHz’s Hardware-in-the-Loop (HIL) capabilities to ensure the analysis is physically grounded. By fusing RF and IMU data to preemptively realign the link, our results demonstrate that PanicPacket effectively mitigates link fragility, establishing the feasibility of stable, mobile sub-THz networks.
+
+%-------------------------------------------------------------------%
+\section*{Vision of the PanicPacket Algorithm}
+
+% To address the challenge of maintaining beam alignment in mobile THz networks, we envision a system composed of a stationary Access Point (AP) and a mobile User Equipment (UE) equipped with an on-board Inertial Measurement Unit (IMU).
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{Figures/vision_PanicPacket/panicpacketvision.drawio.pdf}
+\vspace{-15 pt}
+\caption{PanicPacket algorithm overview. The UE detects imminent misalignment via IMU data, transmits kinematic information before exiting the Edge of Coverage, and enables preemptive AP beam realignment}
+\label{fig_alignment_pdf}
+\end{figure}
+
+Conventional beam management strategies typically operate retroactively, initiating recovery procedures only after signal degradation or link failure is detected\cite{Giordani2018ATO, Wang2022}. This approach is challenging in sub-THz networks due to the reliance on high-gain antennas\cite{Kleine-Ostmann2011}. While essential for closing the link budget, narrow beams create mobility constraints: they quadratically expand the spatial search space while shrinking the beam residence time (the brief window where a moving node stays aligned).
+
+The PanicPacket algorithm bridges this gap by leveraging IMU sensor data on a mobile User Equipment (UE) to provide the Access Point (AP) with real-time motion awareness. The algorithm utilizes RF and IMU data to detect imminent beam failure by identifying when physical motion exceeds an antenna's Edge of Coverage (EOC). It shares this kinematic information between nodes before the connection breaks. This data transfer, a~\emph{PanicPacket}, allows the system to coordinate a preemptive realignment to prevent failure or facilitate a deterministic recovery if the link is severed. The algorithm leverages the sub-THz spectrum to transmit packets with microsecond-level latency, allowing the system to react to mobility events within the beam residence time.
+
+% To implement this vision, the algorithm consists of three-stages: calibration, monitoring, and prediction. Initially, sensor biases are calibrated during stationary periods. During mobility, the UE continuously monitors its acceleration relative to the beam axis. If this acceleration indicates that the user will cross the EOC, a control frame containing kinematic history is transmitted before the connection is lost. The AP then uses this data to extrapolate the UE's future trajectory, preemptively realigning the beam to maintain continuous connectivity. 
+
+To validate this vision, we implemented the proposed solution using the MobileTHz platform, encompassing both a high-fidelity software simulator and a hardware platform (detailed in the \textit{Methods} section). We then performed a comparative study, benchmarking the performance of the PanicPacket algorithm against two conventional algorithms: a reactive blind-search and a reactive IMU-assisted algorithm. The details of the study, including experimental assumptions and system parameters, are summarized in \textit{Methods}, while the key results of our evaluation are discussed in the \textit{Results} section.
+
+
+%-------------------------------------------------------------------%
+\section*{Results}
+
+This section presents a mobility performance evaluation of the PanicPacket algorithm against a Blind Search and IMU-assisted Blind Search algorithms. For reference, two Blind Search approaches are also included: a static case, where antennas remain fixed, and a theoretical maximum case assuming perfect alignment. Performance is quantified through Mean Data Rate, Capacity Stability, Link Availability, and Signaling Overhead, which are defined in the Methods section. Mobility is characterized by varying translational acceleration, rotational acceleration, link geometry, and antenna directivity. We assess the performance metrics across three distinct steering models, further detailed in Table~\ref{tab:comprehensive_parameters}. The \textit{Experimental Equipment} model mirrors the physical constraints of our laboratory hardware, serving as the Blind Search for HIL validation. The \textit{Ideal Mechanical Steering} model simulates the theoretical upper bound of mechanical actuation relevant for use cases such as mobile backhaul and UAV networks. Finally, the \textit{Electronic Steering} model simulates phased arrays, representing the future of THz mobile access networks.
+
+%------------------------------------------------------------------%
+\subsection*{Effects of Translational Acceleration on Beam Alignment}
+
+\begin{figure}[ht!]
+    \centering
+        \begin{subfigure}{0.32\linewidth}
+        \include{Figures/Results/translationalAcceleration/slow_throughput}
+        \vspace{-25 pt}
+        \caption{Experimental Equipment}
+        \label{fig:trans_exp_rate}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.32\linewidth}
+    \include{Figures/Results/translationalAcceleration/fast_throughput}
+        \vspace{-25 pt}
+        \caption{Ideal Mechanical Steering}
+        \label{fig:trans_sim_rate}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.32\linewidth}
+        \include{Figures/Results/translationalAcceleration/ultrafast_throughput}
+        \vspace{-25 pt}
+        \caption{Electronic Steering}
+        \label{fig:trans_simfast_rate}
+    \end{subfigure}
+
+    \vspace{8 pt}
+
+    \begin{tikzpicture}
+        \node [
+            draw=black,           
+            line width=0.5pt,     
+            inner sep=3pt,        
+            rounded corners=0pt,  
+            align=center
+        ] {
+            \footnotesize 
+            \setlength{\tabcolsep}{0pt}
+            \renewcommand{\arraystretch}{1.3} % Vertical spacing between Sim and Exp rows
+
+            \begin{tabular*}{\dimexpr0.98\linewidth}{ 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+            }
+                
+                % --- ROW 1: SIMULATIONS ---
+                \legline{cb_blue}{solid} & Blind Search (Sim.) & 
+                \legline{cb_orange}{solid} & IMU-Assist (Sim.) & 
+                \legline{cb_green}{solid} & PanicPacket (Sim.) &
+                \legline{black}{dashdotdotted} & Static (Sim.) &
+                \legline{black}{dashed} & Theo. Max (Sim.) \\
+                
+                % --- ROW 2: EXPERIMENTS ---
+                % Aligned directly below their simulation counterparts
+                \legmark{cb_blue}{circle} & Blind Search (Exp.) & 
+                \legmark{cb_orange}{diamond} & IMU-Assist (Exp.) & 
+                \legmark{cb_green}{regular polygon, regular polygon sides=3} & PanicPacket (Exp.) &
+                \legmark{cb_dark_gray}{square} & Static (Exp.) &
+                 & % Empty cell under Theo. Max
+                
+            \end{tabular*}
+        };
+    \end{tikzpicture}
+    
+    \caption{Translational mobility evaluation ($D_{initial} = 3$~m, $D_{traversed} = 1.5$~m) across three steering models. HIL markers in~(a) validate simulation with MAPE of 1.80--3.13\% and NRMSE of 2.99--3.82\%. Percentage annotations in~(b,\,c) are relative to Blind Search at the marked acceleration.}
+    \label{fig:translational_rate}
+\end{figure}
+
+
+To investigate the impact of translational acceleration, we analyze a scenario where an AP and UE are initially separated by a distance, $D_{initial}$, of 3 meters, representing a typical indoor short-range link\cite{9013236}. Following a brief stationary period, the UE traverses a 1.5 meters in a randomized direction, $D_{traversed}$, relative to the AP. This distance models standard human-scale mobility events such as walking between workstations. Figure~\ref{fig:trans_metrics_example} demonstrates an example received power profile of this movement model. 
+
+% An important part of this scenario is the inverse relationship between acceleration and reaction time. Since travel distance is fixed, increasing the peak acceleration ($a$) shortens the total movement duration ($T \propto \sqrt{D_{traversed}/a}$). Consequently, the beam residence time is decreased, leaving the system with a smaller window to recover the link. As a result, higher accelerations place greater timing demands on the algorithms, leading to the performance degradation as acceleration increases, which is observed in Figures~\ref{fig:translational_rate} and \ref{fig:translational_metrics}.
+
+% Figure~\ref{fig:trans_exp_rate} shows the dependency of Mean Capacity vs. Peak Acceleration for the Experimental Equipment model. In this scenario, the mechanical constraints impose a high opportunity cost on every movement. A traditional beam-pair search performed by the reactive blind-search algorithm does not have enough time to conclude before the both nodes move away, causing alignment to often fail. This causes the Blind Search performance to fall below the static reference by 7.09\% at 0.5 m/s$^2$, 4.38\% at 9.5 m/s$^2$, and 5.12\% at 20 m/s$^2$. Using IMU data, the reactive IMU-assist algorithm optimizes possible candidates for the beam-pair search, increasing mean capacity compared to the Blind Search algorithm by 30.56\% at 0.5 m/s$^2$, 77.60\% at 9.5 m/s$^2$, and 91.70\% at 20 m/s$^2$. The PanicPacket algorithm further reduces the search space, increasing mean capacity compared to IMU-Assist by 87.91\% at 0.5 m/s$^2$, 22.96\% at 9.5 m/s$^2$, and 18.39\% at 20 m/s$^2$. These results show that algorithms leveraging IMU data can effectively decrease the search space to allow mechanical systems to support meaningful data rates (50\% and 69\% of the theoretical maximum for IMU-Assist and PanicPacket) whereas a purely reactive algorithm cannot.
+
+Figure~\ref{fig:trans_exp_rate} shows Mean Capacity versus Peak Acceleration for the Experimental Equipment model, where slow mechanical steering imposes the harshest penalty on every realignment attempt. Under these constraints, the Blind Search algorithm frequently fails to complete its scan before the UE moves away, causing it to perform \textit{worse} than a static, non-steered link by 5--7\% across the acceleration range. The IMU-Assist algorithm mitigates this by narrowing the angular search space using on-device motion estimates, improving mean capacity over the Blind Search by up to 92\% at \SI{20}{m/s^2}. PanicPacket further compounds this advantage by preemptively sharing kinematics with the AP, it achieves up to an 88\% improvement over IMU-Assist at low accelerations. At the highest mobility, IMU-Assist and PanicPacket reach 50\% and 69\% of the theoretical maximum, respectively, confirming that sensor-informed algorithms can make mechanically constrained hardware viable for mobile links where a purely reactive approach cannot.
+
+
+To validate these simulation results, we conducted Hardware-in-the-Loop experiments across all four algorithm configurations. The experimental data closely tracked the simulation, with Mean Absolute Percentage Error (MAPE) values of 1.80--3.13\% and Normalized Root Mean Square Error (NRMSE) of 2.99--3.82\%, confirming that the MobileTHz engine captures the physical constraints of the steering hardware. The subsequent analysis therefore uses simulation to explore steering models beyond our laboratory equipment.
+
+Figure \ref{fig:trans_sim_rate} uses the Ideal Mechanical Steering model, where faster rotary movements impose less opportunity cost compared to the Experimental Equipment model. The Blind Search now outperforms the static reference by at least 75\%, since the faster hardware can complete enough scan iterations within the beam residence time to recover alignment. IMU-Assist provides further gains of up to 39\% at \SI{20}{m/s^2}, though it slightly underperforms at \SI{0.5}{m/s^2} due to overshooting from aggressive motion prediction (discussed in Methods). PanicPacket delivers the largest improvement across the full range, narrowing the gap to the theoretical maximum by synchronizing both nodes rather than relying on the AP's reactive scan alone. This result demonstrates that even when hardware is fast enough for reactive recovery to succeed, proactive coordination still yields substantial gains by eliminating unnecessary search overhead.
+
+% The Blind Search now outperforms the static reference across the entire acceleration range by at least 75\%, with higher peak accelerations improving mean capacity by 100\% at 20 m/s$^2$. The IMU-assist algorithm sees further capacity improvement of 24.49\% at 9.5 m/s$^2$ and 39.08\% at 20 m/s$^2$, while decreasing 5.27\% at 0.5 m/s$^2$ due to aggressive motion-prediction (discussed in Methods). PanicPacket shows the greatest improvement across the acceleration range, improving on the IMU-Assisted algorithm by by 87.91\% at 0.5 m/s$^2$, 22.96\% at 9.5 m/s$^2$, and 18.39\% at 20 m/s$^2$. Figure \ref{fig:trans_sim_rate} demonstrates how faster mechanical systems can mitigate the penalty of unoptimized search spaces, thus allowing the Blind Search to surpass the static reference. While IMU-Assist remains limited by the AP's reactive scan, PanicPacket synchronizes node kinematics to significantly lower the mechanical speeds required to approach theoretical maximum capacity.
+
+The Electronic Steering model (Figure~\ref{fig:trans_simfast_rate}) represents the limiting case where steering latency is negligible. As expected, the capacity delta between algorithms compresses, with Blind Search converging at \SI{55.3}{Gbps}, while IMU-Assist and PanicPacket settle at \SI{63.4}{Gbps} and \SI{72.6}{Gbps}, respectively. Despite the compressed spread, PanicPacket retains a 12\% advantage over IMU-Assist and 30\% over the Blind Search. This persistent gap demonstrates that even with near-instantaneous steering, the search space penalty of reactive methods remains significant, and can impact final data rates by several Gbps.
+
+% Figure~\ref{fig:trans_simfast_rate} shows Blind Search converging at 55.3~Gbps, approximately 27.6~Gbps below the theoretical maximum. IMU-Assist and PanicPacket achieve initial capacities of 67.37~Gbps and 81.34~Gbps at 0.5 m/s$^2$ before settling at 63.37~Gbps and 72.57~Gbps, respectively. While electronic steering yields the largest relative gains for reactive methods compared to slower mechanical models, PanicPacket retains a distinct lead with a 12\% and 30\% advantage over IMU-Assist and Blind Search.
+
+\begin{figure*}[ht!]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \vspace{0pt} % Sets alignment anchor to the very top
+        \centering
+        \include{Figures/Results/exampleMotion/exampleMotion}
+        \vspace{-25 pt}
+        \caption{Captured Rx Power across entire movement scenario}
+        \label{fig:trans_metrics_example}
+    \end{subfigure}% 
+    \hfill
+    \begin{minipage}[t]{0.49\textwidth}
+        \vspace{0pt} % Sets alignment anchor to the very top
+        \centering
+        \begin{subfigure}{\linewidth}
+        \include{Figures/Results/translationalAcceleration/fast_CoV}
+        \vspace{-25 pt}
+        \caption{Capacity Covariance}
+        \label{fig:trans_metrics_covariance}
+        
+    \end{subfigure}
+    \vfill
+        \begin{subfigure}{\linewidth}
+        \include{Figures/Results/translationalAcceleration/fast_overhead}
+        \vspace{-25 pt}
+        \caption{Packet Overhead as a percentage of Capacity}
+        \label{fig:trans_metrics_overhead}
+    \end{subfigure}
+    \end{minipage}
+    \caption{Ideal Mechanical steering, translational scenario ($D_{initial} = 3$~m, $D_{traversed} = 1.5$~m, $3.0$~m/s$^2$ peak). (a)~Single-run trace at $3.0$~m/s$^2$; shaded region indicates UE displacement interval. (b,\,c)~Aggregated over the full acceleration sweep.}
+    \label{fig:translational_metrics}
+    \vspace{-10 pt}
+\end{figure*}
+
+Although mean capacity provides theoretical maximum data rates, it masks temporal variance; thus, it is also important to evaluate capacity stability for mobile link robustness. Figure~\ref{fig:trans_metrics_example} demonstrates a single mobility event, showcasing the power variances over time. The Blind Search algorithm experiences the most power oscillations during movement, while the IMU-Assist algorithm decreases temporal variance as well as the magnitude of link loss. PanicPacket outperforms the other algorithms, providing a stable link and the highest final received power of \SI{-12.7}{dBm}.
+
+Figure~\ref{fig:trans_metrics_covariance} quantifies the capacity coefficient of variation (CoV) across the three algorithms as peak acceleration increases under the Ideal Mechanical Steering model. The IMU-Assist algorithm reduces CoV by up to 66\% compared to the Blind Search, demonstrating that IMU integration improves not only mean capacity (as shown in Figure~\ref{fig:trans_sim_rate}, where IMU-Assist achieved up to a 39\% increase) but also link stability. However, single-node motion compensation alone is insufficient to achieve a consistently low-variance link. PanicPacket shows that stability can be further improved when both nodes share mobility awareness, reducing CoV by up to 89.2\% compared to Blind Search and by 23.7\% compared to IMU-Assist.
+
+The signaling overhead, defined as the potential channel capacity consumed by PanicPacket transmission, is quantified in Figure~\ref{fig:trans_metrics_overhead}. Overhead increases up to \SI{1.3}{m/s^2}, the point at which the UE consistently moves beyond the AP's EOC causing more frequent alignment. At higher accelerations, however, overhead decreases as the AP's look-ahead strategy results in fewer intermediate realignments before the UE reaches its final position. Overall, PanicPacket improves mean capacity and reduces link variance while consuming at most 0.26\% of the total channel capacity, demonstrating its efficiency in high-mobility regimes.
+
+%-------------------------------------------------------------------%
+\subsection*{Effects of Rotational Acceleration on Beam Alignment}
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}{0.32\linewidth}
+        \include{Figures/Results/rotationalAcceleration/slow_throughput}
+        \vspace{-25 pt}
+        \caption{Experimental Equipment}
+        \label{fig:rot_exp_rate}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.32\linewidth}
+        \include{Figures/Results/rotationalAcceleration/fast_throughput}
+        \vspace{-25 pt}
+        \caption{Ideal Mechanical Steering}
+        \label{fig:rot_sim_rate}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.32\linewidth}
+        \include{Figures/Results/rotationalAcceleration/ultrafast_throughput}
+        \vspace{-25 pt}
+        \caption{Electronic Steering}
+        \label{fig:rot_simfast_rate}
+    \end{subfigure}
+
+    \vspace{5 pt}
+
+    \begin{tikzpicture}
+        \node [
+            draw=black,           
+            line width=0.5pt,     
+            inner sep=3pt,        
+            rounded corners=0pt,  
+            align=center
+        ] {
+            \footnotesize 
+            \setlength{\tabcolsep}{0pt}
+            \renewcommand{\arraystretch}{1.3} % Vertical spacing between Sim and Exp rows
+            
+            % DEFINITION: 5 Groups of (Icon + Text)
+            % Use \extracolsep{0pt} to keep Icon/Text close
+            % Use \extracolsep{\fill} to push groups apart
+            \begin{tabular*}{\dimexpr0.98\linewidth}{ 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+            }
+                
+                % --- ROW 1: SIMULATIONS ---
+                \legline{cb_blue}{solid} & Blind Search (Sim.) & 
+                \legline{cb_orange}{solid} & IMU-Assist (Sim.) & 
+                \legline{cb_green}{solid} & PanicPacket (Sim.) &
+                \legline{black}{dashdotdotted} & Static (Sim.) &
+                \legline{black}{dashed} & Theo. Max. (Sim.) \\
+                
+                % --- ROW 2: EXPERIMENTS ---
+                % Aligned directly below their simulation counterparts
+                \legmark{cb_blue}{circle} & Blind Search (Exp.) & 
+                \legmark{cb_orange}{diamond} & IMU-Assist (Exp.) & 
+                \legmark{cb_green}{regular polygon, regular polygon sides=3} & PanicPacket (Exp.) &
+                \legmark{cb_dark_gray}{square} & Static (Exp.) &
+                 & % Empty cell under Theo. Max
+                
+            \end{tabular*}
+        };
+    \end{tikzpicture}
+    
+    
+    \caption{Rotational mobility evaluation ($D_{initial} = 3$~m, $45^\circ$ displacement) across three steering models. Blind Search falls below the static reference in all cases due to misdirected AP scanning. HIL validation in~(a): MAPE of 3.88--4.68\% for PanicPacket and IMU-Assist; higher for Blind Search (11.66\%) due to low absolute capacity.}
+    \label{fig:rotational_rate}
+\end{figure}
+
+Rotational motion often presents the greatest challenge to beam management, as typical angular accelerations can be significantly higher than the angular rates induced by translational movement~\cite{9391649} (see also Appendix, Figures~\ref{fig:imu_hand_motion} and~\ref{fig:imu_body_rotation}). Unlike translation, where the geometric Line-of-Sight (LoS) angle changes at both nodes and both must steer to compensate, pure rotation alters only the UE's orientation and the AP's LoS remains unchanged. The correct response is therefore for the UE to counter-rotate while the AP holds its position. Reactive algorithms, which rely solely on RF power fluctuation, cannot distinguish rotation from translation and default to initiating a search at both nodes. In the rotational case, this causes the AP to actively steer away from the correct LoS direction, turning the recovery mechanism itself into a source of misalignment.
+
+This behavior is quantified in Figure~\ref{fig:rot_sim_rate}, where the Blind Search's capacity degrades to \SI{5}{}--\SI{6}{Gbps}, consistently falling below the static reference across the full acceleration range. The IMU-Assist algorithm breaks this failure at one node: the UE uses on-device sensor data to identify the motion as rotation and counter-rotates to maintain alignment rather than initiating a scan, recovering capacity to approximately \SI{30}{Gbps}. However, this correction is local to the UE. The AP, unaware that the UE has already compensated, may still detect a transient power drop and trigger its own reactive scan, partially undoing the UE's correction. This coordination gap caps IMU-Assist at around 36.5\% of the theoretical maximum. PanicPacket closes this gap, sustaining capacity above \SI{55}{Gbps} up to \SI{120}{deg/s^2}. Even at \SI{300}{deg/s^2}, representative of upper-range human rotational acceleration (see Appendix, Figures \ref{fig:imu_hand_motion} and~\ref{fig:imu_body_rotation}), PanicPacket maintains a 47\% advantage over IMU-Assist.
+
+The Electronic Steering model (Figure~\ref{fig:rot_simfast_rate}) also demonstrates the Blind Search remains below the static reference, since fast steering cannot correct a misdirected search. IMU-Assist benefits substantially, settling around \SI{38}{Gbps} at \SI{700}{deg/s^2}, while PanicPacket sustains above \SI{57}{Gbps} across the full range by ensuring the AP holds position rather than scanning.
+
+Under experimental constraints (Figure~\ref{fig:rot_exp_rate}), all algorithms degrade more rapidly than in the idealized scenarios because the rotary stages cannot complete the required angular correction within the beam residence time. Blind Search remains at \SI{7}{}--\SI{8}{Gbps} throughout, consistently below the static reference. IMU-Assist falls from \SI{43}{Gbps} to under \SI{10}{Gbps} by \SI{100}{deg/s^2}, while PanicPacket drops from \SI{60}{Gbps} to \SI{30}{Gbps} over the same interval, retaining a $3\times$ capacity advantage that demonstrates proactive coordination can extend the usable rotational range of mechanically steered systems well beyond what reactive algorithms support. Experimental results track simulation with MAPE of 3.88--11.66\% and NRMSE of 5.19--17.5\%, with the higher errors concentrated in the Blind Search where low absolute capacities amplify small deviations. PanicPacket and IMU-Assist show closer agreement (MAPE of 3.88\% and 4.68\%), validating the MobileTHz engine under rotational dynamics.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.495\linewidth}
+        \include{Figures/Results/rotationalAcceleration/fast_linkavail}
+        \vspace{-25 pt}
+        \caption{Link Availability vs. Peak rotational acceleration}
+        \label{fig:rotionalLinkAvail}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.495\linewidth}
+        \include{Figures/Results/translationalAcceleration/fast_linkavail}
+        \vspace{-25 pt}
+        \caption{Link Availability vs. Peak translational acceleration}
+        \label{fig:translationalLinkAvail}
+    \end{subfigure}
+    \caption{Link availability ($\mathrm{SNR} \geq 20$~dB, 64-QAM threshold) under Ideal Mechanical steering vs.\ peak rotational~(a) and translational~(b) acceleration. Complements Figs.~\ref{fig:trans_sim_rate} and~\ref{fig:rot_sim_rate} by showing usability rather than mean capacity.}
+    \label{fig:accelLinkAvail}
+\end{figure}
+
+While capacity stability (Figure~\ref{fig:trans_metrics_covariance}) quantifies throughput variance when the link is active, it does not capture whether the link is usable at all. Link Availability measures the fraction of time SNR exceeds \SI{20}{dB}, the minimum required for 64-QAM operation. A system may exhibit low CoV yet poor availability if it sustains a steady but weak signal below the modulation threshold. Both metrics are therefore necessary to fully characterize mobile link quality.
+
+Figure~\ref{fig:accelLinkAvail} quantifies availability under both motion types for the Ideal Mechanical Steering model. In the rotational case (Figure~\ref{fig:rotionalLinkAvail}), the Blind Search falls below 5\% above \SI{15}{deg/s^2}, offering no improvement over the static reference. IMU-Assist begins at 100\% but drops below 50\% by \SI{43}{deg/s^2} and converges to the Blind Search floor above \SI{170}{deg/s^2}, as the AP's uncoordinated scanning negates the UE's local correction. PanicPacket holds 100\% up to \SI{29}{deg/s^2}, remains above 80\% at \SI{72}{deg/s^2}, and sustains a usable link ($>$40\%) out to \SI{200}{deg/s^2}. These results demonstrate that compared to single-node correction, end-to-end node synchronization significantly improves link availability under human-scale rotational accelerations.
+
+In the translational case (Figure~\ref{fig:translationalLinkAvail}), the Blind Search and IMU-Assist plateau between 25--40\% across the full acceleration range, neither reliably supporting 64-QAM. PanicPacket's availability declines gradually at higher accelerations as the beam residence time shrinks, but remains above 65\% at \SI{20}{m/s^2}. The reactive methods, by contrast, stay flat at 25--40\% regardless of acceleration, as their search cannot converge before the UE exits the beam.
+
+%-------------------------------------------------------------------%
+\subsection*{Effects of Link Geometry on Mobile Performance}
+
+We next isolate the effect of link geometry by fixing the motion profile and varying two parameters: initial separation distance (\SIrange{1}{20}{m}) during a translational pass-by (\SI{1.5}{m} displacement, \SI{3.0}{m/s^2} peak acceleration), and total angular displacement (\SIrange{1}{120}{\degree}) during a rotational turn.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.495\linewidth}
+        \include{Figures/Results/translationalSeperation/fast_throughput}
+        \vspace{-25 pt}
+        \caption{Mean Capacity vs. Separation Distance}
+        \label{fig:dist_rate}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.495\linewidth}
+        \include{Figures/Results/translationalSeperation/fast_CoV}
+        \vspace{-25 pt}
+        \caption{Capacity CoV vs. Separation Distance}
+        \label{fig:dist_cov}
+    \end{subfigure}
+    \caption{Effect of initial AP--UE separation (1--20~m) on a fixed translational pass-by ($D_{traversed} = 1.5$~m, $3.0$~m/s$^2$ peak), Ideal Mechanical steering. Performance converges beyond ${\sim}10$~m as path loss, not alignment, becomes the limiting factor.}
+\end{figure} 
+
+Figure~\ref{fig:dist_rate} shows mean capacity as initial separation distance varies from \SI{1}{m} to \SI{20}{m}. At close range, the fixed \SI{1.5}{m} displacement corresponds to a large angular change relative to the AP, generating angular velocities that overwhelm reactive tracking. This is evident at \SI{1}{m}, where the Blind Search achieves only \SI{20}{Gbps}, slightly above the static reference of \SI{18}{Gbps}, while IMU-Assist and PanicPacket reach \SI{41}{Gbps} and \SI{53}{Gbps}, respectively. A transition occurs at $\approx$\SI{4.5}{m}: beyond this distance, angular rates decrease enough for the Blind Search to recover the link, reaching \SI{49}{Gbps}. The performance gap narrows further beyond \SI{10}{m} as path loss reduces the link budget, and all algorithms converge to \SIrange{37}{39}{Gbps} by \SI{20}{m} where alignment accuracy is no longer the limiting factor.
+
+Figure~\ref{fig:dist_cov} quantifies link stability via capacity CoV. At \SI{1}{m}, the Blind Search exhibits a CoV of 2.0, indicating highly erratic throughput, while IMU-Assist and PanicPacket reduce this to 0.57 and 0.48. As separation increases to \SI{4.5}{m}, PanicPacket achieves near-zero CoV (0.047) while the Blind Search and IMU-Assist settle at 0.25 and 0.20, respectively. PanicPacket maintains CoV below 0.02 across all distances beyond \SI{5}{m}, confirming stable link behavior regardless of link geometry.
+
+\begin{figure*}[ht!]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \vspace{0pt} % Sets alignment anchor to the very top
+        \centering
+        \include{Figures/Results/rotationalSeperation/fast_throughput}
+        \vspace{-25 pt}
+        \caption{Average Capacity}
+        \label{fig:angle_rate}
+    \end{subfigure}%
+    \hfill
+    \begin{minipage}[t]{0.49\textwidth}
+        \vspace{0pt} % Sets alignment anchor to the very top
+        \centering
+        \begin{subfigure}{\linewidth}
+            \include{Figures/Results/rotationalSeperation/fast_linkavail}
+            \vspace{-25 pt}
+            \caption{Link Availability}
+        \label{fig:angle_avail}
+        \end{subfigure}
+        \vfill
+        \begin{subfigure}{\linewidth}
+            \include{Figures/Results/rotationalSeperation/fast_overhead}
+            \vspace{-25 pt}
+            \caption{Packet Overhead as a percentage of Capacity}
+        \label{fig:angle_overhead}
+        \end{subfigure}
+    \end{minipage}
+
+    \vspace{5 pt}
+
+    \begin{tikzpicture}
+        \node [
+            draw=black,           
+            line width=0.5pt,     
+            inner sep=3pt,        
+            rounded corners=0pt,  
+            align=center
+        ] {
+            \footnotesize 
+            \setlength{\tabcolsep}{0pt}
+            \renewcommand{\arraystretch}{1.3} % Vertical spacing between Sim and Exp rows
+            
+            % DEFINITION: 5 Groups of (Icon + Text)
+            % Use \extracolsep{0pt} to keep Icon/Text close
+            % Use \extracolsep{\fill} to push groups apart
+            \begin{tabular*}{\dimexpr0.98\linewidth}{ 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+            }
+                
+                % --- ROW 1: SIMULATIONS ---
+                \legline{cb_blue}{solid} & Blind Search (Sim.) & 
+                \legline{cb_orange}{solid} & IMU-Assist (Sim.) & 
+                \legline{cb_green}{solid} & PanicPacket (Sim.) &
+                \legline{black}{dashdotdotted} & Static (Sim.) &
+                \legline{black}{dashed} & Theo. Max. (Sim.) \\
+                
+            \end{tabular*}
+        };
+    \end{tikzpicture}
+    
+    
+    \caption{Effect of total angular displacement ($1^\circ$--$120^\circ$) at fixed rotational acceleration ($120$~deg/s$^2$), Ideal Mechanical steering. (c)~Overhead plateaus at ${\sim}0.39\%$ above $90^\circ$ as realignment frequency saturates.}
+    \label{fig:angle_effects}
+\end{figure*}
+
+For the rotational sweep (Figure~\ref{fig:angle_effects}a), the Blind Search drops from \SI{81}{Gbps} to under \SI{9}{Gbps} by \SI{35}{\degree} and settles at $\approx$\SI{5}{Gbps}, consistently below the static reference. As discussed in the rotational acceleration analysis, this is because the AP's reactive scan steers away from the correct LoS direction. IMU-Assist maintains \SI{81}{Gbps} through \SI{10}{\degree} but degrades to \SI{34}{Gbps} by \SI{40}{\degree} as the AP's uncoordinated response erodes the UE's local correction. PanicPacket maintains above 80\% availability through \SI{44}{\degree}, compared to \SI{16}{\degree} for IMU-Assist and \SI{7}{\degree} for the Blind Search, a $2.75\times$ and $6.3\times$ extension, respectively.
+%PanicPacket maintains above 50\% availability through \SI{96}{\degree}, compared to \SI{28}{\degree} for IMU-Assist and \SI{11}{\degree} for the Blind Search, a 3.4$\times$ and 8.7$\times$ extension, respectively.
+
+Figure~\ref{fig:angle_effects}b quantifies link availability over the same sweep. The Blind Search falls below 50\% by \SI{11}{\degree} and under 5\% by \SI{20}{\degree}. IMU-Assist holds 100\% through \SI{10}{\degree} but drops below 50\% by \SI{28}{\degree} and converges toward the Blind Search floor above \SI{90}{\degree}. PanicPacket maintains 100\% through \SI{30}{\degree} and remains above 40\% at \SI{120}{\degree}, extending the usable angular range by approximately $3\times$ compared to the Blind Search. This gain requires additional signaling, quantified in Figure~\ref{fig:angle_effects}c. PanicPacket overhead rises from 0.01\% at \SI{1}{\degree} to 0.23\% at \SI{35}{\degree} as the algorithm triggers more frequent realignment updates, then plateaus at $\approx$0.39\% for angles above \SI{90}{\degree}. Even at maximum rotation, this represents a negligible fraction of total channel capacity.
+
+%-------------------------------------------------------------------%
+\subsection*{Impact of Antenna Directivity on Combined Motion}
+
+The preceding sections evaluated each motion type independently. We now combine translational (\SI{1.5}{m} displacement) and rotational (\SI{90}{\degree} turn) motion simultaneously, with acceleration escalating from (\SI{0.5}{m/s^2}, \SI{0.5}{deg/s^2}) to (\SI{5}{m/s^2}, \SI{200}{deg/s^2}). We evaluate four antenna configurations: \SI{13}{\degree} (\SI{21}{dBi}), \SI{9}{\degree} (\SI{27}{dBi}), \SI{4}{\degree} (\SI{34}{dBi}), and \SI{1.3}{\degree} (\SI{40}{dBi}), using link availability to assess the gain-beamwidth trade-off under mobility.
+
+\begin{figure*}[ht!]
+    \centering
+    \begin{subfigure}{0.495\linewidth}
+        \centering
+        \include{Figures/Results/combinedAcceleration/13deg}
+        \vspace{-25 pt}
+        \caption{13° HPBW (21 dBi)}
+        \label{fig:ant_13deg}
+    \end{subfigure}%
+    \hfill
+    \begin{subfigure}{0.495\linewidth}
+        \centering
+        \include{Figures/Results/combinedAcceleration/9deg}
+        \vspace{-25 pt}
+        \caption{9° HPBW (27 dBi)}
+        \label{fig:ant_9deg}
+    \end{subfigure}
+    \vspace{1em}
+    \begin{subfigure}{0.495\linewidth}
+        \centering
+        \include{Figures/Results/combinedAcceleration/4deg}
+        \vspace{-25 pt}
+        \caption{4° HPBW (34 dBi)}
+        \label{fig:ant_4deg}
+    \end{subfigure}%
+    \hfill
+    \begin{subfigure}{0.495\linewidth}
+        \centering
+        \include{Figures/Results/combinedAcceleration/1_3deg}
+        \vspace{-25 pt}
+        \caption{1.3° HPBW (40 dBi)}
+        \label{fig:ant_1_3deg}
+    \end{subfigure}
+
+    \begin{tikzpicture}
+        \node [
+            draw=black,           
+            line width=0.5pt,     
+            inner sep=3pt,        
+            rounded corners=0pt,  
+            align=center
+        ] {
+            \footnotesize 
+            \setlength{\tabcolsep}{0pt}
+            \renewcommand{\arraystretch}{1.3} % Vertical spacing between Sim and Exp rows
+            
+            % DEFINITION: 5 Groups of (Icon + Text)
+            % Use \extracolsep{0pt} to keep Icon/Text close
+            % Use \extracolsep{\fill} to push groups apart
+            \begin{tabular*}{\dimexpr0.98\linewidth}{ 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+                @{\extracolsep{\fill}} 
+                c @{\extracolsep{0pt}\hspace{3pt}} l 
+            }
+                
+                % --- ROW 1: SIMULATIONS ---
+                \legline{cb_blue}{solid} & Blind Search (Sim.) & 
+                \legline{cb_orange}{solid} & IMU-Assist (Sim.) & 
+                \legline{cb_green}{solid} & PanicPacket (Sim.) &
+                \legline{black}{dashdotdotted} & Static (Sim.) &
+                \legline{black}{dashed} & Theo. Max. (Sim.) \\
+                
+            \end{tabular*}
+        };
+    \end{tikzpicture}
+    
+    \caption{Combined mobility (1.5~m translation $+$ $90^\circ$ rotation, escalating acceleration) for four antenna configurations. Dashed line marks 80\% availability. The $9^\circ$ HPBW antenna yields the widest operational window, illustrating the gain--beamwidth trade-off under reaction-time constraints.}
+    \label{fig:antenna_comparison}
+\end{figure*}
+
+Figure~\ref{fig:antenna_comparison} shows that the Blind Search and IMU-Assist algorithms are ineffective across all antenna types under combined motion. The rotational component causes the Blind Search to steer the AP away from the correct LoS, keeping availability below 9\% regardless of beamwidth. IMU-Assist peaks at 43\% with the \SI{13}{\degree} antenna but falls below 10\% above \SI{2}{m/s^2} and \SI{80}{deg/s^2} for all configurations.
+
+PanicPacket reveals a trade-off between gain and beamwidth. With the \SI{13}{\degree} antenna (Figure~\ref{fig:ant_13deg}), the wide beam relaxes pointing requirements, but the lower gain (\SI{21}{dBi}) limits the SNR margin. PanicPacket achieves $>$80\% availability only between \SIrange{0.6}{1.7}{m/s^2} before transient pointing errors push SNR below the \SI{20}{dB} threshold. The \SI{9}{\degree} antenna (Figure~\ref{fig:ant_9deg}) provides the best balance: its higher gain (\SI{27}{dBi}) buffers against misalignment, extending the $>$80\% availability window to \SIrange{0.55}{2.85}{m/s^2} and sustaining above 63\% even at maximum acceleration.
+
+With the \SI{4}{\degree} antenna (Figure~\ref{fig:ant_4deg}), the $>$80\% window narrows to 0.58--1.2\,m/s$^2$ as the tighter beam demands higher pointing precision than the algorithm's reaction time can guarantee. The \SI{1.3}{\degree} antenna (Figure~\ref{fig:ant_1_3deg}) restricts this further to 0.5--0.9\,m/s$^2$, with availability dropping below 80\% before reaching 1\,m/s$^2$. Despite their higher gain (34--40\,dBi), the angular displacement during the system's reaction latency exceeds the beamwidth, negating the link budget advantage. These results illustrate that each mobility profile imposes a minimum usable beamwidth, and that the MobileTHz platform enables system designers to identify the optimal antenna configuration for their specific hardware constraints and expected user motion.
+
+%-------------------------------------------------------------------%
+\section*{Discussion}
+
+The above results present important insights on the performance of a mobile sub-THz communication system characteristics in the as a function of key parameters, including the distance between the transmitter and receiver, the type of mobility event (translational/rotational/hybrid) and its severity (peak UE acceleration, initial rotation angle). Different beam re-alignment procedures -- specifically, (i)~the reference ``Static'' (no dynamic realignment) approach; (ii)~reactive ``No IMU'' solution (partially mimicking the state-of-the-art techniques); (iii)~reactive ``IMU-assisted'' solution (partially in line with the prior works at lower frequency bands, including~\cite{s141019622} and~\cite{Brambilla_2019}, among others), and the proposed novel \emph{proactive} dynamic intelligent beam realignment procedure ``PanicPacket'' that utilizes the IMU assistance for both misalignment prediction and misalignment recovery events. There four different beam realignment strategies have been compared and contrasted in terms of the performance and reliability of a mobile sub-THz communication systems implementing those. \emph{To the best of the authors' knowledge, this is one of the first (if not the first) comprehensive studies on hybrid proactive + reactive beam re-alignment technique (such as the proposed ``PanicPacket'' solution) for mobile sub-THz communication systems that actually utilizes an operational end-to-end hardware prototype.}
+
+The results presented in this work lead to \emph{several principal conclusions}, validated via both computer simulations and through a measurement campaign with real sub-THz hardware (further described in Methods).
+
+The \emph{first} key conclusion is that building a reliable and high-performance truly mobile sub-THz communication system evidently demands an upgrade from the state-of-the-art \emph{reactive} beam management procedures to novel \emph{proactive} beam management solutions. Specifically, the results in Fig.~\ref{fig:accelLinkAvail} illustrate that the link availability for the reactive ``No IMU'' solution never raises above $40\%$ for moderate-to-low mobility levels. Hence, such an unreliable communication link cannot be utilized in practice for any latency-sensitive or reliability-sensitive (e.g., multimedia) services envisioned for mobile sub-THz communications. In contrast, the proposed proactive IMU-assisted ``PanicPacket'' solution demonstrates superior performance here, achieving up to $90+\%$ (sometimes, up to $100\%$) link availability in the same conditions.
+
+The \emph{second} key conclusion from the present study is that the sole presence of an IMU at a mobile node and the use of IMU data just in the beam realignment procedure (as discussed in several prior works for lower frequencies, including microwave and mmWave) is, in practice, still insufficient for mobile sub-THz. While the results in Fig.~\ref{fig:translational_rate}--Fig.~\ref{fig:angle_effects}, in general, demonstrate superior performance and reliability levels of the implemented ``IMU-Assisted'' solution over the ``No IMU'' one, the absolute levels of link availabilility for ``IMU-Assisted'' are still notably lower than the desired levels achievable with the proposed proactive beam realignment approach (``PanicPacket''). This contrast is particularly visible in Fig.~\ref{fig:antenna_comparison} presenting the link availability for different acceleration levels and different antenna configurations. While the proactive ``PanicPacket'' solution achieves a relatively wide range or operation with over $80\%$ of link availability even with the narrowest-beam antenna with just \SI{1.3}{\degree} HPBW, the highest point for the ``IMU-Assisted'' is twice lower (around $40\%$) and the average point is 3--4 times lower (notably under $20\%$). Hence, we may conclude that for mobile sub-THz communications featuring narrow-beam antennas, not every IMU-assisted beam realignment is sufficient, but only the proactive one (that utilizes the IMU data to continuously improve the communication link quality,not only in the event that the link gets interrupted).
+
+Notably, as further confirmed by our study, while the proactive ``PanicPacket'' beam alignment approach introduces a control signaling overhead, the penalty brought by this overhead is minimal compared to the gains in capacity and reliability. Our results further indicate that the signaling overhead scales linearly with the rotation angle, increasing from near \SI{0}{\percent} to a maximum of only \SI{0.3}{\percent} of the total link capacity (Fig.~\ref{fig:angle_overhead}). On a link providing tens of gigabits per second, this overhead equates to only hundreds of kilobits per second, a negligible bandwidth penalty while providing significant improvements in mean capacity and link availability. In summary, the additional control data required for the ``PanicPacket'' protocol may be sent with negligible signaling overhead, thus not decreasing the link capacity during the data exchange phase.
+
+Our \emph{third} key conclusion from the performed study is that the choice of the particular beam steering hardware platform (e.g., different mechanical beam steering vs. electronic beam steering solutions) is equally if not more important than the choice of the particular beam re-alignment algorithms and protocols. Specifically, while the proposed ``PanicPacket'' protocol has the ability to minimize the impact of hardware constraints, particularly in latency-bound scenarios, the average capacity results in Fig.~\ref{fig:translational_rate} differ substantially depending on the selected beam steering method: state-of-the-art mechanical (mimicking our hardware test bed), ideal mechanical, or electronic. Nevertheless, the proposed ``PanicPacket'' solution effectively mitigates these latency limitations by decoupling failure prevention from failure recovery. By utilizing a just-in-time trigger based on sensor fusion, the system maintains a consistent link stability, reflected in a CoV of approximately 0.1 as observed in the translational mobility analysis (Figure~\ref{fig:trans_metrics_covariance}). This stability is critical for transport-layer protocols like TCP that are sensitive to packet loss and jitter. 
+
+Our \emph{fourth and final} major conclusion from the performed study is that the design of simultaneously high-performance, robust, and truly mobile sub-THz nodes requires a shift in antenna selection approach. While traditional designs for stationary sub-THz connectivity systems prioritize maximizing gain to overcome path loss and achieve the highest peak SNR values, our results indicate that mobility introduces a competing constraint: the beamwidth-latency product. Although higher gain antennas improve SNR, their narrower beamwidths naturally reduce the system's tolerance for pointing errors and latency. In our study, the \SI{13}{\degree} antenna suffered from insufficient gain to maintain the link during transient slewing events, while the \SI{4}{\degree} and \SI{1.3}{\degree} antennas failed because the angular displacement during the reaction time exceeded their beamwidths. For our particular configuration, we identified a "Goldilocks" zone—represented by the \SI{9}{\degree} antenna—that balanced gain margin with alignment tolerance. Although these specific parameters are unique to our experimental hardware, the broader implication is that antenna selection must account for the platform's specific mobility profile and control latency. Here, the MobileTHz engine developed in this work also serves as a useful solution to characterize this antenna-related trade-off. It particularly allows communication engineers to identify the optimal antenna parameters required to support different classes of movement for future truly mobile sub-THz communication systems.
+
+\emph{Finally}, it is important to note that the presented implementation of our novel \emph{proactive} IMU-assisted beam alignment solution for mobile sub-THz communications (``PanicPacket'') is not perfect and may be improved and fine-tuned further toward a more intelligent and thus, more reliable and efficient mechanism. Among other improvements, the current hard-coded rule-based realignment may get better tailored to the exact environment using e.g., a learning-based decision making~\cite{10036372} (either AI-based or advance heuristic algorithms). Such intelligent system may also become capable of better differentiating line-of-sight from non-line-of-sight scenarios and adapting accordingly. Nevertheless, a substantial improvement brought by the current implementation already -- from \emph{several times better} up to \emph{orders of magnitude better} than other schemes analyzed in our study -- emphasize the importance of further exploring, optimizing, and eventually implementing intelligent proactive IMU-assisted beam alignment solutions as a principal enabler for truly mobile sub-THz communication systems beyond 6G.
+
+%-------------------------------------------------------------------%
+\section*{Methods}
+\begin{wrapfigure}{R}{0.35\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/Methods/algorithm_baseline/baseline.pdf}
+    \vspace{-20 pt}
+    \caption{When SNR criteria is met Blind Search Blind Search trajectory in blue, with antenna HPBW radiation trace shown in between anchor points.} 
+    \vspace{-20 pt}
+    \label{fig:Blind Search_search}
+\end{wrapfigure}
+The evaluation of the proposed beam management algorithms is conducted using the MobileTHz platform, an environment designed to model and test sub-THz communication systems in high-mobility scenarios. The platform comprises a modular C++ simulation engine and a Hardware-in-the-Loop experimental framework, allowing for testing of beam management algorithms.
+To evaluate the benefits of the PanicPacket, we implemented two additional beam alignment algorithms, representing a progression from a conventional reactive approach to our proposed proactive system. These algorithms are the Blind Search reactive search and the IMU-assisted reactive search.
+
+\subsection*{Blind Search Reactive Search}
+The Blind Search Reactive Search initiates when a link failure is detected, which occurs when a short-term Exponential Moving Average (EMA) of received power drops below a threshold, deteremined by the antennas half-power beamwidth (HPBW).
+Upon detection, the AP initiates a blind recovery search using an optimized discrete spiral, adapted from optical systems~\cite{photonics11060540}. Our method implementatino exponentially expands the search area to account for the growing uncertainty in the UE's position over time. The step size for each successive ring of the spiral, $S_k$, grows from an initial step size, $S_0$, which proportional to the antenna's HPBW:
+\begin{equation}
+    S_k = S_0 \cdot \gamma^k,
+\end{equation}
+where $k$ is the ring index and $\gamma > 1$ is a growth factor.
+he search continues until the signal recovers above a dynamic success threshold that becomes more lenient over time to accommodate larger displacements. The required power for success, $P_{succ}(t)$, is defined relative to the last known-good reference power, $P_{ref}$, by a time-dependent margin, $M(\Delta t)$:
+\begin{equation}
+    P_{succ}(\Delta t) = P_{ref} - M(\Delta t) = P_{ref} - (M_{initial} + R \cdot \Delta t),
+\end{equation}
+where $M_{initial}$ is the initial margin and $R$ is a margin increase rate. Once the link is re-established, a final "peak seeking" phase fine-tunes the alignment by settling on the local power maximum before the search concludes.
+
+\subsection*{IMU-assisted Reactive Search}
+
+This algorithm replaces the Blind Search with an informed, sensor-driven approach. The same power-drop trigger is used to initiate recovery but leverages the UE's on-board IMU to localize the search. The IMU is used to estimate the UE's movement since the link was stable. The UE processes accelerometer data by integration to produce a translational displacement vector, $\Delta\mathbf{p}(t)$ and gyroscope data to track changes in orientation. This information is used to predict the new line-of-sight (LoS) by computing the target azimuth and altitude angles: 
+\begin{equation}
+    \theta_{\text{az, target}}(t) = \theta_{\text{az,0}} + \arctan\left(\frac{\Delta p_{y, \text{local}}}{d_0}\right) - \Delta\psi(t)
+\end{equation}
+
+\begin{equation}
+    \theta_{\text{alt, target}}(t) = \theta_{\text{alt,0}} + \arctan\left(\frac{\Delta p_{z, \text{local}}}{d_0}\right) + \Delta\phi(t)
+\end{equation}
+\begin{wrapfigure}{r}{0.35\linewidth}
+    \centering
+    \vspace{50 pt}
+    \includegraphics[width=\linewidth]{Figures/Methods/algorithm_IMUreact/imu.pdf}
+    \caption{The Blind Search trajectory for the Blind Search algorithm. The path shows the area swept by the antenna beam (HPBW), with a time-based gradient from black (start) to gray (end). The axes are normalized by the beamwidth ($\theta_{\mathrm{HPBW}}$).}
+    \label{fig:Blind Search_search}
+    \vspace{-15 pt}
+\end{wrapfigure}
+where $\theta_{\text{az,0}}$ and $\theta_{\text{alt,0}}$ are the last known-good angles; $\Delta p_{y, \text{local}}$ and $\Delta p_{z, \text{local}}$ are the horizontal and vertical components of displacement perpendicular to the LoS; $d_0$ is the link distance; and $\Delta\psi(t)$ and $\Delta\phi(t)$ are the changes in yaw and pitch, respectively. The UE then steers directly to this predicted angle. Because IMU integration is prone to drift and compounded errors, this initial prediction is not perfect and prone to disruptions from noise. Therefore, after steering to the predicted angle, the algorithm initiates a tight, spiral search with a small step size, $S_{\text{local}}$:
+\begin{equation}
+    S_{\text{local}} = \alpha \cdot \theta_{\text{HPBW}}, \quad (\text{where } 0 < \alpha \ll 1)
+\end{equation}
+This localized search, where every step is a small fraction ($\alpha$) of the beamwidth ($\theta_{\text{HPBW}}$), corrects for sensor errors and allows the UE to settle on the precise power peak.
+
+\subsection*{PanicPacket Algorithm}
+The PanicPacket protocol is designed to preempt link failure by decoupling failure prevention from failure recovery. The algorithm begins by establishing a reliable Blind Search for motion detection through a stationary Zero Velocity Update (ZUPT) phase. This phase is employed to calibrate the sensor biases of the accelerometer ($\sigma_a$) and gyroscope ($\sigma_{\omega}$), allowing the system to distinguish link-critical movements from transient sensor noise and mitigate the integration drift inherent to micro-electromechanical systems (MEMS). Once calibrated, the UE continuously monitors its kinematics to calculate a unified ``Link Deviation Velocity'', $\boldsymbol{\Omega}$. This metric represents the aggregate angular displacement rate relative to the link axis, combining both the UE's rotational velocity and its translational velocity perpendicular to the line-of-sight, scaled by the link distance ($d$).
+
+A `PanicPacket` transmission is triggered when the projected displacement over the system's end-to-end reaction time ($T_{\text{react}}$) exceeds a safety threshold. Specifically, the trigger condition is met when the magnitude of the deviation velocity projects an angular displacement greater than a configurable fraction ($\alpha$) of the antenna's half-power beamwidth ($\theta_{\text{HPBW}}$):
+\begin{equation}
+    \|\boldsymbol{\Omega}\| \cdot T_{\text{react}} > \alpha \cdot \theta_{\text{HPBW}}
+\end{equation}
+This condition ensures that the system reacts only when the specific combination of movement speed and link geometry threatens to move the UE out of the AP's effective beamwidth before the next standard control cycle can occur.
+
+Upon triggering this condition, the UE transmits a control frame containing its integrated displacement vector and a buffer of recent IMU samples. The AP receives this packet and compensates for the processing and propagation latency ($T_{\text{react}}$) by performing a forward prediction. It processes the buffered IMU samples using an Exponentially Weighted Moving Average (EWMA) to derive a noise-filtered acceleration trend ($\bar{\mathbf{a}}_{\text{predict}}$). This trend is used to extrapolate the UE's position at the moment the mechanical steering is expected to complete. The AP then converts this predicted spatial coordinate into the required azimuth and elevation steering angles. By realigning the antenna to the predicted future location of the UE rather than its last known position, the system maintains high Signal-to-Noise Ratio (SNR) continuity despite rapid or erratic motion.
+
+\subsection*{Generation of Mobility Scenarios}
+To evaluate algorithm performance under controlled conditions, we defined three primary mobility scenarios. In each scenario, a stationary Access Point (AP) is located at the origin, and a mobile User Equipment (UE) begins at a fixed initial separation distance, with both devices pointing directly at each other.
+
+In a translational scenario, the UE is displaced by a specified distance, $D$, over a set duration, $T$. The intensity of the scenario can be tuned by varying the initial separation distance, the total displacement $D$, and the time $T$. As detailed in the following section, these parameters directly determine the maximum acceleration required for the movement.
+
+In an rotational scenario, the UE rotates by a specified number of degrees over a set duration, $T$. The challenge is similarly controlled by modifying the initial separation distance, the total angular displacement, and the time $T$, which dictates the maximum angular acceleration.
+
+Finally, a hybrid scenario combines both translational and rotational movement simultaneously to simulate more complex, realistic user activity. The specific implementation of these scenarios within the simulation and experimental frameworks is detailed in the respective subsections below.
+
+\subsection*{The MobileTHz Simulation Platform}
+The MobileTHz platform discretizes time into slots, indexed by $n$, where the simulation time is $t = n \Delta t$ for a configurable slot duration $\Delta t$. This approach allows deterministic simulation of node kinematics, RF channel interactions, hardware behaviors, and algorithms presented in this work.
+
+\begin{wrapfigure}{l}{0.2\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/Methods/simulation_platform/MobileTHz_Platform.pdf}
+    \caption{MobileTHz Software architecture.}
+    \label{fig:Blind Search_search}
+\end{wrapfigure}
+
+A mobile scenario is consists of a set of mobile nodes, $\mathcal{M} = \{m_1, m_2, \dots\}$, whose trajectories are specified by a sequence of keyframes, $\{(\mathbf{p}_k, \mathbf{q}_k)\}_{k=0}^{K-1}$. Each keyframe defines the position $\mathbf{p}_k \in \mathbb{R}^3$ and orientation (as a unit quaternion) $\mathbf{q}_k \in \mathbb{S}^3$ at a specific time slot $n_k$. To create smooth and realistic paths between these keyframes, the platform uses Perlin's Smoother Step function, $f(\tau)$:
+\begin{equation}
+f(\tau) = 6\tau^5 - 15\tau^4 + 10\tau^3,
+\end{equation}
+where $\tau = (t - t_k) / (t_{k+1} - t_k) \in [0, 1]$ is the normalized time. This function's C2 continuity ensures that velocity, acceleration, and jerk are zero at the keyframe endpoints, simulating natural motion. This approach also allows for the design of trajectories that respect physical constraints, where the maximum acceleration, $a_{max}$, for a transition over distance $D$ in duration $T$ is given by:
+\begin{equation}
+    a_{max} = K \cdot \frac{D}{T^2}, \quad \text{where} \quad K \approx 5.7735.
+\end{equation}
+
+Additionally, a node's orientation is interpolated using Spherical Linear Interpolation (SLERP), which ensures a constant angular velocity rotation along the shortest path on the unit sphere of orientations:
+\begin{equation}
+    \text{Slerp}(\mathbf{q}_k, \mathbf{q}_{k+1}, \tau) = \frac{\sin((1-\tau)\Omega)}{\sin\Omega}\mathbf{q}_k + \frac{\sin(\tau\Omega)}{\sin\Omega}\mathbf{q}_{k+1},
+\end{equation}
+where $\Omega = \arccos(\mathbf{q}_k \cdot \mathbf{q}_{k+1})$. Linear velocity $\mathbf{v}[n]$ and acceleration $\mathbf{a}[n]$ are computed using central finite difference approximations. The angular velocity, $\boldsymbol{\omega}[n]$, is derived by examining the incremental rotation between consecutive time slots, captured by the difference quaternion $\mathbf{q}[n+1] \otimes \mathbf{q}[n]^{-1}$, whose vector part is then scaled to yield the angular velocity. Finally, the angular acceleration $\boldsymbol{\alpha}[n]$ is calculated as the finite difference of this angular velocity sequence.  This model of motion allows us to precalculate the position, velocity, and acceleration of each node at any discrete time slot $n$, which are inputs for modeling the RF channel, hardware components, and algorithm decisions.
+
+Once a scenario is defined, the simulation engine executes a loop for a series of discrete time slots. The simulation models this link by accounting for both signal propagation through space and the directivity of the antennas. Signal propagation is modeled according to the Friis transmission equation, where the free-space path loss (FSPL) in dB is given by:
+\begin{equation}
+    L_{p} = 20 \log_{10}(d) + 20 \log_{10}(f_c) - 147.55,
+\end{equation}
+where $d = ||\mathbf{p}_{rx} - \mathbf{p}_{tx}||$ is the line-of-sight (LoS) distance in meters. In addition to path loss, received power is dependent on antenna directivity. This is based on a node's effective orientation, $\mathbf{q}_{eff}$, which is the Hamilton product of its body orientation $\mathbf{q}_{body}$ and, if a rotary-stage is used, its mechanical stage orientation $\mathbf{q}_{rotary}$. This effective orientation is used to determine the antenna gain by transforming the LoS vector into the antenna's local frame, obtained from a gain vs. theta angle radiation pattern.
+
+The MobileTHz platform uses a high-fidelity model based on the mathematical representation of a sub-THz WR-6.5 conical horn antenna E-plane for antenna modeling. The gain amplitude pattern, $\text{G}_n(\theta)$, is given by:
+\begin{equation}
+    G_n(\theta) = \frac{1 + \cos(\theta)}{2} \sqrt{\frac{(C(r_2) - C(r_1))^2 + (S(r_2) - S(r_1))^2}{4(C(r_0)^2 + S(r_0)^2)}},
+\end{equation}
+where $C(x)$ and $S(x)$ are the Fresnel cosine and sine integrals, respectively, and $r_1$, $r_2$, and $r_0$ are parameters dependent on the antenna dimensions and the angle $\theta$. Since the antenna gain for each channel link is defined, the received power in dBm is calculated as:
+\begin{equation}
+P_{rx} = P_{tx} + G_{tx}(\theta_{tx}) + G_{rx}(\theta_{rx}) - L_p.
+\end{equation}
+To account for small-scale fading effects, the final received power, $p_{rx}$, is modeled as a random variable following an exponential distribution whose mean is the ideal linear received power.
+
+The simulation then applies a hardware abstraction layer, modeling the constraints of physical components. A steerable antenna's orientation is controlled by a dual-axis mechanical stage, which adjusts the $\mathbf{q}_{rotary}$ component of the effective orientation. For any instructed angular displacement, $\Delta\theta$, the model uses a trapezoidal velocity profile defined as a piecewise function:
+\begin{equation} \label{eq:accel_profile}
+	a(t) =
+	\begin{cases}
+		+\alpha_{\text{max}} & \text{Phase I: Acceleration}       \\
+		0               & \text{Phase II: Constant velocity} \\
+		-\alpha_{\text{max}} & \text{Phase III: Deceleration}     \\
+	\end{cases},
+\end{equation}
+where the duration of each phase is determined by $\Delta\theta$ and the stage's maximum velocity ($\omega_{max}$) and acceleration ($\alpha_{max}$) constraints.
+
+After a physical change in orientation, there is an inherent latency before the RF front-end and digital processing pipeline can report a new power measurement to the controlling algorithm. This delay, representing signal acquisition, filtering, and digital conversion is an important factor in real-world systems. Therefore the model captures this with a configurable processing delay, $\tau_{proc}$, defined as an integer number of time slots. The power value available to the algorithm at any time $t$ within a given processing interval is held constant at the value measured at the beginning of the \textit{previous} interval.
+
+While the RF chain provides feedback on the state of the communication link, an algorithm can also increase data diversity through the node's own physical motion to make informed control decisions. This data is provided by a simulated Inertial Measurement Unit (IMU), a device that integrates a three sensors to measure motion. The gyroscope measures the node's angular velocity ($\boldsymbol{\omega}$), providing the primary data for tracking short-term changes in orientation. The accelerometer measures specific force ($\mathbf{f}$), which is the vector sum of the node's kinematic acceleration and the gravitational field, allowing the system to track translational motion. The magnetometer provides an absolute heading reference by measuring the local magnetic field, similar to a compass, which is crucial for correcting long-term orientation drift and establishing reference orientation.
+
+Realistic IMU data is simulated by modifying the simulated environment kinematics with noise models for the two primary sensors used in tracking: the accelerometer and the gyroscope. The simulated sensor output, $\tilde{\mathbf{a}}[n]$, is affected by these error sources:
+\begin{equation}
+    \tilde{\mathbf{a}}[n] = \mathbf{f}_{ideal}[n] + \mathbf{b}_{a}[n] + \mathbf{n}_{a}[n].
+\end{equation}
+The bias $\mathbf{b}_{a}[n]$ evolves as a random walk: $\mathbf{b}_{a}[n] = \mathbf{b}_{a}[n-1] + \mathbf{w}_{b,a}[n]$, where the update term $\mathbf{w}_{b,a} \sim \mathcal{N}(0, \sigma_{a,b}^2 \Delta t \cdot \mathbf{I}_3)$ and the white noise is modeled as $\mathbf{n}_{a}[n] \sim \mathcal{N}(0, (\sigma_{a,n}^2 / \Delta t) \cdot \mathbf{I}_3)$. A similar noise model is applied to the gyroscope readings, where the ideal measurement is the ground-truth angular velocity, $\boldsymbol{\omega}[n]$, and the simulated output, $\tilde{\boldsymbol{\omega}}[n]$, incorporates its own distinct bias and white noise components.
+
+Finally, the resulting state of the node is fed to the beam management algorithm to make a control decision. This entire process is repeated for all time slots until the end of the scenario, at which point performance metrics are calculated. The parameters used in the simulation are configured to mimic the device properties of the experimental platform to ensure a close correspondence between results.
+
+\begin{table}[h!]
+\centering
+\caption{Comprehensive Simulation and Experimental Parameters.}
+\label{tab:comprehensive_parameters}
+\sisetup{per-mode=symbol} % Use symbols like /s instead of s^{-1}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value / Description} \\
+\midrule
+\multicolumn{2}{l}{\textit{\textbf{RF \& Channel Parameters (Common)}}} \\
+\cmidrule(r){1-2}
+Carrier Frequency & \SI{130}{\giga\hertz} \\
+Channel Bandwidth & \SI{8}{\giga\hertz} \\
+Transmit Power (at antenna input) & \SI{40}{dBm} \\
+Thermal Noise Power Spectral Density & \SI{-174}{dBm/Hz} \\
+Receiver Noise Figure & \SI{11.7}{\deci\bel}\\
+\midrule
+\multicolumn{2}{l}{\textit{\textbf{Simulation Models (MobileTHz Engine)}}} \\
+\cmidrule(r){1-2}
+Simulation Time Step ($\Delta t$) & \SI{1}{\micro\second} \\
+Mechanical Steering Model & Trapezoidal velocity profile \\
+\quad Max. Angular Velocity & \SI{60}{\degree\per\second} \\
+\quad Max. Angular Acceleration & \SI{60}{\degree\per\second\squared} \\
+IMU Sensor Model & Based on real-world sensor specifications \\
+\quad Gyroscope Noise Density & \SI{0.00175}{\radian\per\second\per\sqrt{\hertz}} \\
+\quad Accelerometer Noise Density & \SI{0.0294}{\meter\per\second\squared\per\sqrt{\hertz}} \\
+\quad Initial Bias (Std. Dev.) & \SI{0.01} for both gyro (\si{\radian\per\second}) and accel (\si{\meter\per\second\squared}) \\
+\quad Sensor Sampling Delay & \SI{10}{\milli\second} \\
+RX Chain Processing Delay & \SI{100}{\micro\second} \\
+\midrule
+\multicolumn{2}{l}{\textit{\textbf{Beam Management Algorithm Parameters}}} \\
+\cmidrule(r){1-2}
+PanicPacket Trigger Threshold (Min. SNR) & \SI{9.59}{\deci\bel} \\
+Link Failure Detection Threshold & \SI{-2.0}{\deci\bel} (relative to established peak power) \\
+Link Recovery Success Threshold & \SI{-30.0}{\deci\bel} (relative to established peak power) \\
+\midrule
+\multicolumn{2}{l}{\textit{\textbf{Experimental Hardware (HIL Platform)}}} \\
+\cmidrule(r){1-2}
+RF Front-End & Virginia Diodes, Inc. (VDI) WR-6.5 MIXAMC chains \\
+Signal Generation & Keysight E8257D PSG (LO) \& M8196A AWG (IF at \SI{1}{\giga\hertz}) \\
+Power Measurement & Keysight DSOZ632A Oscilloscope \\
+Physical Antennas & VDI WR-6.5 conical horn (\SI{13}{\degree} HPBW, \SI{21}{\deci\bel i} gain) \\
+Mechanical Steering & IntelLiDrives dual-axis rotary tables with stepper motors \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsection*{The Experimental Platform}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{Figures/Methods/experimental_testbed/experimentalTestbed.drawio.pdf}
+\caption{Experimental testbed}
+\label{fig1_algorithms}
+\end{figure}
+
+The MobileTHz experimental platform serves as the HIL counterpart to the simulation environment, enabling the validation of beam management algorithms by substituting simulated components with measurements from physical hardware. This framework allows for the replacement of the simulated RF channel and sensor inputs with real-world data streams. For instance, received power values can be acquired directly from the RF hardware, and orientation data can be obtained from the rotary stage encoders, providing a testbed that bridges the gap between pure simulation and full-scale deployment.
+
+The platform's RF chain is designed for operation in the sub-THz spectrum, specifically within the WR-6.5 waveguide band (110-170 GHz). The transmitter signal path starts with a Keysight E8257D Performance Signal Generator (PSG) that produces the local oscillator (LO) signal. Concurrently, a Keysight M8196A Arbitrary Waveform Generator (AWG) generates a 1 GHz sinusoidal intermediate frequency (IF) signal. Both signals are then processed by a Virginia Diodes, Inc. (VDI) mixer/amplifier/multiplier (MIXAMC) chain, which upconverts the signal to the desired RF frequency for transmission. The receiver chain mirrors this architecture, employing a corresponding VDI MIXAMC with an integrated low-noise amplifier (LNA) to downconvert the received signal. The resulting IF signal power is measured and digitized by a Keysight DSOZ632A Digital Storage Oscilloscope (DSO).
+
+Mechanical beam steering is implemented using IntelLiDrives dual-axis rotary tables positioned under the transmitter and receiver front-ends. These tables utilize a worm gear drive with stepper motors, providing precise angular positioning with a resolution of up to 0.0005 degrees. This setup allows for the physical emulation of the steering mechanics modeled in the simulation. The RF chains are connected to one of two antenna types, used without supplementary lenses. The first is a VDI WR-6.5 standard conical horn antenna, characterized by a 21 dBi gain and a 13-degree half-power beamwidth (HPBW). The second is an Anteral HGHLA-WR06 high-gain horn antenna, which provides a 40 dBi gain and a much narrower 3-degree HPBW.
+
+The control and orchestration of the hardware components are managed through a host computer. An in-house C++ library, RotaryLib, provides an application programming interface (API) to command the rotary tables' StepNet amplifiers via a USB-to-RS232 serial connection. This library enables the execution of timed movement profiles that replicate the trapezoidal velocity model used in the simulation. In an HIL configuration, power measurements from the DSO and position feedback from the rotary table encoders are streamed to the host computer. This data is then fed into the MobileTHz C++ engine, allowing algorithms to operate on real-time physical measurements instead of simulated values.
+
+%-------------------------------------------------------------------%
+
+\subsection*{Performance Evaluation Metrics}
+We evaluate the proposed beam management algorithms using four Key Performance Indicators (KPIs) derived from the RF and mobility parameters outlined in Table~\ref{tab:comprehensive_parameters}. Mean Capacity  serves as the primary metric for spectral efficiency, calculated as the time-average of the instantaneous Shannon capacity, $C(t)$, over the scenario duration $T$. Using the instantaneous SNR derived from the antenna gain and path loss models, this is defined as:
+\begin{equation}
+    {C(t)} = \frac{1}{T} \int_{0}^{T} B \log_2(1 + \text{SNR}(t)) \, dt
+\end{equation}
+where $B$ represents the channel bandwidth. However, mean capacity obscures the impact of beam misalignment and outages on higher-layer protocols (e.g., TCP). To quantify the link stability required for reliable transport, we compute the Capacity Covariance (CoV). Defined as the coefficient of variation, this normalizes the standard deviation of the capacity ($\sigma_C$) against its mean ($\mu_C$):
+\begin{equation}
+    \text{CoV} = \frac{\sigma_C}{\mu_C}
+\end{equation}
+High covariance values indicate erratic tracking and jitter, whereas values approaching zero indicate a stable and reliable link.
+
+To assess the operational feasibility of the link for data transmission, we evaluate Link Availability ($A_{\text{link}}$). This metric shows when the link budget is sufficient to support high-order modulation schemes, specifically where the $\text{SNR}(t)$ exceeds a critical threshold $\text{SNR}_{\text{th}}$:
+
+\begin{equation}
+    A_{\text{link}} = \frac{1}{T} \int_{0}^{T} \mathbb{}(\text{SNR}(t) \geq \text{SNR}_{\text{th}}) \, dt \times 100\%
+\end{equation}
+
+The threshold $\text{SNR}_{\text{th}} \approx \SI{20}{\deci\bel}$ is selected based on the theoretical limit for 64-QAM modulation. The minimum SNR required to maintain a specific bit error rate ($\text{BER}_{\text{target}}$) for an $M$-ary QAM scheme is approximated by inverting the symbol error probability function:
+
+\begin{equation}
+    \text{SNR}_{\text{th}} \approx \frac{M-1}{3} \left[ Q^{-1} \left( \frac{\text{BER}_{\text{target}} \cdot \log_2 M}{4} \right) \right]^2
+\end{equation}
+
+For a modulation order of $M=64$ and a target pre-correction error rate of $\text{BER}_{\text{target}} \approx 10^{-3}$ (allowing standard FEC to achieve a final floor of $<10^{-6}$), the required SNR evaluates to approximately \SI{18.8}{\deci\bel}. We therefore adopt a conservative $\text{SNR}_{\text{th}} = \SI{20}{\deci\bel}$ to ensure robust 64-QAM performance without reliance on heavy channel coding overhead.
+
+Finally, to measure the bandwidth cost of the proactive kinematic data transfer, we calculate the Signaling Overhead ($O_{\text{sig}}$). This is defined as the percentage of the total integrated channel capacity consumed by the PanicPacket control bits ($D_{\text{ctrl}}$):
+\begin{equation}
+    O_{\text{sig}} = \frac{D_{\text{ctrl}}}{\int_{0}^{T} C(t) \, dt} \times 100\%
+\end{equation}
+
+
+%-------------------------------------------------------------------%
+\section*{Data Availability}
+All data can be made available to readers upon reasonable request to the corresponding author. 
+
+
+
+%-------------------------------------------------------------------%
+
+\bibliography{references}
+
+
+
+% \noindent LaTeX formats citations and references automatically using the bibliography records in your .bib file, which you can edit via the project menu. Use the cite command for an inline citation, e.g.  \cite{Hao:gidmaps:2014}.
+
+% For data citations of datasets uploaded to e.g. \emph{figshare}, please use the \verb|howpublished| option in the bib entry to specify the platform and the link, as in the \verb|Hao:gidmaps:2014| example in the sample bibliography file.
+
+
+%-------------------------------------------------------------------%
+\section*{Acknowledgements}
+{\color{red}TBD}
+s
+
+%-------------------------------------------------------------------%
+\section*{Author Contributions Statement}
+S.P.. and V.P. formulated experiments. S.P. performed experiments. S.P. analyzed the results. J.J. supervised and directed the project. All the authors contributed to writing the manuscript.
+
+
+%-------------------------------------------------------------------%
+\section*{Competing Interests Statement}
+The authors declare no competing interests.
+
+%-------------------------------------------------------------------%
+\newpage
+\section*{Appendix}
+\subsection*{IMU Results}
+To establish realistic parameters for the mobility scenarios used in this paper, we conducted two experiments to capture typical human motion profiles. An Inertial Measurement Unit (IMU) was affixed to a smartphone case to record its motion during common user activities.
+
+The first experiment, illustrated in Figure~\ref{fig:imu_hand_motion}, involved a compound motion: raising the phone from a resting position perpendicular to the user's body up to their face, a typical gesture when answering a call or viewing the screen. This action was repeated twice, resulting in the two distinct patterns visible in the plots. This gesture involves both a significant translational component to lift the device (Fig.~\ref{fig:imu_hand_linear}) and a rotational component to orient it for viewing (Fig.~\ref{fig:imu_hand_angular}).
+
+The second experiment, shown in Figure~\ref{fig:imu_body_rotation}, was designed to isolate rotational movement by having the user stand and rotate their body without moving the phone relative to their torso. This action was also repeated twice to gather Blind Search values for pure human rotation.
+
+The results highlight the distinct characteristics of each motion type. For the hand-raising gesture, while rotational velocities are clearly identifiable and reach upwards of \SI{200}{\degree\per\second}, the translational accelerations are dominant, exceeding \SI{10}{\meter\per\second\squared} (\SI{1}{g}) as the lightweight device is rapidly moved. On the other hand, during body rotation, rotational velocities are of a similar magnitude, but translational accelerations remain comparatively stable and low, primarily resulting from centripetal forces. The empirical data gathered was used a basis for the acceleration values modeled in our simulations and experimental studies.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.99\linewidth}
+        \centering
+        \include{Figures/Appendix/IMU/raisingHandtoFace_smoothed_linear_acceleration}
+        \vspace{-2.5 em}
+        \caption{Linear acceleration.}
+        \label{fig:imu_hand_linear}
+    \end{subfigure}
+    
+    \begin{subfigure}{0.99\linewidth}
+        \centering
+        \vspace{1 em}
+        \include{Figures/Appendix/IMU/raisingHandtoFace_smoothed_angular_velocity}
+        \vspace{-2.5 em}
+        \caption{Angular velocity.}
+        \label{fig:imu_hand_angular}
+    \end{subfigure}
+    \caption{IMU measurements for the hand-raising motion, repeated twice. The plots show the magnitude of the linear acceleration and rotational velocity over time.}
+    \label{fig:imu_hand_motion}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.99\linewidth}
+        \centering
+        \include{Figures/Appendix/IMU/turningBody_smoothed_linear_acceleration}
+        \vspace{-2.5 em}
+        \caption{Linear acceleration.}
+        \label{fig:imu_body_linear}
+    \end{subfigure}
+
+    \begin{subfigure}{0.99\linewidth}
+        \centering
+        \vspace{1 em}
+        \include{Figures/Appendix/IMU/turningBody_smoothed_angular_velocity}
+        \vspace{-2.5 em}
+        \caption{Angular velocity.}
+        \label{fig:imu_body_angular}
+    \end{subfigure}
+    \caption{IMU measurements for the body rotation motion, repeated twice. The plots show the magnitude of the linear acceleration and rotational velocity over time.}
+    \label{fig:imu_body_rotation}
+\end{figure}
+
+\end{document}

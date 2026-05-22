@@ -1,0 +1,73 @@
+% Long-term IMU drift control by opportunistic ZUPT and per-trigger
+% accumulator reset. Addresses Reviewer 1 R1.3 / Editor #3 on
+% multi-hour / multi-day operation without explicit recalibration.
+\begin{tikzpicture}[
+    >=Latex,
+    font=\footnotesize,
+    every node/.style={inner sep=1pt},
+    timeline/.style={line width=0.8pt, gray!70!black},
+    drift/.style={line width=0.9pt, cb_vermillion},
+    capped/.style={line width=1.1pt, cb_green!55!black},
+    zupt/.style={->, line width=0.8pt, cb_blue, dashed},
+]
+
+% ---------- Timeline axis ----------
+\draw[timeline, ->] (-0.2,0) -- (10.2,0) node[anchor=west, font=\scriptsize] {time $t$};
+\foreach \x/\lab in {0/{$t_0$ (boot)}, 2/{trigger~$k$}, 4/{trigger~$k{+}1$}, 6/{ZUPT~at idle}, 8/{trigger~$k{+}2$}, 10/{$\ldots$}} {
+    \draw[timeline] (\x,-0.1) -- (\x, 0.1);
+    \node[anchor=north, font=\scriptsize] at (\x,-0.12) {\lab};
+}
+
+% ---------- Drift curves ----------
+% Unmitigated (red): drift grows monotonically as t^{1/2} (random walk)
+\draw[drift, domain=0:10, samples=30, smooth]
+    plot (\x, {0.30*sqrt(\x)});
+
+% JIT-capped (green): drift reset to 0 at every trigger, ZUPT recalibrates bias
+\draw[capped]
+    (0,0)
+    -- (0.05,0.0)
+    -- plot[domain=0.05:1.95, samples=15, smooth] (\x, {0.18*sqrt(\x-0.05)})
+    -- (2.0, 0.05) -- (2.05, 0.0)
+    -- plot[domain=2.05:3.95, samples=15, smooth] (\x, {0.18*sqrt(\x-2.05)})
+    -- (4.0, 0.05) -- (4.05, 0.0)
+    -- plot[domain=4.05:5.95, samples=15, smooth] (\x, {0.18*sqrt(\x-4.05)})
+    -- (6.0, 0.04) -- (6.05, 0.0)   % ZUPT also re-zeros bias estimate
+    -- plot[domain=6.05:7.95, samples=15, smooth] (\x, {0.16*sqrt(\x-6.05)}) % slightly lower noise floor after ZUPT
+    -- (8.0, 0.04) -- (8.05, 0.0)
+    -- plot[domain=8.05:9.95, samples=15, smooth] (\x, {0.16*sqrt(\x-8.05)});
+
+% ZUPT arrow during idle period
+\draw[zupt] (6,1.55) -- (6,0.15) node[anchor=south west, font=\scriptsize, cb_blue, midway] {bias re-estimation};
+
+% Trigger ticks at top
+\foreach \x in {2,4,8} {
+    \draw[->, line width=0.5pt, cb_green!55!black] (\x,1.25) -- (\x,0.10);
+    \node[anchor=south, font=\scriptsize, cb_green!50!black] at (\x,1.27) {trigger fires};
+    \node[anchor=south, font=\scriptsize, cb_green!50!black] at (\x,1.50) {(accumulator reset)};
+}
+
+% Drift trajectory labels (place at the END of curves)
+\node[anchor=west, font=\scriptsize\bfseries, cb_vermillion] at (10.15, {0.30*sqrt(10)})
+    {unmitigated drift $\propto\sqrt{t}$};
+\node[anchor=west, font=\scriptsize\bfseries, cb_green!40!black] at (10.15, 0.27)
+    {JIT-capped drift $\leq$ one inter-trigger interval};
+
+% Y axis label
+\node[anchor=south, font=\scriptsize, rotate=90] at (-0.55, 0.95) {position drift $\sigma_p$};
+
+% Caption / explanation box
+\node[draw, line width=0.4pt, fill=cb_blue!4, rounded corners=2pt,
+      anchor=north west, align=left, font=\scriptsize, inner sep=4pt] (box) at (-0.5,-0.9) {
+   \textbf{Drift containment in JIT.}\quad
+   \textcolor{cb_green!40!black}{Green:} cumulative position drift is reset at every JIT trigger (the
+   control frame transmits only the displacement \emph{since the previous transmission}),
+   so the random-walk error is capped by a single inter-trigger interval ($\le$ seconds
+   under nominal motion), not the full session length.\\[2pt]
+   \textcolor{cb_blue}{Blue arrow:} opportunistic ZUPT during idle intervals (UE stationary, $\dot{\boldsymbol\delta}\approx 0$)
+   re-estimates $\mathbf{b}_a,\mathbf{b}_\omega$ without operator action, supporting multi-hour / multi-day operation.
+};
+
+% Bounding box
+\useasboundingbox (-1.2,-3.2) rectangle (12.5,2.0);
+\end{tikzpicture}

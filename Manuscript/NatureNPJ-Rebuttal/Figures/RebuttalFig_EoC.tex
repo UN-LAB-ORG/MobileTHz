@@ -1,0 +1,96 @@
+% EoC + Trigger-Boundary schematic. Shows how the UE locally detects
+% approaching EoC without RF feedback (Reviewer 2 Q1+Q2, Editor #4).
+\begin{tikzpicture}[
+    >=Latex,
+    font=\footnotesize,
+    every node/.style={inner sep=1pt},
+    boresight/.style={dashed, line width=0.6pt, gray!60!black},
+    eoc/.style={line width=0.7pt, cb_vermillion!85!black},
+    trigger/.style={line width=0.7pt, cb_blue!85!black},
+    pathvec/.style={->, line width=0.9pt, cb_green!55!black},
+    velvec/.style={->, line width=1.1pt, cb_vermillion},
+    apnode/.style={draw, line width=0.5pt, fill=white, rounded corners=1.5pt, minimum width=0.85cm, minimum height=0.55cm},
+    uenode/.style={draw, line width=0.5pt, fill=cb_blue!10, circle, inner sep=1.6pt},
+]
+
+% ---------- AP at origin (left) ----------
+\coordinate (AP) at (0,0);
+\node[apnode, anchor=center] (APbox) at (AP) {};
+\node[anchor=east, font=\scriptsize\bfseries] at (AP) {AP\,\,};
+
+% Boresight axis
+\draw[boresight] (AP) -- (8.8,0);
+\node[anchor=south, font=\scriptsize, gray!60!black] at (8.6,0) {boresight};
+
+% ---------- Beam cone (EoC outer boundary at +/- theta_HPBW/2) ----------
+% Open angle: theta_HPBW/2 from the boresight at top and bottom
+\def\halfEoC{14}      % EoC half-angle (deg)
+\def\halfTrig{5}      % trigger boundary half-angle (deg, eta*HPBW ~ 0.36 * 14 deg = 5deg shown narrower)
+
+% EoC top
+\draw[eoc] (AP) -- ({8.8*cos(\halfEoC)}, {8.8*sin(\halfEoC)});
+% EoC bottom
+\draw[eoc] (AP) -- ({8.8*cos(\halfEoC)}, {-8.8*sin(\halfEoC)});
+% EoC fill (light vermillion)
+\fill[cb_vermillion!6, opacity=0.6]
+    (AP) -- ({8.8*cos(\halfEoC)}, {8.8*sin(\halfEoC)})
+       -- ({8.8*cos(\halfEoC)}, {-8.8*sin(\halfEoC)}) -- cycle;
+
+% Trigger boundary (interior)
+\draw[trigger] (AP) -- ({8.8*cos(\halfTrig)}, {8.8*sin(\halfTrig)});
+\draw[trigger] (AP) -- ({8.8*cos(\halfTrig)}, {-8.8*sin(\halfTrig)});
+\fill[cb_blue!6, opacity=0.6]
+    (AP) -- ({8.8*cos(\halfTrig)}, {8.8*sin(\halfTrig)})
+       -- ({8.8*cos(\halfTrig)}, {-8.8*sin(\halfTrig)}) -- cycle;
+
+% Annotated half-angles
+\draw[<->, line width=0.4pt, gray!60!black]
+    (1.6,0) arc[start angle=0, end angle=\halfEoC, radius=1.6];
+\node[font=\scriptsize, anchor=west] at ({1.6*cos(\halfEoC/2)+0.05}, {1.6*sin(\halfEoC/2)}) {$\dfrac{\theta_{\text{HPBW}}}{2}$ (EoC)};
+
+\draw[<->, line width=0.4pt, gray!60!black]
+    (2.7,0) arc[start angle=0, end angle=\halfTrig, radius=2.7];
+\node[font=\scriptsize, anchor=west, cb_blue!70!black] at ({2.7*cos(\halfTrig/2)+0.05}, {2.7*sin(\halfTrig/2)-0.03}) {$\eta\,\theta_{\text{HPBW}}$};
+
+% Bottom-side labels
+\node[font=\scriptsize, anchor=west, cb_vermillion!75!black, rotate=-\halfEoC] at ({3.4*cos(\halfEoC)+0.05}, {-3.4*sin(\halfEoC)-0.06}) {Edge of Coverage (EoC, $-3$\,dB)};
+\node[font=\scriptsize, anchor=west, cb_blue!75!black, rotate=-\halfTrig] at ({3.4*cos(\halfTrig)+0.05}, {-3.4*sin(\halfTrig)-0.06}) {Trigger Boundary};
+
+% ---------- UE inside beam, moving toward EoC ----------
+% UE at current offset inside trigger boundary
+\coordinate (UE) at (5.4, 0.20);
+\node[uenode] at (UE) {};
+\node[anchor=south, font=\scriptsize\bfseries] at ($(UE)+(0,0.06)$) {UE};
+
+% Velocity vector at UE pointing toward upper EoC
+\draw[velvec] (UE) -- ++(0.55, 0.65)
+    node[anchor=south west, font=\scriptsize\bfseries, cb_vermillion] {$\dot{\boldsymbol{\delta}}$};
+
+% Projected displacement over T_react (dashed segment leading to trigger boundary)
+\coordinate (UEproj) at ($(UE) + (0.95, 1.10)$);
+\draw[pathvec, dashed]
+    (UE) -- (UEproj) node[midway, anchor=west, font=\scriptsize, cb_green!40!black, xshift=2pt, yshift=-1pt] {$\|\dot{\boldsymbol\delta}\|\cdot T_{\text{react}}$};
+
+% Mark where the projected position would land relative to trigger boundary
+\draw[fill=cb_green!50!black] (UEproj) circle (1.2pt);
+\node[anchor=south west, font=\scriptsize, cb_green!40!black] at (UEproj) {projected position at $t{+}T_{\text{react}}$};
+
+% Trigger-fires marker (Eq.~7 with equality)
+\node[draw, line width=0.4pt, fill=cb_green!8, rounded corners=2pt,
+      anchor=north west, align=left, font=\scriptsize, inner sep=4pt] (eq) at (-0.4,-3.7) {
+   \textcolor{cb_green!50!black}{\textbf{JIT trigger condition (Eq.~7):}}\quad
+   $\|\dot{\boldsymbol{\delta}}\|\cdot T_{\text{react}} \;>\; \eta\cdot\theta_{\text{HPBW}}$\\[1pt]
+   \textcolor{cb_blue!70!black}{Boundary adapts to motion:} faster $\|\dot{\boldsymbol{\delta}}\|$ $\Rightarrow$ trigger fires \emph{earlier}, farther inside EoC.\\
+   Detection is performed \emph{locally at the UE} (no AP feedback needed for AP-stationary scenarios).
+};
+
+% Sequence numbers on the timeline
+\node[circle, draw, line width=0.4pt, fill=white, inner sep=0.5pt, minimum size=10pt, font=\scriptsize] at ($(UE)+(0,-0.45)$) {1};
+\node[font=\scriptsize, anchor=north, gray!60!black] at ($(UE)+(0,-0.65)$) {UE inside beam};
+
+\node[circle, draw, line width=0.4pt, fill=white, inner sep=0.5pt, minimum size=10pt, font=\scriptsize] at ($(UEproj)+(0.10,0.40)$) {2};
+\node[font=\scriptsize, anchor=south, gray!60!black] at ($(UEproj)+(0.10,0.55)$) {projected crossing $\to$ trigger fires};
+
+% Bounding box
+\useasboundingbox (-1.0,-4.5) rectangle (9.2,3.8);
+\end{tikzpicture}

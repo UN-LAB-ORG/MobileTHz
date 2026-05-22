@@ -1,0 +1,105 @@
+% Detailed system-model schematic addressing Reviewer 1, Reviewer 2,
+% and the editor: coordinate frame, position/velocity variables, and
+% Link Deviation Velocity composition for the JIT setting.
+\begin{tikzpicture}[
+    >=Latex,
+    font=\footnotesize,
+    every node/.style={inner sep=1pt},
+    axisstyle/.style={->, line width=0.7pt, gray!75!black},
+    bodyaxis/.style={->, line width=0.7pt, cb_blue},
+    losline/.style={line width=0.9pt, cb_dark_gray, dashed},
+    beamline/.style={line width=0.6pt, cb_blue!70!black},
+    velvec/.style={->, line width=1.0pt, cb_vermillion},
+    omegavec/.style={->, line width=1.0pt, cb_reddish_purple},
+    devvec/.style={->, line width=1.2pt, cb_green!60!black},
+    hatchstyle/.style={pattern=north east lines, pattern color=gray!60},
+]
+
+% ---------- Wall + AP on the right ----------
+\fill[hatchstyle] (7.7,-2.0) rectangle (8.0,3.2);
+\draw[line width=0.6pt, gray!75!black] (7.7,-2.0) -- (7.7,3.2);
+
+% AP enclosure
+\node[draw, line width=0.6pt, fill=white, rounded corners=1.5pt, minimum width=0.85cm, minimum height=0.6cm, anchor=center] (AP) at (7.05,0.5) {};
+\node[anchor=south, font=\scriptsize\bfseries] at (AP.north) {THz-AP};
+
+% AP horn cone (boresight points to UE)
+\fill[cb_blue!10] (AP.west) -- ++(-0.5,0.18) -- ++(-0.4,0.0) -- ++(0,-0.36) -- ++(0.4,0.0) -- cycle;
+\draw[line width=0.5pt, cb_blue!70!black] (AP.west) -- ++(-0.5,0.18) -- ++(-0.4,0.0) -- ++(0,-0.36) -- ++(0.4,0.0) -- cycle;
+
+% ---------- World coordinate frame at AP (origin O) ----------
+\coordinate (O) at (6.1, 0.5);
+\node[circle, fill=black, inner sep=1pt, label={[font=\scriptsize\bfseries, yshift=-1pt]above right:$O$}] at (O) {};
+
+% World axes: x (toward UE), y (along wall), z (up)
+\draw[axisstyle] (O) -- ++(-1.8,-0.45) node[anchor=north east, font=\scriptsize\bfseries, gray!60!black] {$\mathbf{x}$};
+\draw[axisstyle] (O) -- ++(-0.55,0.95)  node[anchor=south west, font=\scriptsize\bfseries, gray!60!black] {$\mathbf{z}$};
+\draw[axisstyle] (O) -- ++(1.05,-0.20)  node[anchor=west,     font=\scriptsize\bfseries, gray!60!black] {$\mathbf{y}$};
+
+% AP-fixed beam axis (LoS direction)
+\coordinate (UE) at (1.2,-0.6);
+\draw[losline] (O) -- (UE);
+\node[anchor=south, font=\scriptsize] at ($(O)!0.55!(UE) + (0.05,0.05)$) {$d_{\text{link}}$};
+
+% AP beam edges (HPBW cone in 2D projection)
+\draw[beamline] (O) -- ($(UE)+(-0.12,0.72)$);
+\draw[beamline] (O) -- ($(UE)+(0.12,-0.72)$);
+\fill[cb_blue!7, opacity=0.55] (O) -- ($(UE)+(-0.12,0.72)$) -- ($(UE)+(0.12,-0.72)$) -- cycle;
+
+% Edge-of-coverage half-angle annotation
+\draw[<->, line width=0.4pt, gray!60!black]
+    ($(O)!0.32!(UE)+(-0.04,0.24)$) arc[start angle=160, end angle=180, radius=0.30];
+\node[font=\scriptsize, anchor=east] at ($(O)!0.36!(UE)+(-0.20,0.16)$) {$\tfrac{\theta_{\text{HPBW}}}{2}$};
+
+% ---------- UE on the left ----------
+\node[draw, line width=0.6pt, fill=white, rounded corners=1.5pt, minimum width=1.3cm, minimum height=0.78cm, anchor=center] (UEbody) at (UE) {};
+\node[anchor=south, font=\scriptsize\bfseries] at ($(UEbody.north)+(0,0.01)$) {THz-UE};
+
+% UE antenna on its right edge (pointing back toward AP)
+\fill[cb_orange!20] (UEbody.east) -- ++(0.35,0.13) -- ++(0.30,0.0) -- ++(0,-0.26) -- ++(-0.30,0.0) -- cycle;
+\draw[line width=0.5pt, cb_orange!70!black] (UEbody.east) -- ++(0.35,0.13) -- ++(0.30,0.0) -- ++(0,-0.26) -- ++(-0.30,0.0) -- cycle;
+
+% UE body-frame coordinate axes (at UE)
+\coordinate (Ub) at ($(UEbody.center)+(-0.05,0.05)$);
+\draw[bodyaxis] (Ub) -- ++(0.55,0.18)  node[anchor=west,  font=\scriptsize\bfseries, cb_blue] {$\mathbf{x}_{\text{b}}$};
+\draw[bodyaxis] (Ub) -- ++(-0.20,0.60) node[anchor=south, font=\scriptsize\bfseries, cb_blue] {$\mathbf{z}_{\text{b}}$};
+\draw[bodyaxis] (Ub) -- ++(0.55,-0.32) node[anchor=west,  font=\scriptsize\bfseries, cb_blue] {$\mathbf{y}_{\text{b}}$};
+
+% IMU marker on UE
+\node[draw, line width=0.4pt, fill=cb_yellow!50, rounded corners=0.5pt, minimum size=2.5pt, anchor=center] (IMU) at ($(UEbody.south west)+(0.18,0.12)$) {};
+\node[font=\scriptsize, anchor=north east, xshift=2pt] at ($(IMU.south)+(0.18,-0.02)$) {IMU};
+
+% Orientation quaternion label
+\node[font=\scriptsize, anchor=north west, cb_blue] at ($(UEbody.south east)+(-0.05,-0.05)$) {$\mathbf{q}_{\text{body}}$};
+
+% ---------- Velocity vectors at UE ----------
+% LoS-perpendicular translational velocity v_perp (orthogonal to OUE line)
+\draw[velvec] (UEbody.center) -- ++(0.30,1.00) node[anchor=south, font=\scriptsize\bfseries, cb_vermillion] {$\mathbf{v}_{\perp}$};
+
+% Angular velocity (rotational arc + vector at UE)
+\draw[omegavec, line width=0.7pt, ->]
+    ($(UEbody.center)+(-0.62,0.0)$)
+    arc[start angle=160, end angle=20, radius=0.62];
+\node[font=\scriptsize\bfseries, anchor=east, cb_reddish_purple] at ($(UEbody.center)+(-0.65,0.45)$) {$\boldsymbol{\omega}_{\text{UE}}$};
+
+% ---------- Link Deviation Velocity composition (right panel) ----------
+\node[draw, line width=0.4pt, fill=cb_green!8, rounded corners=2pt, anchor=north west,
+      align=left, font=\scriptsize, inner sep=4pt] (vecbox) at (-0.4,-1.55) {
+    \textcolor{cb_green!50!black}{\textbf{Link Deviation Velocity (Eq.~6)}}\\[1pt]
+    $\dot{\boldsymbol{\delta}} \;=\; \boldsymbol{\omega}_{\text{UE}} \;+\; \dfrac{\mathbf{v}_{\perp}}{d_{\text{link}}}$\\[3pt]
+    \textit{both terms transformed to world frame}\\
+    \textit{via }$\mathbf{q}_{\text{body}}$\textit{ (Reviewer~1, R1.5)}
+};
+
+% Link Deviation arrow at UE (the combined angular rate)
+\draw[devvec] ($(UEbody.center)+(-0.10,-0.65)$) -- ++(1.10,0.55)
+    node[anchor=north west, font=\scriptsize\bfseries, cb_green!40!black] {$\dot{\boldsymbol{\delta}}$};
+
+% ---------- Title / caption inside figure ----------
+\node[font=\footnotesize, anchor=north] at (3.5, 3.5) {%
+  \textbf{Detailed JIT system-model schematic: variables, frames, and Link Deviation Velocity composition}%
+};
+
+% Bounding to keep the figure compact
+\useasboundingbox (-2.5,-3.7) rectangle (8.4,3.7);
+\end{tikzpicture}

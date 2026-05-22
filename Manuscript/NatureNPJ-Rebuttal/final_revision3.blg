@@ -1,0 +1,82 @@
+This is BibTeX, Version 0.99e
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: final_revision3.aux
+Reallocating 'name_of_file' (item size: 1) to 14 items.
+The style file: naturemag-doi.bst
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig2a.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig2b.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig2c.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig4a.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig4b.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig4c.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig5a.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig5b.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig6a.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig6b.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig7a.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig7b.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig7c.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig8a.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig8b.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig8c.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Figures/Fig8d.aux
+Reallocating 'name_of_file' (item size: 1) to 11 items.
+Database file #1: references.bib
+You've used 78 entries,
+            2380 wiz_defined-function locations,
+            1521 strings with 24742 characters,
+and the built_in function-call counts, 33319 in all, are:
+= -- 2395
+> -- 904
+< -- 1
++ -- 452
+- -- 226
+* -- 4201
+:= -- 3551
+add.period$ -- 238
+call.type$ -- 78
+change.case$ -- 117
+chr.to.int$ -- 0
+cite$ -- 78
+duplicate$ -- 2838
+empty$ -- 3026
+format.name$ -- 296
+if$ -- 6735
+int.to.chr$ -- 0
+int.to.str$ -- 78
+missing$ -- 691
+newline$ -- 404
+num.names$ -- 78
+pop$ -- 565
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 662
+stack$ -- 0
+substring$ -- 1630
+swap$ -- 2848
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 212
+width$ -- 80
+write$ -- 933

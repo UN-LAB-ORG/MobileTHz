@@ -1,0 +1,82 @@
+\begin{tikzpicture}[
+        scale=1.0,
+        every node/.style={font=\small},
+        worldax/.style={->, line width=0.8pt, black!85},
+        bodyax/.style={->, line width=0.7pt, cb_blue!85!black},
+        veloc/.style={->, line width=1.0pt, cb_orange!90!black},
+        angvel/.style={->, line width=0.9pt, cb_green!50!black},
+        losline/.style={dashed, line width=0.7pt, black!70},
+        beamfill/.style={fill=cb_green!10, draw=cb_green!65!black, line width=0.4pt},
+        ueicon/.style={draw=black, fill=gray!12, line width=0.5pt, rounded corners=1.2pt},
+        apicon/.style={draw=black, fill=gray!22, line width=0.5pt}
+    ]
+
+    %---------- AP (right) ----------
+    \coordinate (AP) at (8.0, 0);
+    % Wall hatching
+    \draw[pattern=north east lines, pattern color=black!45, line width=0.3pt]
+        (8.2,-1.3) rectangle (8.6,1.3);
+    \draw[apicon] (7.9,-0.35) rectangle (8.2,0.35);
+    \node[anchor=south, font=\small\bfseries] at ($(AP)+(0,0.45)$) {AP};
+
+    %---------- AP World Coordinate Frame ----------
+    \coordinate (WO) at (7.9,0);
+    \draw[worldax] (WO) -- ++(180:0.8) node[anchor=north east, xshift=2pt] {\scriptsize $X_W$};
+    \draw[worldax] (WO) -- ++(90:0.8) node[anchor=south] {\scriptsize $Z_W$};
+    \draw[worldax] (WO) -- ++(-145:0.55) node[anchor=north east, xshift=-3pt, yshift=2pt] {\scriptsize $Y_W$};
+
+    %---------- AP Beam Cone (HPBW) ----------
+    \fill[beamfill] (AP) -- ($(AP)+(168:7.5)$) arc[start angle=168, end angle=192, radius=7.5] -- cycle;
+
+    % Boresight
+    \draw[line width=0.5pt, dashed, black!60] (AP) -- ($(AP)+(180:7.5)$);
+
+    % HPBW angle marker
+    \draw[<->, line width=0.4pt, black!70]
+        ($(AP)+(168:1.3)$) arc[start angle=168, end angle=192, radius=1.3];
+    \node[anchor=east, font=\scriptsize] at ($(AP)+(180:1.6)$) {$\theta_{\text{HPBW}}$};
+
+    %---------- UE position ----------
+    \coordinate (UE) at (2.3, 0.30);
+
+    %---------- Line of Sight ----------
+    \draw[losline] (AP) -- (UE);
+    \node[font=\scriptsize, fill=white, inner sep=1pt] at ($(AP)!0.55!(UE)$) {$d_{\text{link}}$};
+
+    %---------- UE Phone Icon (slightly tilted) ----------
+    \begin{scope}[shift={(UE)}, rotate=12]
+        \fill[ueicon] (-0.32,-0.62) rectangle (0.32,0.62);
+        \fill[black!80] (-0.24,-0.55) rectangle (0.24,0.50);
+    \end{scope}
+    \node[anchor=south, font=\small\bfseries] at ($(UE)+(0,0.75)$) {UE};
+    \node[anchor=north, font=\scriptsize, text=black!65] at ($(UE)+(0,-0.75)$) {w/ IMU};
+
+    %---------- UE Body Frame ----------
+    \coordinate (BO) at ($(UE)+(0.55,0)$);
+    \draw[bodyax] (BO) -- ++(78:0.65) node[anchor=south, xshift=-2pt, font=\scriptsize] {$\mathbf{x}_b$};
+    \draw[bodyax] (BO) -- ++(0:0.65) node[anchor=west, font=\scriptsize] {$\mathbf{y}_b$};
+    \draw[bodyax] (BO) -- ++(-130:0.45) node[anchor=north east, xshift=2pt, font=\scriptsize] {$\mathbf{z}_b$};
+    \node[anchor=west, font=\scriptsize, text=cb_blue!85!black] at ($(BO)+(0.55,0.65)$)
+        {body frame ($\mathbf{q}_{\text{body}}$)};
+
+    %---------- UE Velocities ----------
+    \coordinate (VO) at ($(UE)+(-0.15,0.10)$);
+    \draw[veloc] (VO) -- ++(110:1.4) node[anchor=south east, font=\small, text=cb_orange!90!black] {$\mathbf{v}$};
+    \draw[->, line width=0.7pt, cb_orange!70!black, densely dashed]
+        (VO) -- ++(180:0.55) node[anchor=east, font=\scriptsize] {$\mathbf{v}_{\parallel}$};
+    \draw[->, line width=0.9pt, cb_orange!90!black]
+        (VO) -- ++(90:1.30) node[anchor=east, font=\small, text=cb_orange!90!black, xshift=-2pt] {$\mathbf{v}_{\perp}$};
+
+    %---------- UE Angular Velocity ----------
+    \draw[angvel] ($(UE)+(0.05,0.45)$)
+        arc[start angle=-30, end angle=210, radius=0.28, x radius=0.22, y radius=0.16];
+    \node[font=\small, text=cb_green!50!black] at ($(UE)+(0.60,0.70)$) {$\boldsymbol{\omega}_{\text{UE}}$};
+
+    %---------- Link Deviation Velocity equation (call-out) ----------
+    \node[draw=black!55, fill=white, rounded corners=2pt, font=\footnotesize, line width=0.4pt,
+          align=center, inner sep=4pt]
+        at (5.0,-1.80)
+        {$\dot{\boldsymbol{\delta}} = \boldsymbol{\omega}_{\text{UE}} + \dfrac{\mathbf{v}_{\perp}}{d_{\text{link}}}$\quad
+         (Eq.~6, both terms in AP-anchored world frame)};
+
+\end{tikzpicture}

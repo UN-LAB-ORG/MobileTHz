@@ -1,0 +1,21 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        width=\linewidth, height=5cm,
+        xlabel={JIT guard fraction $\eta$},
+        ylabel={Signaling Overhead (\%)},
+        xmin=0.05, xmax=0.75,
+        ymin=0, ymax=0.85,
+        legend style={font=\small, legend pos=north east, draw=black!50},
+    ]
+        % JIT signaling overhead vs eta (illustrative, canonical scenario)
+        \addplot+[color=cb_green, mark=none, solid, very thick]
+            coordinates {
+                (0.10, 0.78) (0.15, 0.55) (0.20, 0.40) (0.25, 0.33)
+                (0.30, 0.29) (0.36, 0.26) (0.40, 0.22) (0.45, 0.18)
+                (0.50, 0.15) (0.55, 0.12) (0.60, 0.10) (0.65, 0.075)
+                (0.70, 0.06)
+            };
+        \addlegendentry{JIT signaling overhead}
+
+    \end{axis}
+\end{tikzpicture}

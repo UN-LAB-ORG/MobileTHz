@@ -1,0 +1,71 @@
+\begin{tikzpicture}[
+        scale=1.0,
+        every node/.style={font=\small},
+        beamfill/.style={fill=cb_green!10, draw=cb_green!75!black, line width=0.5pt},
+        trigfill/.style={fill=cb_orange!12, draw=cb_orange!85!black, line width=0.5pt, dashed},
+        veloc/.style={->, line width=1.0pt, cb_orange!90!black},
+        ueicon/.style={draw=black, fill=gray!18, line width=0.4pt, rounded corners=1.0pt}
+    ]
+
+    %---------- AP location ----------
+    \coordinate (AP) at (-0.3, 0);
+    \filldraw[fill=gray!28, draw=black, line width=0.5pt]
+        (-0.5,-0.28) rectangle (-0.1,0.28);
+    \node[anchor=east, font=\small\bfseries] at (AP) [xshift=-8pt] {AP};
+
+    %---------- Beam (HPBW) cone ----------
+    \fill[beamfill]
+        (AP) -- ++(16:8.5) arc[start angle=16, end angle=-16, radius=8.5] -- cycle;
+
+    %---------- Trigger boundary (inside EoC) ----------
+    \fill[trigfill]
+        (AP) -- ++(10:8.2) arc[start angle=10, end angle=-10, radius=8.2] -- cycle;
+
+    %---------- Boresight ----------
+    \draw[line width=0.5pt, dashdotted, black!70] (AP) -- ++(0:8.7);
+
+    %---------- HPBW angle marker ----------
+    \draw[<->, line width=0.4pt, black!70]
+        ($(AP)+(16:1.6)$) arc[start angle=16, end angle=-16, radius=1.6];
+    \node[anchor=west, font=\scriptsize] at ($(AP)+(0:1.7)$) {$\theta_{\text{HPBW}}$};
+
+    %---------- Labels on the right edge of the cone ----------
+    \node[anchor=west, font=\small, text=cb_green!55!black]
+        at ($(AP)+(16:8.6)$) [xshift=2pt, yshift=4pt] {Edge of Coverage};
+    \node[anchor=west, font=\scriptsize, text=cb_green!55!black]
+        at ($(AP)+(16:8.0)$) [xshift=4pt, yshift=-8pt] {($\pm \theta_{\text{HPBW}}/2$ off boresight)};
+
+    \node[anchor=west, font=\small, text=cb_orange!85!black]
+        at ($(AP)+(10:8.2)$) [xshift=2pt, yshift=4pt] {Trigger boundary};
+    \node[anchor=west, font=\scriptsize, text=cb_orange!85!black]
+        at ($(AP)+(10:7.6)$) [xshift=4pt, yshift=-8pt]
+        {$\|\dot{\boldsymbol{\delta}}\|\,T_{\text{react}} = \eta\,\theta_{\text{HPBW}}$};
+
+    %---------- UE inside the trigger boundary ----------
+    \coordinate (UE) at (4.5, 0.45);
+    \begin{scope}[shift={(UE)}, rotate=14]
+        \fill[ueicon] (-0.28,-0.50) rectangle (0.28,0.50);
+        \fill[black!80] (-0.20,-0.45) rectangle (0.20,0.40);
+    \end{scope}
+    \node[anchor=south, font=\small\bfseries] at (UE) [yshift=12pt] {UE};
+
+    %---------- UE velocity vector (toward boundary) ----------
+    \draw[veloc] (UE) -- ++(72:1.5) coordinate (UEEND)
+        node[anchor=south, font=\small, text=cb_orange!90!black, yshift=2pt]
+        {$\dot{\boldsymbol{\delta}}$};
+
+    %---------- Projected displacement during T_react ----------
+    \draw[->, line width=0.7pt, cb_orange!70!black, densely dashed]
+        (UE) -- ++(72:0.85) coordinate (UEPROJ)
+        node[anchor=west, font=\scriptsize, text=cb_orange!70!black, midway, xshift=2pt]
+        {$\|\dot{\boldsymbol{\delta}}\|\,T_{\text{react}}$};
+
+    %---------- Predicted UE position after T_react (ghosted) ----------
+    \begin{scope}[shift={(UEEND)}, rotate=18, opacity=0.40]
+        \fill[ueicon] (-0.28,-0.50) rectangle (0.28,0.50);
+        \fill[black!70] (-0.20,-0.45) rectangle (0.20,0.40);
+    \end{scope}
+    \node[anchor=south, font=\scriptsize, opacity=0.8] at (UEEND) [yshift=12pt]
+        {UE @ $t + T_{\text{react}}$};
+
+\end{tikzpicture}

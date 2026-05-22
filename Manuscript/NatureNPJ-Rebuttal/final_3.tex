@@ -1,0 +1,958 @@
+\documentclass[fleqn,10pt]{wlscirep}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{multirow, wrapfig, comment, subcaption, graphicx, standalone, pgfplots, tikz, bbm, tabularx, booktabs, siunitx}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usetikzlibrary{scopes, backgrounds, matrix, shapes.geometric, patterns,
+    decorations.markings, arrows.meta, calc, positioning}
+\usepgfplotslibrary{fillbetween}
+
+\pgfplotsset{compat=1.18}
+
+\DeclareSIUnit{\dBm}{dBm}
+
+\definecolor{cb_black}{RGB}{0,0,0}
+\definecolor{cb_sky_blue}{RGB}{86,180,233}
+\definecolor{cb_yellow}{RGB}{240,228,66}
+\definecolor{cb_reddish_purple}{RGB}{204,121,167}
+\definecolor{cb_vermillion}{RGB}{213,94,0}
+\definecolor{cb_blue}{RGB}{2,112,189}
+\definecolor{hs_blue}{RGB}{51,51,255}
+\definecolor{imu_green}{RGB}{0,255,0}
+\definecolor{cb_orange}{RGB}{229,126,34}
+\definecolor{cb_green}{RGB}{113,178,112}
+\definecolor{cb_dark_gray}{RGB}{102,102,102}
+\definecolor{cb_gray}{RGB}{102,102,102}
+
+% Revision-marking macros: clean (final_2) version — render as identity.
+% (final_revision2.tex defines them as colored for the marked-up version.)
+\newcommand{\rev}[1]{#1}
+\newcommand{\adj}[1]{#1}
+\newcommand{\moved}[1]{#1}
+
+\newcommand{\legline}[2]{%
+    \tikz[baseline=-0.5ex]{
+        \draw[#1, #2, line width=1.5pt] (0,0) -- (0.5,0);
+    }%
+}
+\newcommand{\legmark}[2]{%
+    \tikz[baseline=-0.5ex]{
+        \node[#2, fill=#1, draw=#1, inner sep=2pt, scale=0.8] at (0,0) {};
+    }%
+}
+\newcommand{\circled}[1]{\tikz[baseline=(char.base)]{\node[shape=circle, draw, inner sep=1pt, font=\scriptsize\bfseries, line width=0.5pt] (char) {#1};}}
+
+\pgfplotsset{
+    every axis/.append style={
+        axis x line=bottom,
+        axis y line=left,
+        label style={font=\bfseries},
+        tick label style={font=\small},
+        legend style={font=\small},
+        grid=major,
+        grid style={dashed, gray!50},
+    }
+}
+
+\title{Truly Mobile Sub-Terahertz Communications Beyond 6G via Just-in-Time IMU-Assisted Beam Management}
+\author[1*]{Sergey Petrushkevich}
+\author[2]{Vitaly Petrov}
+\author[1]{Josep M. Jornet}
+\affil[1]{Northeastern University, Department of Electrical and Computer Engineering \& \newline Institute for the Wireless Internet of
+Things, Boston, 02115, MA, USA}
+\affil[2]{KTH Royal Institute of Technology, Department of Communications Systems, \newline School of Electrical Engineering and Computer Science, Stockholm, 11428, Sweden}
+\affil[*]{Corresponding author, petrushkevich.s@northeastern.edu}
+
+\begin{abstract}
+Sub-Terahertz (sub-THz) communication is a candidate technology for beyond-sixth-generation (beyond-6G) wireless networks, promising up to Terabit-per-second data rates and microsecond-level latencies. However, the highly directional sub-THz beams required to overcome severe path loss make maintaining reliable beam alignment under mobility extremely challenging. Existing \emph{reactive} in-band and out-of-band sensor-assisted beam management strategies are often insufficient to prevent outages caused by unpredictable user motion. Progress is further challenged by the absence of comprehensive evaluation platforms that jointly account for: (a)~realistic user mobility, (b)~real-time sensor data, and (c)~accurate characteristics of sub-THz hardware. To address these challenges, we introduce: (i)~\emph{Just-in-Time (JIT)}, a \emph{hybrid proactive and reactive beam management algorithm} that fuses RF and inertial measurement unit (IMU) data to preemptively realign the link before failure, and (ii)~\emph{MobileTHz}, an integrated simulation and Hardware-in-the-Loop platform for mobile sub-THz systems. Benchmarked against an in-band hierarchical search and a sensor-assisted reactive algorithm, JIT improves mean capacity, reduces capacity variance, and increases link availability by up to 1--2 orders of magnitude over reactive baselines, while incurring a signaling overhead below 0.4\% of the channel capacity. Together, JIT and MobileTHz advance efficient, resilient, and truly mobile sub-THz communication systems beyond 6G.
+\end{abstract}
+
+\begin{document}
+\flushbottom
+\maketitle
+
+\thispagestyle{empty}
+
+\vspace{-10mm}
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+\section*{Introduction}
+The trajectory of wireless communications development is heavily defined by a growing demand for higher reliability and capacity, lower latency, and ubiquitous connectivity\cite{Dang2020, DeAlwis2021, 9766110}. Despite an initially relatively slow rollover of fifth-generation (5G) wireless network deployments globally, in recent years, the use of high-definition video streaming, cloud-based services (including artificial intelligence (AI) systems), and the Internet of Things (IoT) has continued to accelerate\cite{Ericsson2025, DeAlwis2021}. According to multiple predictions and analyses, future 6G-and-beyond applications such as immersive extended reality (XR), large-scale digital twinning, connected robotics, and high-rate non-terrestrial networks will place demanding requirements on wireless infrastructure. These applications may ultimately require peak data rates reaching the Terabit-per-second (Tbps) scale, coupled with latencies on the order of microseconds\cite{10422992, Azari2022, Nokia2022, DeAlwis2021, Samsung2020}.
+
+Multiple ongoing R\&D efforts worldwide aim to improve the efficiency of existing wireless systems through further network densification\cite{Boccardi2014}, the deployment of massive multiple-input and multiple-output (MIMO) systems\cite{Chataut2020}, the utilization of Orbital Angular Momentum (OAM)\cite{Zhang2022OAM}, novel modulation and coding schemes\cite{Chen2020BeamSpace}, integrated sensing and communication (ISAC)\cite{Liu2022ISAC}, and more efficient AI-native air interfaces\cite{Hoydis2021}, among others. However, the key performance indicators for wireless systems, such as capacity and latency for communication and resolution for sensing, are tightly coupled to the frequency and bandwidth at which the wireless system operates. Hence, the availability of sufficient spectrum resources becomes essential. Meanwhile, the spectrum allocated for existing 5G networks spans the sub-6~GHz band (Frequency Range 1, FR1), mid-bands between 7~GHz and 15~GHz (sometimes referred to as FR3\cite{Tang2024FR3}), and millimeter-wave (mmWave) bands below 100~GHz (such as FR2 and FR2-2). These resources, which the forthcoming first 6G releases are expected to share\cite{Chen2023}, are projected to become a significant bottleneck\cite{fi14040117, Rappaport2019, 10494372}.
+
+To address this challenge, the research community is actively exploring the sub-Terahertz (sub-THz) spectrum, spanning from 100~GHz (0.1~THz) to 1~THz (also referred to as ``higher mmWave'' bands\cite{9269931}), as a possible next frontier for wireless communication systems beyond 6G\cite{Kleine-Ostmann2011, Dang2020, DeAlwis2021, Samsung2020, Rappaport2019, 10494372}. The sub-THz spectrum particularly offers large contiguous blocks of unallocated bandwidth, up to tens or even hundreds of gigahertz of usable spectrum\cite{10171235, 9766110}. Efficiently utilizing such a wide spectrum will provide one of the essential prerequisites to achieve Tbps-level data rates in future wireless systems\cite{Nokia2022}.
+
+Although the sub-THz spectrum offers a solution to bandwidth scarcity, the properties of the sub-THz channel present many challenges. At these frequencies, free-space path loss presents a significant challenge\cite{10422992, Yu2025Research, Kleine-Ostmann2011}. Additionally, sub-THz signals exhibit poor diffraction and penetration capabilities, making them extremely sensitive to blockage by common obstacles, such as a human hand or body, which are sufficient to interrupt a communication link\cite{10494372, Jornet2023}. \emph{To counteract these issues, sub-THz systems must employ highly directional, high-gain beams on both the transmitter (Tx) and the receiver (Rx) sides\cite{Kleine-Ostmann2011}.}
+
+With the evolution of sub-THz technology in recent decades\cite{9766110, 10579941}, the viability of sub-THz communications is rapidly moving from theoretical speculation to prototyping, demonstration, and practical system design. Recent experimental milestones include offline systems achieving 1.0488~Tbps in the 330--500~GHz band and long-distance links such as 18~Gbps over 30.2~km\cite{Yu2025Research}. Real-time software-defined radios have also demonstrated 33~Gbps data rates in the 135~GHz sub-THz band\cite{9798100,10704668}, among many other recent advancements in sub-THz hardware.
+
+However, while for \textbf{stationary} links (e.g., backhaul or fronthaul setups) high-rate data exchange using highly-directional sub-THz beams has already been experimentally demonstrated via various testbeds\cite{Sen2023, Li2024THz84Gbps, Samsung2021_140GHz}, building reliable \textbf{mobile} sub-THz communication systems remains an open challenge with only a few successful hardware trials reported to date\cite{Han2025THz_ISAC, Petrov2023Mobile}. The key difficulty here is to ensure continuous alignment of narrow Tx and Rx sub-THz beams in the presence of unpredictable node mobility (both translation and rotation)\cite{Stepanov2021, Wang2022, Petrov2023Mobile}. A deviation of just a few degrees between the Tx and Rx beams can lead to complete loss of the received signal, immediately breaking the connection and making it difficult to coordinate Tx and Rx actions to promptly realign their beams. \emph{Hence, developing a reliable mechanism to ensure close-to-perfect alignment of sub-THz beams is one of the key challenges in converting mobile sub-THz communications from concept to realization\cite{10036372, Petrov2023Mobile, Azari2022}.}
+
+Maintaining beam alignment under mobility, commonly referred to as part of beam management, is a key bottleneck for mobile sub-THz networks\cite{Giordani2018ATO, 10422712, Wang2022}. Conventional \textbf{purely in-band} approaches used in modern networks, such as Kalman-filter-based tracking of Rx power, signal-to-noise ratio (SNR), bit error rate (BER), and other RF measurements\cite{8455289,9145366,10067030, 10123123}, demonstrate reliable performance for smooth, linear node motion but struggle with abrupt changes, such as unpredictable rapid device rotation by a human user\cite{Wang2022}. This limitation has recently motivated a shift toward developing new \textbf{out-of-band} strategies that also incorporate auxiliary sensor data into the beam management\cite{10494372, Azari2022, Nokia2022, Chen2023, Jornet2023}. Particularly, infrastructure-side sensors (radar, LiDAR, cameras) can track user position\cite{10422712,5GPPP_Automotive_Vision_2015}, while built-in on-device IMUs provide low-latency motion estimates directly at the user equipment (UE). Fusing IMU and RF data has been shown to outperform either source alone\cite{10036372,9391649,electronics8020142, s21082723, 9814507}. \emph{Still, the principal challenge remains, once the Tx and Rx sub-THz beams get misaligned, realigning them quickly in a mobile environment is difficult without an active Tx-Rx link, even with the use of auxiliary data (e.g., from IMUs).}
+
+Beyond reactive RF-only tracking, recent mmWave work has explored several proactive cues for beam management: sub-6~GHz channel features~\cite{Alrabeiah2020DeepLearning}, infrastructure-mounted LiDAR/radar/vision~\cite{Alkhateeb2023DeepSense, Jiang2023LiDAR, Morais2023Position}, the user device's current orientation~\cite{Rezaie2022Orientation, Struye2023CoVRage}, and bilateral reference-signal exchanges between access point and user device~\cite{Alkhateeb2018DLCB, Xue2023Standardization, Heng2021SixChallenges}. \rev{Machine-learning failure prediction on RF time-series features has been used to pre-emptively trigger a standard beam switch~\cite{9838772}; the 3GPP NR Beam Failure Recovery procedure~\cite{Giordani2018ATO, Heng2021SixChallenges} sends a discrete PRACH-based control message after the MAC entity counts $N$ consecutive Beam Failure Instances at L1; and sensor-aided V2X tracking~\cite{Brambilla_2019} streams IMU samples on every tracking interval over a separate out-of-band control channel.} Each has limitations: the sub-6~GHz approach needs a continuous lower-band reference; AP-side sensing adds infrastructure hardware and raises regulatory and privacy concerns; orientation-based methods select a beam from a precomputed list using only the present orientation, without anticipating when the beam is about to fail; reference-signal exchanges consume RF airtime continuously, even when the link is not at risk; \rev{RF-statistical failure prediction~\cite{9838772} cannot anticipate geometric edge crossings caused by rotation that have not yet manifested in RF; 3GPP NR Beam Failure Recovery is reactive (the recovery message fires after the link has already degraded); and continuous IMU streaming~\cite{Brambilla_2019} pays constant out-of-band overhead}. Most of these approaches were evaluated at mmWave, where beam residence times are an order of magnitude longer than in sub-THz. \emph{In this work we combine three elements specifically for sub-THz beam residence times: UE-side IMU motion sensing, a pre-failure trigger, and coordinated AP/UE realignment delivered through a single low-overhead control frame. To our knowledge, no prior approach jointly delivers all three over a sub-THz protocol with hardware-in-the-loop validation.}
+
+The progress in this field is further limited by a gap in comprehensive end-to-end sub-THz-specific evaluation platforms. On one side, existing sub-THz simulators, including TeraSim\cite{HOSSAIN2019100004}, NYUSIM\cite{10367974}, SiMoNe\cite{rose2015simone, eckhardt2022modular}, and TeraMIMO\cite{tarboush2021teramimo, bodet2023directional}, primarily focus on carefully modeling static or quasi-static point-to-point links and are not inherently designed for real-time beam tracking under mobility\cite{Petrov2023Mobile}. Even when modeling mobility, it is usually accounted for with a low-complexity first-order model: limited straight trajectories, no realistic acceleration, complex non-linear device rotations, etc. On the other hand, although various hardware alignment platforms exist for lower frequency bands\cite{Abdulwahab2020, Keshavamurthy2022, AlAkkoumi2008}, most of them do not account for the unique constraints of sub-THz hardware and data links.
+
+To address the gap above, in this article we design, develop, and comprehensively evaluate (both through simulations and a hardware testbed) a \emph{JIT mobile sub-THz communication system implementing a new IMU-assisted beam management protocol}. The presented solution operates in both a reactive regime, facilitating fast beam realignment once the link is broken, and a \textbf{proactive} regime, predicting possible link failure and coordinating Tx and Rx efforts to prevent it or, when prevention is not possible, minimize the duration of misalignment. We further present \emph{MobileTHz}, a new hardware and software platform, implementing this proposed beam management procedure for mobile sub-THz communications. Finally, we utilize the MobileTHz platform to compare the performance of our proposed solution against state-of-the-art IMU-assisted and non-IMU-assisted beam management approaches.
+
+Our analysis demonstrates that the proposed JIT solution consistently outperforms baseline sub-THz beam management techniques in terms of achievable capacity, lower capacity variance, and greater link availability (\emph{by up to 1--2 orders of magnitude}, depending on the scenario). We therefore conclude that implementing such a new hybrid reactive+proactive IMU-assisted beam management approach can become one of the essential building blocks for truly mobile, reliable, and efficient sub-THz communications toward beyond-6G wireless networks.
+
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+\section*{``Just-in-Time'' Proactive Sub-THz Beam Management}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.95\linewidth]{Figures/Fig1.pdf}
+\vspace{-8 pt}
+\caption{Overview of JIT proactive beam management. (1)~Steady-state operation with continuous RF and IMU monitoring. (2)~Upon crossing the trigger boundary, the UE transmits a control frame ($T_{\text{frame}}$) containing its kinematic state \emph{just before} exiting the Edge of Coverage; the AP processes it ($T_{\text{proc}}$) and both nodes initiate beam steering. (3)~Realignment completes and the data link is restored. The bottom timeline shows the UE and AP activity during the procedure.}
+
+\label{fig_alignment_pdf}
+\vspace{-5pt}
+\end{figure}
+
+Conventional millimeter-wave beam management strategies typically operate reactively, initiating recovery procedures only after signal degradation or link failure is detected\cite{Giordani2018ATO, Wang2022}. This approach is challenging in sub-THz networks due to the reliance on high-gain antennas\cite{Kleine-Ostmann2011}. While essential for closing the link budget, narrow beams (with half-power beamwidths, HPBW, on the order of a few degrees) create mobility constraints: they quadratically expand the spatial search space while shrinking the beam residence time (the window where a moving node stays aligned).
+
+The proposed JIT hybrid proactive+reactive sub-THz beam realignment approach, illustrated in Fig.~\ref{fig_alignment_pdf}, bridges this gap by leveraging IMU sensor data on a mobile UE to provide the access point (AP) with real-time motion awareness. The algorithm fuses RF and IMU data to continuously monitor the UE's deviation from the beam center. A trigger boundary, set inside the antenna's Edge of Coverage (EoC), determines when preemptive action is required. When the projected deviation crosses this boundary, the UE transmits a compact control frame containing its kinematic state to the AP before the link is lost. Then, both nodes initiate coordinated IMU-aided beam steering, completing realignment, or, when prevention is not possible, facilitating a deterministic prompt recovery. Additionally, JIT leverages the sub-THz spectrum to transmit control frames with microsecond-level latency, allowing the system to react to mobility events within the short beam residence time.
+
+To validate this proposal, we implemented the JIT solution using the MobileTHz platform, encompassing both a high-fidelity software simulator and a hardware platform (detailed in the \textit{Methods} section). We then performed a comparative study, benchmarking the performance of the JIT beam realignment against two conventional reactive approaches: the Hierarchical Search algorithm and the IMU-Assist algorithm. The details of the study, including experimental assumptions and system parameters, are summarized in \textit{Methods}, while the key results of our evaluation are discussed in the \textit{Results} section.
+
+
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+\section*{Results}
+
+\rev{\subsection*{Experimental Setup and Performance Metrics}}
+
+We benchmark JIT against four reference schemes. The first two are: (i)~a \rev{state-of-the-art Hierarchical Search beam recovery approach (without IMU assistance)\cite{photonics11060540}, consistent with the SSB-based beam search defined for 3GPP NR\cite{Giordani2018ATO, Heng2021SixChallenges}}; and (ii)~a reactive IMU-assisted beam alignment (leveraging IMU data for beam realignment, but without JIT signaling)\rev{\cite{s141019622, Brambilla_2019, 9391649}}. For illustration, we also model (iii)~a pure static (no realignment) baseline approach used in stationary sub-THz communication systems; and (iv)~a perfect alignment setup (a non-constructive Oracle-based optimal setup with continuous perfect beam alignment and no signaling overheads regardless of the nodes' mobility). The latter also serves as a theoretical upper bound for any constructive beam realignment approach.
+
+We evaluate each scheme across four key performance indicators (KPIs), formally derived in the \textit{Evaluation Metrics} subsection of \textit{Methods}: \emph{Mean Capacity} ($\bar{C}$), the time-averaged Shannon capacity over the scenario duration; \emph{Capacity Coefficient of Variation (CoV)}, the normalized standard deviation of instantaneous capacity, capturing temporal stability; \emph{Link Availability} ($A_{\text{link}}$), the fraction of time the SNR meets or exceeds the 64-QAM threshold; and \emph{Signaling Overhead} ($O_{\text{sig}}$), the channel capacity foregone by JIT control-frame transmissions as a percentage of the total link capacity. Each group of results below sweeps a different input parameter: separation distance, UE translational acceleration, UE rotational acceleration, antenna directivity, and steering hardware constraints.
+
+For the steering hardware, we evaluate three representative models spanning practical sub-THz options (Table~\ref{tab:steering_and_hardware}): \textit{Constrained Mechanical} mirrors our laboratory testbed and anchors Hardware-in-the-Loop (HIL) validation; \textit{Ideal Mechanical} represents the upper bound of mechanical actuation for backhaul and UAV-style high-speed platforms; and \textit{Electronic} represents phased arrays envisioned for future mobile sub-THz access.
+
+
+
+%------------------------------------------------------------------%
+\subsection*{Effects of Translational Acceleration on Beam Alignment}
+
+We consider an AP and UE initially separated by $D_{initial} = 3$~m, an indoor short-range link\cite{9013236}. After a brief stationary period, the UE moves $D_{traversed} = 1.5$~m in a random direction relative to the AP, modeling human-scale mobility, such as walking between workstations. A representative received power profile for this scenario is shown in Fig.~\ref{fig:trans_metrics_example}.
+
+\begin{figure}[ht!]
+    \centering
+        \begin{subfigure}{0.3275\linewidth}
+        \include{Figures/Fig2a}
+        \vspace{-25pt}
+        \caption{Constrained Mechanical Steering}
+        \label{fig:trans_exp_rate}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3275\linewidth}
+    \include{Figures/Fig2b}
+        \vspace{-25pt}
+        \caption{Ideal Mechanical Steering}
+        \label{fig:trans_sim_rate}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3275\linewidth}
+        \include{Figures/Fig2c}
+        \vspace{-25pt}
+        \caption{Electronic Steering}
+        \label{fig:trans_simfast_rate}
+    \end{subfigure}
+
+    \vspace{8 pt}
+
+    \begin{tikzpicture}
+        \node [
+            draw=black,
+            line width=0.5pt,
+            inner sep=3pt,
+            rounded corners=0pt,
+            align=center
+        ] {
+            \footnotesize
+            \setlength{\tabcolsep}{0pt}
+            \renewcommand{\arraystretch}{1.3} % Vertical spacing between Sim and Exp rows
+
+            \begin{tabular*}{\dimexpr0.969\linewidth}{
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+            }
+
+                % --- ROW 1: SIMULATIONS ---
+                \legline{cb_blue}{solid} & Hierarchical Search (Sim.) &
+                \legline{cb_orange}{solid} & IMU-Assist (Sim.) &
+                \legline{cb_green}{solid} & JIT (Sim.) &
+                \legline{black}{dashdotdotted} & Static (Sim.) &
+                \legline{black}{dashed} & Perfect Alignment (Sim.) \\
+
+                % --- ROW 2: EXPERIMENTS ---
+                \legmark{cb_blue}{circle} & Hierarchical Search (Exp.) &
+                \legmark{cb_orange}{diamond} & IMU-Assist (Exp.) &
+                \legmark{cb_green}{regular polygon, regular polygon sides=3} & JIT (Exp.) &
+                \legmark{cb_dark_gray}{rectangle} & Static (Exp.) &
+                 & % Empty cell under Perfect Alignment
+
+            \end{tabular*}
+        };
+    \end{tikzpicture}
+
+    \caption{Translational mobility evaluation ($D_{initial} = 3$~m, $D_{traversed} = 1.5$~m) across three steering models. HIL markers in~(a) validate simulation with MAPE of 1.80--3.13\% and NRMSE of 2.99--3.82\%. Percentage annotations in~(b,\,c) are relative to Hierarchical Search at the marked acceleration.}
+    \label{fig:translational_rate}
+    \vspace{-5pt}
+\end{figure}
+
+Under the Constrained Mechanical model (Fig.~\ref{fig:trans_exp_rate}), slow mechanical steering imposes the harshest penalty on every realignment attempt. Under these constraints, Hierarchical Search frequently fails to complete its scan before the UE moves away, causing it to achieve 5–7\% worse mean capacity than a static, non-steered link across the acceleration range. The IMU-Assist algorithm mitigates this by narrowing the angular search space using on-device motion estimates, improving mean capacity over Hierarchical Search by up to 92\% at \SI{20}{m/s^2}. JIT further extends this advantage by preemptively sharing kinematics with the AP, achieving up to an 88\% improvement over IMU-Assist at low accelerations. At the highest mobility, IMU-Assist and JIT reach 50\% and 69\% of the theoretical maximum, respectively, confirming that sensor-informed algorithms can make mechanically constrained hardware viable for mobile links where a purely reactive approach cannot.
+
+To validate these simulation results, we conducted Hardware-in-the-Loop experiments across all four algorithm configurations. The experimental data closely matched the simulation, with Mean Absolute Percentage Error (MAPE) values of 1.80--3.13\% and Normalized Root Mean Square Error (NRMSE) of 2.99--3.82\%, confirming that the MobileTHz engine captures the physical constraints of the steering hardware. The subsequent analysis therefore uses simulation to explore steering models beyond our laboratory equipment.
+
+Under the Ideal Mechanical model (Fig.~\ref{fig:trans_sim_rate}), faster rotary movements impose a lower opportunity cost than the Constrained Mechanical model. Hierarchical Search now outperforms the static reference by at least 75\%, since the faster hardware can complete enough scan iterations within the beam residence time to recover alignment. IMU-Assist provides further gains of up to 39\% at \SI{20}{m/s^2}, though it slightly underperforms at \SI{0.5}{m/s^2} due to overshooting from aggressive motion prediction (discussed in Methods). JIT delivers the largest improvement across the full range, narrowing the gap to the theoretical maximum by synchronizing both nodes rather than relying on the AP's reactive scan alone. This result demonstrates that even when hardware is fast enough for reactive recovery to succeed, proactive coordination still yields additional gains by eliminating unnecessary search overhead.
+
+With the Electronic model (Fig.~\ref{fig:trans_simfast_rate}), where steering latency is negligible, the performance spread narrows: Hierarchical Search plateaus at \SI{55.3}{Gbps}, IMU-Assist at \SI{63.4}{Gbps}, and JIT at \SI{72.6}{Gbps}. Yet JIT still retains a 12\% advantage over IMU-Assist and 30\% over Hierarchical Search, showing that the search-space penalty of reactive methods persists even when hardware is no longer the bottleneck.
+
+\begin{figure*}[ht!]
+    \centering
+    \begin{subfigure}[t]{0.475\textwidth}
+        \vspace{0pt}
+        \centering
+        \input{Figures/Fig3a}
+        \vspace{-20pt}
+        \caption{Captured Rx Power across entire movement scenario}
+        \label{fig:trans_metrics_example}
+    \end{subfigure}%
+    \hfill
+    \begin{minipage}[t]{0.475\textwidth}
+        \vspace{0pt}
+        \centering
+        \begin{subfigure}{\linewidth}
+            \input{Figures/Fig3b}
+            \vspace{-15pt}
+            \caption{Capacity Coefficient of Variation}
+            \label{fig:trans_metrics_covariance}
+        \end{subfigure}
+        \vfill
+            \begin{subfigure}{\linewidth}
+            \input{Figures/Fig3c}
+            \vspace{-15pt}
+            \caption{Signaling Overhead}
+            \label{fig:trans_metrics_overhead}
+        \end{subfigure}
+    \end{minipage}
+    \caption{Ideal Mechanical, translational scenario ($D_{initial} = 3$~m, $D_{traversed} = 1.5$~m, $3.0$~m/s$^2$ peak). (a)~Single-run trace at $3.0$~m/s$^2$; shaded region indicates UE displacement interval. (b,\,c)~Aggregated over the full acceleration sweep.}
+    \label{fig:translational_metrics}
+    \vspace{-5pt}
+\end{figure*}
+
+Although mean capacity summarizes maximum link performance, it masks temporal variance, making it insufficient as a sole metric for assessing mobile link robustness. A single mobility event is illustrated in Fig.~\ref{fig:trans_metrics_example}, showcasing the power variations over time. Hierarchical Search experiences the most power oscillations during movement, while the IMU-Assist algorithm decreases temporal variance as well as the magnitude of link loss. JIT outperforms the other algorithms, providing a stable link and the highest final received power of \SI{-12.7}{dBm}.
+
+The CoV of the capacity across the three algorithms is quantified in Fig.~\ref{fig:trans_metrics_covariance} as peak acceleration increases under the Ideal Mechanical model. The IMU-Assist algorithm reduces CoV by up to 66\% compared to Hierarchical Search, demonstrating that IMU integration improves not only mean capacity (as shown in Fig.~\ref{fig:trans_sim_rate}, where IMU-Assist achieved up to a 39\% increase) but also reduces capacity variance. However, single-node motion compensation alone is insufficient to achieve a consistently low-variance link. JIT shows that capacity variance can be further reduced when both nodes share mobility awareness, reducing CoV by up to 89.2\% compared to Hierarchical Search and by 23.7\% compared to IMU-Assist.
+
+Overhead, defined as the potential channel capacity consumed by JIT transmission, is quantified in Fig.~\ref{fig:trans_metrics_overhead}. Overhead increases up to \SI{1.3}{m/s^2}, the point at which the UE consistently moves beyond the AP's EoC causing more realignment events. At higher accelerations, however, overhead decreases as the AP's look-ahead strategy results in fewer intermediate realignments before the UE reaches its final position. Overall, JIT improves mean capacity and reduces link variance while consuming at most 0.26\% of the total channel capacity, demonstrating its efficiency in high-mobility regimes.
+
+A small residual gap between JIT and the Perfect Alignment reference is visible in the steady-state portion of Fig.~\ref{fig:trans_metrics_example}. By design, JIT does not continuously chase the maximum SNR; it triggers realignment only when the projected angular displacement is about to cross $\eta \cdot \theta_{\text{HPBW}} = 0.36 \cdot \SI{13}{\degree} \approx \SI{4.7}{\degree}$ (Eq.~\ref{eq:trigger}). Between triggers, the UE may sit slightly off-axis without correction, while the Perfect Alignment reference assumes zero misalignment at every instant.
+
+
+
+%-------------------------------------------------------------------%
+\subsection*{Effects of Rotational Acceleration on Beam Alignment}
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}{0.3275\linewidth}
+        \include{Figures/Fig4a}
+        \vspace{-25pt}
+        \caption{Constrained Mechanical Steering}
+        \label{fig:rot_exp_rate}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3275\linewidth}
+        \include{Figures/Fig4b}
+        \vspace{-25pt}
+        \caption{Ideal Mechanical Steering}
+        \label{fig:rot_sim_rate}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3275\linewidth}
+        \include{Figures/Fig4c}
+        \vspace{-25pt}
+        \caption{Electronic Steering}
+        \label{fig:rot_simfast_rate}
+    \end{subfigure}
+
+    \vspace{5 pt}
+
+    \begin{tikzpicture}
+        \node [
+            draw=black,
+            line width=0.5pt,
+            inner sep=3pt,
+            rounded corners=0pt,
+            align=center
+        ] {
+            \footnotesize
+            \setlength{\tabcolsep}{0pt}
+            \renewcommand{\arraystretch}{1.3} % Vertical spacing between Sim and Exp rows
+            \begin{tabular*}{\dimexpr0.969\linewidth}{
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+            }
+
+                % --- ROW 1: SIMULATIONS ---
+                \legline{cb_blue}{solid} & Hierarchical Search (Sim.) &
+                \legline{cb_orange}{solid} & IMU-Assist (Sim.) &
+                \legline{cb_green}{solid} & JIT (Sim.) &
+                \legline{black}{dashdotdotted} & Static (Sim.) &
+                \legline{black}{dashed} & Perfect Alignment (Sim.) \\
+
+                % --- ROW 2: EXPERIMENTS ---
+                \legmark{cb_blue}{circle} & Hierarchical Search (Exp.) &
+                \legmark{cb_orange}{diamond} & IMU-Assist (Exp.) &
+                \legmark{cb_green}{regular polygon, regular polygon sides=3} & JIT (Exp.) &
+                \legmark{cb_dark_gray}{rectangle} & Static (Exp.) &
+                 & % Empty cell under Perfect Alignment
+
+            \end{tabular*}
+        };
+    \end{tikzpicture}
+    \caption{Rotational mobility evaluation ($D_{initial} = 3$~m, $45^\circ$ displacement) across three steering models. Hierarchical Search falls below the static reference in all cases due to misdirected AP scanning. HIL validation in~(a): MAPE of 3.88--4.68\% for JIT and IMU-Assist; higher for Hierarchical Search (11.66\%) due to low absolute capacity.}
+    \label{fig:rotational_rate}
+    \vspace{-5pt}
+\end{figure}
+
+Rotational motion often presents the greatest challenge to beam management, as typical angular rates from rotation can be significantly higher than those induced by translation\cite{9391649} (see also Supplementary Figs.~1 and~2). Unlike translation, where the geometric Line-of-Sight (LoS) angle changes at both nodes and both must steer to compensate, pure rotation alters only the UE's orientation, and the AP's LoS remains unchanged. The correct response is therefore for the UE to counter-rotate while the AP holds its position. Reactive algorithms, relying solely on RF power drops, cannot distinguish rotation from translation and default to searching at both nodes. Under pure rotation, this causes the AP to actively steer \emph{away} from the correct direction, turning the recovery mechanism itself into a source of misalignment.
+
+This behavior is quantified in Fig.~\ref{fig:rot_sim_rate}, where Hierarchical Search's capacity degrades to \SI{5}{}--\SI{6}{Gbps}, consistently falling below the static reference across the full acceleration range. The IMU-Assist algorithm addresses this failure at one node: the UE uses on-device sensor data to identify the motion as rotation and counter-rotates to maintain alignment rather than initiating a scan, recovering capacity to approximately \SI{30}{Gbps}. However, this correction is local to the UE. The AP, unaware that the UE has already compensated, may still detect a transient power drop and trigger its own reactive scan, partially undoing the UE's correction. This coordination gap caps IMU-Assist at around 36.5\% of the theoretical maximum. JIT closes this gap, sustaining capacity above \SI{55}{Gbps} up to \SI{120}{deg/s^2}. Even at \SI{300}{deg/s^2}, representative of the upper range of human rotational acceleration (see Supplementary Figs.~1 and~2), JIT maintains a 47\% advantage over IMU-Assist.
+
+The Electronic model (Fig.~\ref{fig:rot_simfast_rate}) also demonstrates that Hierarchical Search remains below the static reference, since fast steering cannot correct a misdirected search. IMU-Assist recovers to approximately \SI{38}{Gbps} at \SI{700}{deg/s^2}, while JIT sustains above \SI{57}{Gbps} across the full range by ensuring the AP holds position rather than scanning.
+
+Under experimental constraints (Fig.~\ref{fig:rot_exp_rate}), all algorithms degrade more rapidly than in the idealized scenarios because the rotary stages cannot complete the required angular correction within the beam residence time. Hierarchical Search remains at \SI{7}{}--\SI{8}{Gbps} throughout, consistently below the static reference. IMU-Assist falls from \SI{43}{Gbps} to under \SI{10}{Gbps} by \SI{100}{deg/s^2}, while JIT drops from \SI{60}{Gbps} to \SI{30}{Gbps} over the same interval, retaining a $3\times$ capacity advantage, demonstrating that hybrid proactive+reactive coordination can extend the usable rotational range of mechanically steered systems well beyond what reactive algorithms support. Experimental results track simulation with MAPE of 3.88--11.66\% and NRMSE of 5.19--17.5\%, with the higher errors concentrated in Hierarchical Search, where low absolute capacities amplify small deviations. JIT and IMU-Assist show closer agreement (MAPE of 3.88\% and 4.68\%), validating the MobileTHz engine under rotational dynamics.
+
+While capacity CoV (Fig.~\ref{fig:trans_metrics_covariance}) quantifies variance over the entire scenario, it does not indicate what fraction of time the link actually sustains the data rates that sub-THz systems are designed to deliver\cite{Dang2020, Nokia2022}. Link availability addresses this by measuring the fraction of time SNR exceeds \SI{18.8}{dB} (derived in \textit{Evaluation Metrics} subsection). A system may exhibit low CoV yet poor link availability if it sustains a steady but weak signal below the modulation threshold.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.495\linewidth}
+        \include{Figures/Fig5a}
+        \vspace{-25pt}
+        \caption{Link Availability vs. Peak rotational acceleration}
+        \label{fig:rotionalLinkAvail}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.495\linewidth}
+        \include{Figures/Fig5b}
+        \vspace{-25pt}
+        \caption{Link Availability vs. Peak translational acceleration}
+        \label{fig:translationalLinkAvail}
+    \end{subfigure}
+    \caption{Link availability ($\mathrm{SNR} \geq 18.8$~dB, 64-QAM threshold) under Ideal Mechanical vs.\ peak rotational~(a) and translational~(b) acceleration. Complements Figs.~\ref{fig:trans_sim_rate} and~\ref{fig:rot_sim_rate} by showing usability rather than mean capacity.}
+    \label{fig:accelLinkAvail}
+    \vspace{-5pt}
+\end{figure}
+
+The link availability under the Ideal Mechanical model is quantified in Fig.~\ref{fig:accelLinkAvail}. In the rotational case (Fig.~\ref{fig:rotionalLinkAvail}), Hierarchical Search falls below 5\% above \SI{15}{deg/s^2}, offering no improvement over the static reference. IMU-Assist begins at 100\% but drops below 50\% by \SI{43}{deg/s^2} and converges to the Hierarchical Search floor above \SI{170}{deg/s^2}, as the AP's uncoordinated scanning negates the UE's local correction. JIT holds 100\% up to \SI{29}{deg/s^2}, remains above 80\% at \SI{72}{deg/s^2}, and maintains a usable link ($>$40\%) up to \SI{200}{deg/s^2}. These results demonstrate that compared to single-node correction, end-to-end node synchronization sustains usable link availability across an approximately $5\times$ wider range of rotational accelerations under human-scale conditions.
+
+In the translational case (Fig.~\ref{fig:translationalLinkAvail}), Hierarchical Search and IMU-Assist plateau between 25--40\% across the full acceleration range, neither reliably supporting 64-QAM. JIT's availability declines gradually at higher accelerations as the beam residence time shrinks, but remains above 65\% at \SI{20}{m/s^2}. The reactive methods, by contrast, stay flat at 25--40\% regardless of acceleration, as their search cannot converge before the UE exits the beam.
+
+
+
+%-------------------------------------------------------------------%
+\subsection*{Effects of Link Geometry on Mobile Performance}
+
+We next isolate the effect of link geometry by fixing the motion profile and varying two parameters: initial separation distance (\SIrange{1}{20}{m}) during a translational pass-by (\SI{1.5}{m} displacement, \SI{3.0}{m/s^2} peak acceleration) and total angular displacement (\SIrange{1}{120}{\degree}) during a rotational turn.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.495\linewidth}
+        \include{Figures/Fig6a}
+        \vspace{-25pt}
+        \caption{Mean Capacity vs. Separation Distance}
+        \label{fig:dist_rate}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.495\linewidth}
+        \include{Figures/Fig6b}
+        \vspace{-25pt}
+        \caption{Capacity CoV vs. Separation Distance}
+        \label{fig:dist_cov}
+    \end{subfigure}
+    \caption{Effect of initial AP--UE separation (1--20~m) on a fixed translational pass-by ($D_{traversed} = 1.5$~m, $3.0$~m/s$^2$ peak), Ideal Mechanical. Performance converges beyond ${\sim}10$~m as path loss, not alignment, becomes the limiting factor.}
+    \vspace{-5pt}
+\end{figure}
+
+Mean capacity as a function of initial separation distance (\SIrange{1}{20}{m}) is shown in Fig.~\ref{fig:dist_rate}. At close range, the fixed \SI{1.5}{m} displacement corresponds to a large angular change relative to the AP, generating angular velocities that overwhelm reactive tracking. This is evident at \SI{1}{m}, where Hierarchical Search achieves only \SI{20}{Gbps}, slightly above the static reference of \SI{18}{Gbps}, while IMU-Assist and JIT reach \SI{41}{Gbps} and \SI{53}{Gbps}, respectively. A crossover occurs at $\approx$\SI{4.5}{m}: beyond this distance, angular rates decrease enough for Hierarchical Search to recover the link, reaching \SI{49}{Gbps}. The performance gap narrows further beyond \SI{10}{m} as path loss reduces the link budget, and all algorithms converge to \SIrange{37}{39}{Gbps} by \SI{20}{m}, where alignment accuracy is no longer the limiting factor.
+
+The capacity CoV (Fig.~\ref{fig:dist_cov}) complements this view. At \SI{1}{m}, Hierarchical Search exhibits a CoV of 2.0, indicating highly erratic capacity, while IMU-Assist and JIT reduce this to 0.57 and 0.48. As separation increases to \SI{4.5}{m}, JIT achieves near-zero CoV (0.047) while Hierarchical Search and IMU-Assist settle at 0.25 and 0.20, respectively. JIT maintains CoV below 0.02 across all distances beyond \SI{5}{m}, confirming stable link behavior regardless of link geometry.
+
+\begin{figure*}[ht!]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \vspace{0pt}
+        \centering
+        \include{Figures/Fig7a}
+        \vspace{-25pt}
+        \caption{Mean Capacity}
+        \label{fig:angle_rate}
+    \end{subfigure}%
+    \hfill
+    \begin{minipage}[t]{0.49\textwidth}
+        \vspace{0pt}
+        \centering
+        \begin{subfigure}{\linewidth}
+            \include{Figures/Fig7b}
+            \vspace{-25pt}
+            \caption{Link Availability}
+        \label{fig:angle_avail}
+        \end{subfigure}
+        \vfill
+        \begin{subfigure}{\linewidth}
+            \include{Figures/Fig7c}
+            \vspace{-25pt}
+            \caption{Signaling Overhead}
+        \label{fig:angle_overhead}
+        \end{subfigure}
+    \end{minipage}
+
+    \vspace{5 pt}
+
+    \begin{tikzpicture}
+        \node [
+            draw=black,
+            line width=0.5pt,
+            inner sep=3pt,
+            rounded corners=0pt,
+            align=center
+        ] {
+            \footnotesize
+            \setlength{\tabcolsep}{0pt}
+            \renewcommand{\arraystretch}{1.3}
+            \begin{tabular*}{\dimexpr0.969\linewidth}{
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+            }
+
+                % --- ROW 1: SIMULATIONS ---
+                \legline{cb_blue}{solid} & Hierarchical Search (Sim.) &
+                \legline{cb_orange}{solid} & IMU-Assist (Sim.) &
+                \legline{cb_green}{solid} & JIT (Sim.) &
+                \legline{black}{dashdotdotted} & Static (Sim.) &
+                \legline{black}{dashed} & Perfect Alignment (Sim.) \\
+
+            \end{tabular*}
+        };
+    \end{tikzpicture}
+    \caption{Effect of total angular displacement ($1^\circ$--$120^\circ$) at fixed rotational acceleration ($120$~deg/s$^2$), Ideal Mechanical. (c)~Overhead plateaus at ${\sim}0.39\%$ above $90^\circ$ as realignment frequency saturates.}
+    \label{fig:angle_effects}
+    \vspace{-5pt}
+\end{figure*}
+
+For the rotational sweep (Fig.~\ref{fig:angle_rate}), Hierarchical Search drops from \SI{81}{Gbps} to under \SI{9}{Gbps} by \SI{35}{\degree} and settles at $\approx$\SI{5}{Gbps}, again falling below the static reference due to misdirected AP scanning. IMU-Assist maintains \SI{81}{Gbps} through \SI{10}{\degree} but degrades to \SI{34}{Gbps} by \SI{40}{\degree} as the AP's uncoordinated scanning erodes the UE's correction. JIT sustains above \SI{55}{Gbps} through \SI{50}{\degree} and remains above \SI{40}{Gbps} at \SI{120}{\degree}, maintaining a capacity advantage of at least $2\times$ over IMU-Assist across the full angular range.
+
+Link availability over the same sweep is quantified in Fig.~\ref{fig:angle_avail}. Hierarchical Search falls below 50\% by \SI{11}{\degree} and under 5\% by \SI{20}{\degree}. IMU-Assist holds 100\% through \SI{10}{\degree} but drops below 50\% by \SI{28}{\degree} and converges toward Hierarchical Search's floor above \SI{90}{\degree}. JIT maintains 100\% through \SI{30}{\degree} and remains above 40\% at \SI{120}{\degree}, extending the usable angular range by approximately $3\times$ compared to Hierarchical Search. This gain requires additional signaling, quantified in Fig.~\ref{fig:angle_effects}c. JIT overhead rises from 0.01\% at \SI{1}{\degree} to 0.23\% at \SI{35}{\degree} as the algorithm triggers more frequent realignment updates, then plateaus at $\approx$0.39\% for angles above \SI{90}{\degree}. Even at maximum rotation, this represents a negligible fraction of total channel capacity.
+
+
+
+%-------------------------------------------------------------------%
+\subsection*{Impact of Antenna Directivity on Combined Motion}
+
+The preceding sections evaluated each motion type independently. We now combine translational (\SI{1.5}{m} displacement) and rotational (\SI{90}{\degree} turn) motion simultaneously, with acceleration escalating from (\SI{0.5}{m/s^2}, \SI{0.5}{deg/s^2}) to (\SI{5}{m/s^2}, \SI{200}{deg/s^2}). We evaluate four antenna configurations with HPBWs of \SI{13}{\degree} (\SI{21}{dBi}), \SI{9}{\degree} (\SI{27}{dBi}), \SI{4}{\degree} (\SI{34}{dBi}), and \SI{1.3}{\degree} (\SI{40}{dBi}), using link availability to assess the gain-beamwidth trade-off under mobility.
+
+\begin{figure*}[ht!]
+    \centering
+    \begin{subfigure}{0.495\linewidth}
+        \centering
+        \include{Figures/Fig8a}
+        \vspace{-25pt}
+        \caption{13° HPBW (21 dBi)}
+        \label{fig:ant_13deg}
+    \end{subfigure}%
+    \hfill
+    \begin{subfigure}{0.495\linewidth}
+        \centering
+        \include{Figures/Fig8b}
+        \vspace{-25pt}
+        \caption{9° HPBW (27 dBi)}
+        \label{fig:ant_9deg}
+    \end{subfigure}
+    \vspace{1em}
+    \begin{subfigure}{0.495\linewidth}
+        \centering
+        \include{Figures/Fig8c}
+        \vspace{-25pt}
+        \caption{4° HPBW (34 dBi)}
+        \label{fig:ant_4deg}
+    \end{subfigure}%
+    \hfill
+    \begin{subfigure}{0.495\linewidth}
+        \centering
+        \include{Figures/Fig8d}
+        \vspace{-25pt}
+        \caption{1.3° HPBW (40 dBi)}
+        \label{fig:ant_1_3deg}
+    \end{subfigure}
+
+    \begin{tikzpicture}
+        \node [
+            draw=black,
+            line width=0.5pt,
+            inner sep=3pt,
+            rounded corners=0pt,
+            align=center
+        ] {
+            \footnotesize
+            \setlength{\tabcolsep}{0pt}
+            \renewcommand{\arraystretch}{1.3} % Vertical spacing between Sim and Exp rows
+
+            \begin{tabular*}{\dimexpr0.969\linewidth}{
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+            }
+
+                % --- ROW 1: SIMULATIONS ---
+                \legline{cb_blue}{solid} & Hierarchical Search (Sim.) &
+                \legline{cb_orange}{solid} & IMU-Assist (Sim.) &
+                \legline{cb_green}{solid} & JIT (Sim.) &
+                \legline{black}{dashdotdotted} & Static (Sim.) &
+                \legline{black}{dashed} & Perfect Alignment (Sim.) \\
+
+            \end{tabular*}
+        };
+    \end{tikzpicture}
+
+    \caption{Combined mobility (1.5~m translation $+$ $90^\circ$ rotation, escalating acceleration) for four antenna configurations. Dashed line marks 80\% availability. The $9^\circ$ HPBW antenna yields the widest operational window, illustrating the gain--beamwidth trade-off under reaction-time constraints.}
+    \label{fig:antenna_comparison}
+    \vspace{-5pt}
+\end{figure*}
+
+The Hierarchical Search and IMU-Assist algorithms are ineffective across all antenna types under combined motion (Fig.~\ref{fig:antenna_comparison}). The rotational component causes Hierarchical Search to steer the AP away from the correct LoS, keeping availability below 9\% regardless of beamwidth. IMU-Assist peaks at 43\% with the \SI{13}{\degree} antenna but falls below 10\% above \SI{2}{m/s^2} and \SI{80}{deg/s^2} for all configurations.
+
+JIT reveals a trade-off between gain and beamwidth. With the \SI{13}{\degree} antenna (Fig.~\ref{fig:ant_13deg}), the wide beam relaxes pointing requirements, but the lower gain (\SI{21}{dBi}) limits the SNR margin. JIT achieves $>$80\% availability only between \SIrange{0.6}{1.7}{m/s^2} before transient pointing errors push SNR below the \SI{18.8}{dB} threshold. The \SI{9}{\degree} antenna (Fig.~\ref{fig:ant_9deg}) provides the best balance: its higher gain (\SI{27}{dBi}) buffers against misalignment, extending the $>$80\% availability window to \SIrange{0.55}{2.85}{m/s^2} and sustaining above 63\% even at maximum acceleration.
+
+With the \SI{4}{\degree} antenna (Fig.~\ref{fig:ant_4deg}), the $>$80\% window narrows to 0.58--1.2\,m/s$^2$ as the tighter beam demands higher pointing precision than the algorithm's reaction time can guarantee. The \SI{1.3}{\degree} antenna (Fig.~\ref{fig:ant_1_3deg}) restricts this further to 0.5--0.9\,m/s$^2$, with availability dropping below 80\% before reaching 1\,m/s$^2$. Despite their higher gain (34--40\,dBi), the angular displacement during the system's reaction latency exceeds the beamwidth, negating the link budget advantage. These results show that each mobility profile imposes a minimum usable beamwidth, and that selecting the right antenna requires jointly considering gain, control latency, and expected user motion.
+
+
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+\section*{Discussion}
+
+The above results characterize mobile sub-THz link performance as a function of link geometry, motion type and severity, and beam steering hardware, comparing four beam realignment strategies of increasing sophistication: a static baseline, a reactive Hierarchical Search, a reactive IMU-Assisted approach in line with prior work at lower frequencies\cite{s141019622, Brambilla_2019}, and the proposed hybrid proactive+reactive JIT beam realignment. \emph{To our knowledge, this constitutes one of the first comprehensive studies of a hybrid proactive and reactive beam realignment technique for mobile sub-THz communications validated through HIL measurements with sub-THz RF hardware.} The results, corroborated by both simulation and experimental measurements, lead to several principal conclusions.
+
+The \textbf{first} key conclusion is that building a reliable and high-performance truly mobile sub-THz communication system demands an upgrade from the state-of-the-art \emph{reactive} beam management procedures to novel \emph{proactive} and hybrid \emph{proactive+reactive} beam management solutions. Specifically, the results in Fig.~\ref{fig:accelLinkAvail} illustrate that the link availability for the reactive Hierarchical Search solution never rises above $40\%$ for moderate-to-low mobility levels. Hence, such an unreliable communication link cannot be utilized in practice for any latency-sensitive or reliability-sensitive (e.g., XR) services envisioned for mobile sub-THz communications. In contrast, the proposed JIT solution demonstrates superior performance here, achieving up to $90+\%$ (sometimes, up to $100\%$) link availability in the same conditions.
+
+The \textbf{second} key conclusion is that placing an IMU at the UE and using its data only reactively, as in prior microwave and mmWave work, is no longer sufficient at sub-THz. Although IMU-Assist generally outperforms Hierarchical Search across Figs.~\ref{fig:translational_rate}--\ref{fig:angle_effects}, its absolute link availability remains well below JIT's. This contrast is particularly visible in Fig.~\ref{fig:antenna_comparison}, where JIT sustains over $80\%$ link availability across a wide operating range even with the narrowest \SI{1.3}{\degree} HPBW antenna, while reactive-only IMU-Assist peaks at only ${\sim}40\%$, with its average falling 3--4 times lower, under $20\%$. The implication is that for narrow-beam sub-THz, IMU data must be used \emph{proactively}, continuously improving link quality before failure, rather than only as input to a post-failure recovery procedure.
+
+JIT's advantage over single-node IMU correction depends on motion type, the chosen metric, and the steering hardware. Under translational motion, the gap widens with acceleration because the beam residence time shrinks faster than IMU-Assist's reactive search can converge, while JIT's pre-failure trigger preserves alignment without scanning. Under rotational motion with fast electronic steering, IMU-Assist's local counter-rotation can keep up with the UE's angular motion and the relative capacity gap narrows; JIT still preserves an absolute lead (approximately \SI{19}{Gbps} at \SI{700}{deg/s^2}) because the AP holds its position rather than starting a misdirected scan. In link-availability terms across mechanically steered rotational regimes (Fig.~\ref{fig:accelLinkAvail}), the gap is most pronounced because JIT updates both the AP and the UE from the same IMU-derived prediction, keeping SNR above the modulation threshold, while IMU-Assist updates only the UE and leaves the AP reacting to power drops, frequently dropping SNR below.
+
+JIT's signaling overhead is minimal compared to the gains in capacity and reliability: it scales linearly with the rotation angle, increasing from near \SI{0}{\percent} to a maximum of only \SI{0.39}{\percent} of the total link capacity (Fig.~\ref{fig:angle_overhead}). The computational cost is similarly modest: both the UE-side per-sample processing and the AP-side per-trigger cost are lightweight, so JIT runs on existing UE hardware without specialized accelerators.
+
+The \textbf{third} key conclusion is that the choice of beam-steering hardware (mechanical vs. electronic) is equally if not more important than the choice of beam-realignment algorithm. The mean capacity results in Fig.~\ref{fig:translational_rate} differ substantially across beam steering methods: constrained mechanical, ideal mechanical, and electronic. Although the proposed JIT protocol can minimize the impact of hardware constraints, particularly in latency-bound scenarios, the underlying steering hardware remains a dominant performance factor. Nevertheless, JIT effectively mitigates these latency limitations by decoupling failure prevention from failure recovery. Specifically, using a just-in-time trigger based on sensor fusion, the system maintains low capacity variance, reflected in a CoV of approximately 0.1 as observed in the translational mobility analysis (Fig.~\ref{fig:trans_metrics_covariance}). Low variance here is critical for transport-layer protocols (e.g., TCP) that are sensitive to large variations in packet loss and jitter\cite{Jacobson1988}.
+
+Our \textbf{fourth} key conclusion is that the design of sub-THz nodes that are simultaneously high-performance, robust, and truly mobile requires a shift in the antenna selection approach. While traditional designs for stationary sub-THz connectivity systems prioritize maximizing gain to overcome path loss and achieve the highest peak SNR values, our results confirm that mobility introduces a competing constraint: narrower beams demand faster and more precise steering, and the system's control latency limits how narrow a beam can be used reliably under motion. In our study, the \SI{13}{\degree} antenna suffered from insufficient gain to maintain the link during transient slewing events, while the \SI{4}{\degree} and \SI{1.3}{\degree} antennas failed because the angular displacement during the reaction time exceeded their beamwidths. For our particular configuration, we identified an optimal operating region, represented by the \SI{9}{\degree} antenna, that balanced gain margin with alignment tolerance. Although these specific parameters are unique to our experimental hardware and evaluation scenario, the broader implication is that antenna selection must account for the platform's specific mobility profile and control latency. Here, the new MobileTHz platform developed in this work also serves as a useful solution to characterize this antenna-related trade-off.
+
+Several avenues remain for extending JIT in \emph{future work}. \textbf{First}, learning-based decision making\cite{10036372}, whether AI-driven or heuristic, could replace the current rule-based realignment to better adapt to specific environments, provided the added inference latency stays within JIT's microsecond reaction budget. \textbf{Second}, the LoS assumption can be relaxed to cover transient blockage (e.g., a hand or body obstructing the beam). Transmitting control frames periodically during steady-state operation, rather than only at the EoC boundary, would give the AP continuous kinematic updates; a sudden RF power drop \emph{without} corresponding motion would then flag an external obstruction rather than misalignment, enabling the AP to suppress unnecessary beam searches and instead await blockage clearance, leverage multi-connectivity, initiate handover, or employ another blockage mitigation technique. \textbf{Third}, in multi-user deployments the per-user kinematic data carried by JIT could enable mobility-aware beam scheduling and more favorable scaling of aggregate steering overhead than reactive methods. \textbf{Finally}, the validation scope can broaden toward (i)~multi-AP scheduling with handover, (ii)~non-line-of-sight channel models with multipath and transient blockage events, (iii)~HIL trials in which both nodes translate through azimuth and altitude (rather than azimuth alone, the present constraint imposed by the weight of the RF front-ends), (iv)~sustained continuous-mobility scenarios with complementary bias-tracking mechanisms beyond the present initial-event focus, and (v)~larger-scale measurement campaigns spanning realistic indoor and outdoor environments.
+
+\textbf{Summarizing}, while the presented first-order evaluation results already show substantial performance improvement, when utilizing the hybrid proactive+reactive JIT beam management approach (up to 1--2 orders of magnitude improvement in certain metrics and setups), our proposed approach can also be developed further both (i)~in terms of its efficiency in mitigating beam misalignment events, and (ii)~by expanding the original sub-THz beam realignment, e.g., to also facilitate blockage mitigation or more efficient radio resource management in future mobile sub-THz wireless communication systems beyond 6G.
+
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+\section*{Methods}
+
+\begin{wraptable}{r}{0.46\linewidth}
+\centering
+\small
+\vspace{-15 pt}
+\caption{Steering-model configurations.}
+\label{tab:steering_and_hardware}
+\sisetup{per-mode=symbol}
+\begin{tabular}{@{}l ccc@{}}
+\toprule
+ & \textbf{\shortstack{Constrained\\Mechanical}} & \textbf{\shortstack{Ideal\\Mechanical}} & \textbf{Electronic} \\
+\midrule
+Mechanism         & 2-Stage rotary & 2-Stage rotary & Phased array \\
+$\omega_{\max}$   & \SI{60}{\degree/s}  & \SI{720}{\degree/s} & --- \\
+$\alpha_{\max}$   & \SI{60}{\degree/s^2} & \SI{3600}{\degree/s^2} & --- \\
+Steer time        & --- & --- & \SI{5}{\micro\second} \\
+Resolution        & \SI{0.0005}{\degree} & \SI{0.001}{\degree} & $\theta_{\text{HPBW}}$ \\
+\bottomrule
+\vspace{-20pt}
+\end{tabular}
+\end{wraptable}
+
+The MobileTHz platform comprises two main components: a modular C++ simulation engine (that we made publicly available\cite{our_code}) and an IMU-integrated HIL testbed further detailed in the ``The Experimental Platform'' subsection below. The hardware platform substantially extends the version reported in our earlier conference paper\cite{10758041}. Together, these tools enable comprehensive evaluation of beam management algorithms across diverse mobile sub-THz scenarios. All algorithms are evaluated across three steering models of increasing actuation speed (see Table~\ref{tab:steering_and_hardware}), spanning from (i)~laboratory-level equipment-constrained mechanical hardware through (ii)~idealized mechanical beam steering up to (iii)~electronic phased-array beam steering.
+
+To assess the proposed JIT solution, we also implemented four alternative algorithms into the MobileTHz platform. The two primary comparison algorithms are described below in detail: (i)~\emph{``Hierarchical Search''}, a state-of-the-art sequential beam realignment approach not leveraging any IMU assistance; and (ii)~\emph{``IMU-Assist''}, an advanced solution leveraging IMU data to faster and better re-align the misaligned sub-THz beams but not utilizing the proactive mechanisms or control frames employed by JIT. The other two algorithms include the reference lower bound \emph{``Static''} (no realignment) approach and the reference upper bound \emph{``Perfect Alignment''}, employing an Oracle that continuously points both the AP and UE beams in the optimal direction.
+
+Across all four algorithms, the parameters reported in the subsections below were independently swept on a canonical translational pass-by ($D_{\text{initial}} = \SI{3}{m}$, $D_{\text{traversed}} = \SI{1.5}{m}$, peak acceleration $\SI{3}{m/s^2}$); the values listed in Table~\ref{tab:system_parameters} are the best-performing within $\pm 10\%$ of the optimum and are not specific to a single operating point.
+
+
+
+%-------------------------------------------------------------------%
+\subsection*{Hierarchical Search}
+\begin{wrapfigure}{R}{0.4\linewidth}
+    \centering
+    \vspace{-15px}
+    \includegraphics[width=\linewidth]{Figures/Fig9.pdf}
+    \begin{tikzpicture}
+    \node [
+            draw=black,
+            line width=0.25pt,
+            inner sep=3pt,
+            rounded corners=0pt,
+            align=center
+        ] {
+            \footnotesize
+            \setlength{\tabcolsep}{0pt}
+            \renewcommand{\arraystretch}{1.3}
+            \begin{tabular*}{\dimexpr0.9\linewidth}{
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+            }
+                \legline{hs_blue}{solid} & Trajectory &
+                \legline{hs_blue}{dashed} & Future steps\\
+            \end{tabular*}
+        };
+    \end{tikzpicture}
+    \caption{Hierarchical Search spiral trajectory expanding outward from the reference beam direction with step sizes $HS_0, HS_1, \ldots, HS_k$. Circles show the evaluation order; the scan ends when received power exceeds $P_{\text{succ}}(\Delta t)$.}
+    \label{fig:blind_spiral_search}
+    \vspace{-5pt}
+\end{wrapfigure}
+Hierarchical Search operates independently and identically at both the AP and UE. Since the procedure is triggered by link failure, no communication between the nodes is possible during recovery; each node executes its own search using only local power measurements.
+
+The procedure is initiated when a short-term Exponentially Weighted Moving Average (EWMA) of received power drops below a failure threshold $P_{\text{fail}} = P_{\text{ref}} - \Gamma_{\text{fail}}$, where $P_{\text{ref}}$ is the reference power (the last successfully received power level before failure) and $\Gamma_{\text{fail}}$ is the failure margin (parameters in Table~\ref{tab:system_parameters}). Upon detection, each node independently executes a discrete spiral scan outward from its reference beam direction (Fig.~\ref{fig:blind_spiral_search}), adapted from optical alignment systems\cite{photonics11060540} \rev{and consistent with the SSB-based beam search defined for 3GPP NR\cite{Giordani2018ATO, Heng2021SixChallenges}}. The step size for successive rings, $HS_k$, grows exponentially from an initial value proportional to the antenna's HPBW:
+\begin{equation}
+    HS_k = HS_0 \cdot \gamma^k,
+\end{equation}
+where $k$ is the ring index, $HS_0 = \theta_{\text{HPBW}}/2$ is the initial step size (half the antenna beamwidth), and $\gamma = 1.25$ is the growth factor. The scan terminates when the received power for a given beam configuration exceeds a time-dependent success threshold $P_{\text{succ}}(\Delta t)$:
+\begin{equation}
+    P_{\text{succ}}(\Delta t) = P_{\text{ref}} - \Gamma(\Delta t) = P_{\text{ref}} - (\Gamma_{0} + R \cdot \Delta t),
+\end{equation}
+where $\Gamma_{0}$ is the initial margin, $R$ is the margin increase rate, and $\Delta t$ is the elapsed time since failure detection. The relaxing margin accounts for the growing positional uncertainty: as more time elapses, the node accepts weaker beam configurations to avoid indefinite searching. Once a beam configuration exceeding $P_{\text{succ}}(\Delta t)$ is found, the node holds that beam direction and resumes data exchange.
+
+\subsection*{IMU-Assisted Reactive Search}
+\begin{wrapfigure}{r}{0.4\linewidth}
+    \centering
+    \vspace{-15px}
+    \includegraphics[width=\linewidth]{Figures/Fig10.pdf}\\[-70pt]
+    \begin{tikzpicture}
+    \node [
+            draw=black,
+            line width=0.25pt,
+            inner sep=3pt,
+            rounded corners=0pt,
+            align=center
+        ] {
+            \footnotesize
+            \setlength{\tabcolsep}{0pt}
+            \renewcommand{\arraystretch}{1.3}
+            \begin{tabular*}{\dimexpr0.9\linewidth}{
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+                @{\extracolsep{\fill}}
+                c @{\extracolsep{0pt}\hspace{3pt}} l
+            }
+                \legline{hs_blue}{solid} & Trajectory &
+                \legline{hs_blue}{dashed} & Future steps\\
+                \legline{imu_green}{solid} & IMU correction &
+                \legline{imu_green}{dashed} & Future corrections\\
+            \end{tabular*}
+        };
+    \end{tikzpicture}\\
+    \caption{IMU-Assisted search trajectory. IMU corrections (green) shift the search center to the sensor-predicted LoS direction before each spiral step. The local refinement spiral (blue) scans around the corrected center.}
+    \label{fig:imu_local_search}
+    \vspace{-5px}
+\end{wrapfigure}
+The IMU-Assisted algorithm uses the same power-drop trigger as Hierarchical Search but replaces the undirected spiral beam steering trajectory with a refined sensor-directed steering trajectory (Fig.~\ref{fig:imu_local_search}). This procedure is built upon a principle of Kalman-filter-based predictive tracking\cite{8455289,9145366} but operates in a triggered rather than continuous mode. Upon failure detection, the UE integrates accelerometer data into a displacement vector $\Delta\mathbf{p}(t)$ and fuses gyroscope data for orientation change, predicting the new beam pointing direction via:
+\begin{equation}
+    \theta_{\text{az}}^{\star}(t) = \theta_{\text{az,0}} + \arctan\!\left(\frac{\Delta p_{y}}{\hat{d}_{\text{link}}}\right) + \Delta\psi(t)
+\end{equation}
+\begin{equation}
+    \theta_{\text{el}}^{\star}(t) = \theta_{\text{el,0}} + \arctan\!\left(\frac{\Delta p_{z}}{\hat{d}_{\text{link}}}\right) + \Delta\phi(t)
+\end{equation}
+where $\theta_{\text{az,0}}$ and $\theta_{\text{el,0}}$ are the last known-good angles; $\Delta p_y$ and $\Delta p_z$ are the horizontal and vertical components of displacement perpendicular to the LoS; $d_{\text{link}}$ is the estimated AP--UE link distance from the last known-good reference time before the link failure; and $\Delta\psi(t)$ and $\Delta\phi(t)$ are the changes in yaw and pitch, respectively. The UE then steers directly to this predicted angle. However, because IMU-based positioning relies on double-integrating noisy accelerometer readings, small measurement errors accumulate over time, causing the estimated position and orientation to progressively diverge from their true values (a phenomenon known as integration drift). To compensate for this residual sensor error, the algorithm follows the predicted steer with a localized refinement phase identical in purpose to the one used by Hierarchical Search but with a tighter step size:
+\begin{equation}
+    IA_k = \beta \cdot \theta_{\text{HPBW}} + \Delta\theta_{\text{az}}^{\star}(t) + \Delta\theta_{\text{el}}^{\star}(t), \quad (\beta = 0.1)
+\end{equation}
+Unlike the expanding step size $HS_k$ used in the Hierarchical Search's Search Phase, the base refinement step $\beta \cdot \theta_{\text{HPBW}}$ is fixed and deliberately small (one-tenth of the beamwidth), while the IMU-predicted azimuth and elevation corrections adapt $IA_k$ over time as the sensor estimates evolve. The node scans a tight spiral around the IMU-predicted direction using this step size until an alignment is made (see Fig.~\ref{fig:imu_local_search}). \rev{The reported $\beta = 0.1$ minimizes overshooting at low acceleration while preserving fast convergence at high acceleration.}
+
+%-------------------------------------------------------------------%
+\subsection*{JIT Beam Realignment}
+While the reactive IMU-Assist algorithm discussed above aims to minimize the beam realignment time once the link failed, our proposed proactive+reactive JIT strives to also prevent the link failure from happening (by realigning the AP and UE beams continuously while the link is still in place). At the same time, not to compromise the actual data exchange and link performance, JIT strives not to produce control signaling overheads and beam re-steering actions unless it is necessary to prevent the link failure. This goal is achieved by designing the system that only triggers beam realignment when the combination of motion speed and link geometry threatens to place the UE outside the AP's beam before the next control cycle.
+
+\rev{\subsubsection*{Trigger Boundary and Edge of Coverage}
+The EoC is the angle off the AP's beam axis at which the antenna gain has dropped by \SI{3}{\deci\bel}, i.e., $\theta_{\text{HPBW}}/2$ off boresight (Fig.~\ref{fig:eoc_trigger}). Crossing the EoC corresponds to a worst-case \SI{6}{\deci\bel} round-trip gain loss, particularly punishing in sub-THz where narrow, high-gain beams leave little SNR margin, and can directly cause link failure. Because reaching the EoC under mobility leaves no time for control signaling, JIT instead places a \emph{trigger boundary} inside the EoC, at the offset where the projected displacement during the system reaction time $T_{\text{react}}$ would reach $\eta \cdot \theta_{\text{HPBW}}$. The boundary adapts to motion: as the UE's Link Deviation Velocity $\|\dot{\boldsymbol{\delta}}\|$ (defined below) grows, the projected displacement reaches $\eta \cdot \theta_{\text{HPBW}}$ at a smaller angular offset from boresight, so the trigger fires earlier, farther inside the EoC. When motion slows, the boundary moves outward toward the EoC, suppressing unnecessary control frames. For AP-stationary scenarios (e.g., a wall-mounted access point serving mobile UEs), detection of approaching EoC is performed \emph{locally} at the UE: at every IMU sample, the UE evaluates Eq.~(\ref{eq:trigger}) using its body-frame kinematics and the known $\theta_{\text{HPBW}}$ of its own antenna, requiring no AP-side feedback. In future work, mobile-AP cases (e.g., UAV-borne access points) would extend the protocol so the AP also shares its kinematic state via the same control frame.}
+
+\begin{figure}[h!]
+\centering
+\resizebox{0.85\linewidth}{!}{\input{Figures/RebFigB_EoC}}
+\caption{\rev{Edge of Coverage (EoC, at $\pm\,\theta_{\text{HPBW}}/2$ off boresight) and JIT's trigger boundary, defined implicitly by $\|\dot{\boldsymbol{\delta}}\|\,T_{\text{react}} = \eta\,\theta_{\text{HPBW}}$. The UE evaluates the trigger condition locally at every IMU sample. Faster motion contracts the boundary toward boresight; slower motion expands it toward the EoC.}}
+\label{fig:eoc_trigger}
+\vspace{-5pt}
+\end{figure}
+
+A stationary Zero Velocity Update (ZUPT) phase is performed at initialization to calibrate the accelerometer bias $\mathbf{b}_a$ and gyroscope bias $\mathbf{b}_\omega$, since any practical IMU has noise that would otherwise propagate into the trigger evaluation. During this phase the UE remains stationary briefly, and the mean of the raw accelerometer and gyroscope readings provides a direct estimate of the sensor biases (true acceleration and angular velocity are both zero). These estimates are then subtracted from all subsequent IMU readings to obtain corrected acceleration $\mathbf{a}_{\text{corr}}[n] = \tilde{\mathbf{a}}[n] - \mathbf{b}_a$ and angular velocity $\boldsymbol{\omega}_{\text{corr}}[n] = \tilde{\boldsymbol{\omega}}[n] - \mathbf{b}_\omega$, separating link-critical motion from sensor noise. Utilizing the corrected IMU data, the UE continuously computes a new metric, the \emph{Link Deviation Velocity} $\dot{\boldsymbol{\delta}}$, which unifies rotational and LoS-perpendicular translational motion into a single angular rate of deviation:
+\begin{equation}
+    \dot{\boldsymbol{\delta}} = \boldsymbol{\omega}_{\text{UE}} + \frac{\mathbf{v}_{\perp}}{d_{\text{link}}},
+    \label{eq:link_deviation_velocity}
+\end{equation}
+where $\boldsymbol{\omega}_{\text{UE}}$ is the UE's angular velocity, $\mathbf{v}_{\perp}$ is its translational velocity perpendicular to the LoS, and $d_{\text{link}}$ is the instantaneous link distance. This metric hence serves as a measure of ``how fast the UE movements are approaching the AP beam boundaries''. \rev{Both terms in Eq.~(\ref{eq:link_deviation_velocity}) are expressed in the AP-anchored world coordinate frame: the UE's body-frame angular velocity $\boldsymbol{\omega}_{\text{UE}}$ and translational velocity perpendicular to the LoS, $\mathbf{v}_{\perp}$, are transformed via the UE's orientation quaternion $\mathbf{q}_{\text{body}}$ (the same quaternion that contributes to $\mathbf{q}_{\text{eff}}$ in the antenna pattern evaluation discussed below). This common frame ensures that rotational and LoS-perpendicular translational contributions to beam deviation are summed consistently as a single 3D angular rate.}
+
+\rev{Two design choices bound the residual drift. The trigger condition (Eq.~\ref{eq:trigger}, below) uses the Link Deviation \emph{velocity} rather than an absolute position (single vs double accelerometer integration), and the control frame transmits only the displacement change since the last transmission, with the accumulator reset at each transmission so cumulative drift cannot grow with session length. Over the AP's per-prediction window $T_{\text{react}} \approx \SI{15}{\micro\second}$, the resulting position-prediction drift is bounded by $\sigma_{p} = \sigma_{a,n}\sqrt{T_{\text{react}}^{3}/3} \lesssim \SI{1}{\nano\meter}$ for the noise density in Table~\ref{tab:system_parameters}, an angular drift of order $10^{-8}$~degrees at $d_{\text{link}} = \SI{3}{m}$ and far below $\theta_{\text{HPBW}}$; across longer tracking sessions the accumulator reset bounds cumulative drift by a single inter-transmission interval rather than the full session duration. \rev{For multi-hour or multi-day operation, the ZUPT can be invoked opportunistically whenever the bias-corrected $\|\dot{\boldsymbol{\delta}}\| \approx 0$ persists for more than a few IMU samples (e.g., the device resting on a desk, charging, or in a pocket), re-estimating $\mathbf{b}_a, \mathbf{b}_\omega$ to within the sensor noise floor.} JIT specifically targets this initial, unpredictable phase of motion. For sustained continuous-mobility scenarios (e.g., a pedestrian walking continuously, or a vehicle in steady transit), complementary bias-tracking from the inertial-navigation literature such as learning-based dead-reckoning~\cite{Brossard2020AIIMU}, deep-learning drift compensation~\cite{Chen2024DLInertial}, or zero-velocity detection~\cite{Skog2010ZUPT} would augment JIT's calibration as future work.}
+
+Finally, a control frame is triggered when the projected angular displacement over the system's reaction time $T_{\text{react}}$ exceeds a fraction $\eta$ of the antenna's HPBW:
+\begin{equation}
+    \|\dot{\boldsymbol{\delta}}\| \cdot T_{\text{react}} > \eta \cdot \theta_{\text{HPBW}}
+    \rev{\label{eq:trigger}}
+\end{equation}
+The guard fraction $\eta$ trades off link robustness against control overhead: a lower $\eta$ triggers control frames earlier, providing more margin against sudden motion at the cost of higher signaling frequency, while a higher $\eta$ reduces overhead but leaves less time to react before the beam exits the main lobe. We use $\eta = 0.36$ across our evaluated scenarios; \rev{mean capacity stays within \SI{5}{\percent} of its maximum across $\eta \in [0.25, 0.50]$, where the lower end fires earlier with more signaling overhead and the upper end fires later with less reaction margin, indicating a gradual plateau around the chosen value. The cooldown between consecutive triggers is set to one IMU sampling period to prevent redundant firings within a single sensor cycle.}
+
+Upon triggering, the UE transmits a control frame containing its integrated displacement vector and a buffer of recent IMU samples. \rev{The AP derives a filtered acceleration trend $\bar{\mathbf{a}}_{\text{predict},k}$ from the buffered samples via an EWMA,
+\begin{equation}
+    \bar{\mathbf{a}}_{\text{predict},k} = \alpha_{\text{short}}\, \mathbf{a}_k + (1 - \alpha_{\text{short}})\, \bar{\mathbf{a}}_{\text{predict},k-1},
+    \label{eq:ewma_predict}
+\end{equation}
+with $\alpha_{\text{short}} = 0.90$ as listed in Table~\ref{tab:system_parameters}. This low-pass cutoff suppresses high-frequency IMU sensor noise while preserving the underlying acceleration trend, and the AP then extrapolates the UE's position at steering completion using $\bar{\mathbf{a}}_{\text{predict},k}$.} By steering to this predicted future location rather than the last known position, the system maintains SNR continuity despite rapid motion.
+
+Each control frame follows the IEEE~802.15.3d THz-SC structure\cite{9269931}, using a short Preamble Acquisition Preamble (PAP) of \SI{1.89}{\micro\second} and the minimum 2048-byte frame payload. With worst-case BPSK modulation and 11/15 LDPC coding, each control frame occupies approximately $T_{\text{frame}} \approx \SI{5}{\micro\second}$. The end-to-end reaction latency comprises the control frame transmission time ($T_{\text{frame}}$) and the AP's signal acquisition and processing delay ($T_{\text{proc}} = \SI{10}{\micro\second}$), giving a total signaling latency of $T_{\text{react}} = T_{\text{frame}} + T_{\text{proc}} \approx \SI{15}{\micro\second}$ before the AP can issue a steering command. \rev{The IMU sampling period (\SI{10}{\milli\second} in this evaluation; commodity $\geq$\SI{1}{\kilo\hertz} IMUs such as the Bosch BMI270 are widely available) gates only the rate at which Eq.~(\ref{eq:trigger}) is evaluated; once a trigger fires, the control-frame transmission, AP processing, and steering actuation all proceed on their own clocks, decoupled from the IMU sample interval.}
+
+Reliable decoding at the AP requires a minimum receive SNR of \SI{9.59}{\deci\bel}, corresponding to BPSK with 11/15 LDPC coding at a target $\text{BER} = 10^{-3}$. \rev{This SNR threshold also doubles as an RF-side fallback trigger:} if the instantaneous SNR falls below \SI{9.59}{\deci\bel}, the AP cannot decode the control frame and the system falls back to reactive recovery, with the UE continuing to steer using its local IMU data while the AP, lacking motion awareness, initiates a Hierarchical Search to restore alignment. \rev{Motion fast enough to outpace IMU-based prediction without already producing RF-side degradation is rare in practice (typical human-scale or vehicular motion develops over tens to hundreds of IMU samples, i.e., hundreds of milliseconds to seconds, well within the IMU detection window), so the IMU + RF combination provides defense in depth across realistic operating regimes.}
+
+
+
+
+%-------------------------------------------------------------------%
+\subsection*{The MobileTHz Simulation Platform}
+The MobileTHz platform discretizes time into fixed-duration slots of length $\Delta t_{\text{sim}} = \SI{1}{\micro\second}$, enabling deterministic, slot-by-slot evaluation of node kinematics, RF channel state, hardware behavior, and algorithm decisions. Simulation parameters, listed in Table~\ref{tab:system_parameters}, mirror the experimental hardware properties to ensure close correspondence between simulated and measured results.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Shared system parameters for the channel model, transceiver, IMU sensor, and beam-management algorithms. All values are common to the three steering configurations.}
+\label{tab:system_parameters}
+\sisetup{per-mode=symbol}
+\begin{tabularx}{\linewidth}{@{}Xr@{\hskip 12pt}Xr@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} & \textbf{Parameter} & \textbf{Value} \\
+\midrule
+\multicolumn{2}{@{}l}{\textbf{\textit{Channel}}} & \multicolumn{2}{@{}l}{\textbf{\textit{IMU Sensor}}} \\
+\cmidrule(r){1-2} \cmidrule(l){3-4}
+Carrier Frequency ($f_c$) & \SI{130}{\giga\hertz} & Gyro.\ Noise Density & \SI{0.00175}{\radian\per\second\per\sqrt{\hertz}} \\
+Bandwidth ($B$) & \SI{8}{\giga\hertz} & Accel.\ Noise Density & \SI{0.0294}{\meter\per\second\squared\per\sqrt{\hertz}} \\
+System Temperature ($T$) & \SI{290}{\kelvin} & Initial Bias Std.\ Dev. & \num{0.01} (gyro/accel) \\
+Thermal Noise ($k_B T B$) & \SI{-75.0}{dBm} & Sampling Period & \SI{10}{\milli\second} \\[3pt]
+\multicolumn{2}{@{}l}{\textbf{\textit{Transceiver}}} & \multicolumn{2}{@{}l}{\textbf{\textit{Algorithm Parameters}}} \\
+\cmidrule(r){1-2} \cmidrule(l){3-4}
+Tx Power ($P_{tx}$) & \SI{13}{dBm} & Failure Margin ($\Gamma_{\text{fail}}$) & \SI{3}{\deci\bel} rel.\ $P_{\text{ref}}$ \\
+Rx Noise Factor ($F$) & 14.83 (\SI{11.7}{\deci\bel}) & EWMA Coeff.\ ($\alpha_{\text{short}}$) & 0.90 \\
+Rx Processing Delay ($T_{\text{proc}}$) & \SI{10}{\micro\second} & Spiral Growth Factor ($\gamma$) & 1.25 \\
+& & Initial Success Margin ($\Gamma_0$) & \SI{0.25}{\deci\bel} \\
+& & Margin Increase Rate ($R$) & $0.5 \cdot G_{\max}$~dB/s \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+A mobile scenario consists of a set of mobile nodes, $\mathcal{M} = \{m_1, m_2, \dots\}$, whose trajectories are specified by a sequence of keyframes, $\{(\mathbf{p}_k, \mathbf{q}_k)\}_{k=0}^{K-1}$. Each keyframe defines the position $\mathbf{p}_k \in \mathbb{R}^3$ and orientation (as a unit quaternion) $\mathbf{q}_k \in \mathbb{S}^3$ at a specific time slot $n_k$. To create smooth and realistic translational paths between keyframes, the platform interpolates position using Perlin's smootherstep function\cite{Perlin2002}, $f(\tau)$:
+\begin{equation}
+f(\tau) = 6\tau^5 - 15\tau^4 + 10\tau^3,
+\label{eq:smootherstep}
+\end{equation}
+where $\tau = (t - t_k) / (t_{k+1} - t_k) \in [0, 1]$ is the normalized time. This function's $C^2$ continuity guarantees zero velocity, acceleration, and jerk at keyframe boundaries, producing physically plausible motion. \rev{The zero-velocity boundary condition models pause-resume mobility patterns such as walking with intermediate stops or beginning and ending a turn from rest, which are the primary motion classes considered in this study. Pause-resume motion is also the hardest case for predictive beam management: the velocity profile is unknown at the onset of motion, acceleration changes rapidly, and the system has the least time to react. Sustained-motion variants (e.g., walking at a steady speed) are easier to predict from a brief observation window, so the performance reported here lower-bounds what is achievable on those variants. Both the software simulator and the HIL testbed support trajectories without a stationary boundary (e.g., continuous walking through multiple checkpoints) by chaining smootherstep-interpolated segments whose endpoints exchange non-zero velocities, preserving slot-by-slot $C^1$ continuity where required.}
+
+For a single smootherstep segment, the maximum acceleration produced by Eq.~\eqref{eq:smootherstep} over a displacement $D$ and duration $T$ is:
+\begin{equation}
+    a_{\max} = K \cdot \frac{D}{T^2},
+\end{equation}
+where $K \approx 5.7735$ is derived from the peak of the second derivative of Eq.~\eqref{eq:smootherstep}. Orientation, in turn, is interpolated via Spherical Linear Interpolation (SLERP)\cite{Shoemake1985SLERP}:
+\begin{equation}
+    \text{SLERP}(\mathbf{q}_k, \mathbf{q}_{k+1}, \tau) = \frac{\sin((1-\tau)\Theta)}{\sin\Theta}\mathbf{q}_k + \frac{\sin(\tau\Theta)}{\sin\Theta}\mathbf{q}_{k+1},
+\end{equation}
+where $\Theta = \arccos(\mathbf{q}_k \cdot \mathbf{q}_{k+1})$. Translational and angular velocities and accelerations are obtained via central finite differences of position and orientation, respectively.
+
+Given the updated node kinematics, the engine evaluates the RF link state. Free-space path loss (FSPL), $L_p$, in dB is:
+\begin{equation}
+    L_{p} = 20 \log_{10}(d_{\text{link}}) + 20 \log_{10}(f_c) - 147.55,
+\end{equation}
+where $d_{\text{link}} = ||\mathbf{p}_{rx} - \mathbf{p}_{tx}||$ is the instantaneous LoS distance in meters and $f_c$ is the carrier frequency in Hz. Antenna directivity is evaluated from the node's effective orientation $\mathbf{q}_{eff} = \mathbf{q}_{body} \otimes \mathbf{q}_{rotary}$, which transforms the LoS vector into the antenna's local frame to obtain the off-axis angle. The directivity follows the E-plane pattern of a WR-6.5 conical horn, whose gain $G(\theta)$ is given by:
+\begin{equation}
+    G(\theta) = \frac{1 + \cos(\theta)}{2} \sqrt{\frac{(C(r_2) - C(r_1))^2 + (S(r_2) - S(r_1))^2}{4(C(r_0)^2 + S(r_0)^2)}},
+\end{equation}
+where $C(x)$ and $S(x)$ are the Fresnel cosine and sine integrals with arguments:
+\begin{equation}
+    r_0 = \frac{b_\mathrm{wg}}{2}\sqrt{\frac{\beta_g}{\pi R_h}}, \quad
+    r_{1,2} = \sqrt{\frac{\beta_g}{\pi R_h}}\left(\mp\frac{B_E}{2} - \frac{R_h \beta_g B_E}{2}\sin\theta\right),
+    \beta_g = \frac{2\pi}{\lambda}\sqrt{1-\left(\frac{\lambda}{2a_\mathrm{wg}}\right)^2}
+\end{equation}
+Here $R_h = \SI{25}{\milli\meter}$ is the horn slant length, $B_E = \SI{3.59}{\milli\meter}$ is the effective E-plane aperture, $b_\mathrm{wg} = \SI{0.826}{\milli\meter}$ and $a_\mathrm{wg} = \SI{1.651}{\milli\meter}$ are the waveguide height and width, respectively. Then, the maximum gain is defined as $G_\mathrm{max} = \max_{\theta} G(\theta)$. \rev{For 3D evaluation, the radiation pattern is treated as rotationally symmetric about the boresight: the gain $G(\theta)$ depends only on the off-axis angle $\theta$ obtained by transforming the 3D LoS vector into the antenna's local frame via $\mathbf{q}_{\text{eff}}$, and the E-plane formula above is applied across all azimuth angles around boresight as a rotationally symmetric approximation. The HIL measurements cross-check this approximation against the physical horn and confirm that it is sufficient for this evaluation.} The received power (in dBm) then combines transmit power, directional gains, and path loss:
+\begin{equation}
+P_{rx} = P_{tx} + G_{tx}(\theta_{tx}) + G_{rx}(\theta_{rx}) - L_p,
+\end{equation}
+where $P_{tx}$ is the transmit power and $\theta_{tx}$, $\theta_{rx}$ are the off-axis angles at the transmitter and receiver, respectively.
+
+The simulation then applies a hardware abstraction layer that models the constraints of physical components. A steerable antenna's orientation is controlled by a dual-axis mechanical stage, which adjusts the $\mathbf{q}_{rotary}$ component of the effective orientation. For any instructed angular displacement $\Delta\theta$, the model uses a trapezoidal velocity profile:
+\begin{equation}
+	a(t) =
+	\begin{cases}
+		+\alpha_{\text{max}} & \text{Phase I: Acceleration}       \\
+		0               & \text{Phase II: Constant velocity} \\
+		-\alpha_{\text{max}} & \text{Phase III: Deceleration}     \\
+	\end{cases},
+\end{equation}
+where the duration of each phase is determined by $\Delta\theta$, the stage's maximum angular velocity, $\omega_{max}$, and the angular acceleration constraints, $\alpha_{max}$.
+
+Beyond mechanical steering, the hardware abstraction layer captures two additional sources of latency and noise. A configurable processing delay $T_{\text{proc}}$ models signal acquisition and digital conversion latency, holding the power reading constant at the value sampled at the start of the previous processing interval. The simulated IMU provides gyroscope ($\boldsymbol{\omega}$), accelerometer ($\mathbf{f}$), and magnetometer data, with realistic outputs generated by corrupting ground-truth kinematics with bias and noise. Denoting the discrete time-slot index by $n$, the simulated accelerometer output $\tilde{\mathbf{a}}[n]$ is:
+\begin{equation}
+    \tilde{\mathbf{a}}[n] = \mathbf{f}_{ideal}[n] + \mathbf{b}_{a}[n] + \mathbf{n}_{a}[n].
+\end{equation}
+The bias $\mathbf{b}_{a}[n]$ evolves as a random walk: $\mathbf{b}_{a}[n] = \mathbf{b}_{a}[n-1] + \mathbf{w}_{b,a}[n]$, where the update term $\mathbf{w}_{b,a} \sim \mathcal{N}(0, \sigma_{a,b}^2 \Delta t_{\text{sim}} \cdot \mathbf{I}_3)$ and the white noise is $\mathbf{n}_{a}[n] \sim \mathcal{N}(0, (\sigma_{a,n}^2 / \Delta t_{\text{sim}}) \cdot \mathbf{I}_3)$. A similar noise model is applied to the gyroscope readings. The noise density parameters $\sigma_{a,n}$ and bias random walk parameter $\sigma_{a,b}$ correspond to the Accelerometer Noise Density and Initial Bias values in Table~\ref{tab:system_parameters}, respectively.
+
+This sequence of kinematics update, channel evaluation, hardware emulation, and algorithm decision repeats at every \SI{1}{\micro\second}-long time slot, producing the continuous per-slot feedback loop that drives all simulated results in this article.
+
+%-------------------------------------------------------------------%
+\subsection*{The Experimental Platform}
+A similar per-slot loop calculation procedure works in the HIL mode, employing the hardware sub-THz platform. However, the simulated RF and sensor inputs discussed in the previous subsection get replaced by actual physical measurements. Specifically, the received power data comes from the RF hardware, orientation data gets fetched from rotary-stage encoders, and inertial data from an on-device IMU. The complete testbed is illustrated in Fig.~\ref{fig1_algorithms}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{Figures/Fig11.pdf}
+\caption{MobileTHz HIL testbed. The UE (left) and AP (right) each pair a sub-THz RF front-end with a dual-axis rotary stage. A 9-axis IMU on the UE supplies inertial data for the IMU-Assisted and JIT algorithms.}
+\label{fig1_algorithms}
+\vspace{-5pt}
+\end{figure}
+
+The RF chain operates in the WR-6.5 waveguide band (110--170~GHz). On the transmit side, a Keysight E8257D PSG and M8196A AWG feed a VDI MixAMC upconverter; on the receive side, a VDI MixAMC downconverter and Keysight DSOZ632A oscilloscope capture in-band power. Each front-end is mounted on an IntelLiDrives dual-axis rotary table equipped with a VDI WR-6.5 conical horn antenna (\SI{21}{dBi}, \SI{13}{\degree} HPBW). A WitMotion WT901BLECL 9-axis IMU, co-located with the UE front-end, supplies the inertial data used by the IMU-Assisted and JIT algorithms.
+
+A custom in-house-developed C++ library (RotaryLib) controls the rotary table movements by sending commands via serial connection. Each commanded motion follows the same trapezoidal acceleration-cruise-deceleration profile assumed by the simulator, ensuring that physical stage behavior matches the simulated steering model. Power measurements, encoder feedback, and IMU samples are streamed back to the MobileTHz engine, allowing the same beam management algorithm code to run on physical data without modification.
+
+
+
+%-------------------------------------------------------------------%
+\subsection*{Evaluation Metrics}
+We evaluate the proposed beam management algorithms across four Key Performance Indicators (KPIs) derived from the RF and mobility parameters summarized in Table~\ref{tab:system_parameters} and Table~\ref{tab:steering_and_hardware}. They complement each other, allowing us to evaluate the performance and reliability of various beam realignment strategies from different perspectives.
+
+\emph{Mean Link Capacity} serves as the primary performance metric, calculated as the time-average of instantaneous Shannon capacity $C(t)$ over the duration of the scenario $T$:
+\begin{equation}
+    \bar{C} = \frac{1}{T} \int_{0}^{T} B \log_2(1 + \text{SNR}(t)) \, dt
+\end{equation}
+where $B$ represents the channel bandwidth. However, as the link is not always available due to beam misalignment, the calculated mean capacity also obscures the impact of beam misalignment and outages on higher-layer protocols (e.g., TCP).
+
+The second metric of interest in our study is the Capacity CoV, used to quantify the capacity variance over time.
+To compute the CoV, we normalize the standard deviation of capacity ($\sigma_C$) by its mean ($\mu_C$):
+\begin{equation}
+    \text{CoV} = \frac{\sigma_C}{\mu_C}
+\end{equation}
+High CoV values indicate erratic tracking and jitter, whereas lower values approaching zero indicate a more stable and reliable link.
+
+To further assess the operational feasibility of the link for actual data transmission, we then evaluate \emph{Link Availability ($A_{\text{link}}$}. This metric measures the fraction of time the link budget is sufficient to support high-order modulation schemes, specifically where the $\text{SNR}(t)$ exceeds a critical threshold $\text{SNR}_{\text{th}}$:
+\begin{equation}
+    A_{\text{link}} = \frac{1}{T} \int_{0}^{T} \mathbbm{1}\!\left(\text{SNR}(t) \geq \text{SNR}_{\text{th}}\right) dt \times 100\%
+\end{equation}
+
+The threshold $\text{SNR}_{\text{th}} = \SI{18.8}{\deci\bel}$ corresponds to 64-QAM at a FEC $\text{BER} = 10^{-3}$, derived from the standard $M$-QAM approximation\cite{Proakis2008}:
+\begin{equation}
+    \text{SNR}_{\text{th}} \approx \frac{M-1}{3} \left[ Q^{-1} \left( \frac{\text{BER}_{\text{target}} \cdot \log_2 M}{4} \right) \right]^2
+\end{equation}
+which evaluates to \SI{18.8}{\deci\bel}.
+
+Last but not least, we also quantify the bandwidth cost (overheads) of JIT's additional control frames via Signaling Overhead ($O_{\text{sig}}$). The rationale here is to provide a fair evaluation, since the link cannot carry any user data during each control frame transmission. Hence, while the JIT-imposed additional link robustness contributes to the channel capacity and availability, this comes at a cost of additional signaling overhead that has to be carefully estimated.
+
+The foregone capacity over $N_{\text{pp}}$ transmissions is:
+\begin{equation}
+    L_{\text{ctrl}} = \sum_{i=1}^{N_{\text{pp}}} C(t_i) \cdot T_{\text{frame}},
+\end{equation}
+where $C(t_i)$ is the instantaneous capacity at the $i$-th transmission and $T_{\text{frame}}$ is the control frame duration derived in the JIT Algorithm subsection. Signaling overhead is then:
+\begin{equation}
+    O_{\text{sig}} = \frac{L_{\text{ctrl}}}{\int_{0}^{T} C(t) \, dt} \times 100\%
+\end{equation}
+
+While the considered beam realignment strategies can, in principle, be evaluated in our platform across multiple other metrics, the selected set of four diverse KPIs already present a comprehensive view on the key trade-offs.
+
+%-------------------------------------------------------------------%
+\subsection*{Statistics and Reproducibility}
+All comparisons between algorithms are based on deterministic metrics (Mean Capacity, Capacity CoV, Link Availability, Signaling Overhead) computed over the full scenario duration for each configuration. All percentage improvements reported between algorithms (e.g., ``JIT achieves up to an 88\% improvement over IMU-Assist'') are computed directly from the respective mean capacity or link availability values at matched operating points. These comparisons reflect differences in algorithmic design evaluated under identical controlled conditions.
+
+Each simulation data point averages $n = 5{,}000$ independent Monte Carlo runs. The source of randomness depends on the scenario: in translational cases, the UE movement direction is drawn uniformly from $[0, 2\pi)$ with no rotation; in rotational cases, the rotation sense and axis are randomized with no translation; in combined-motion cases, both direction and rotation are randomized; and in link-geometry sweeps, the motion profile is fixed while the geometric parameter (separation distance or angular displacement) is varied deterministically. All other parameters (carrier frequency, transmit power, antenna configuration, steering model) are kept constant within each sweep as specified in Tables~\ref{tab:steering_and_hardware} and~\ref{tab:system_parameters}.
+
+Each experimental (HIL) data point averages $n = 10$ independent measurement trials. \rev{The dual-axis rotary stages support full 3D antenna pointing in both azimuth and altitude; the linear translation of the RF front-end mounts, however, was constrained to the azimuth plane by the weight of the RF equipment.} Agreement between simulation and experiment is quantified using MAPE and NRMSE, computed as:
+\begin{equation}
+    \text{MAPE} = \frac{1}{N} \sum_{i=1}^{N} \left| \frac{\bar{C}_{\text{sim},i} - \bar{C}_{\text{exp},i}}{\bar{C}_{\text{sim},i}} \right| \times 100\%
+\end{equation}
+\begin{equation}
+    \text{NRMSE} = \frac{\sqrt{\frac{1}{N}\sum_{i=1}^{N}(\bar{C}_{\text{sim},i} - \bar{C}_{\text{exp},i})^2}}{\bar{C}_{\text{sim,max}} - \bar{C}_{\text{sim,min}}} \times 100\%
+\end{equation}
+where $\bar{C}_{\text{sim},i}$ and $\bar{C}_{\text{exp},i}$ are the simulated and experimental mean capacities at the $i$-th acceleration point, $N$ is the number of acceleration points in the sweep, and $\bar{C}_{\text{sim,max}}$ and $\bar{C}_{\text{sim,min}}$ are the maximum and minimum simulated mean capacities across the sweep.
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+\section*{Data Availability}
+All data generated or analysed during this study are included in this published article and its supplementary information files. Additional data can be made available to readers upon reasonable request to the corresponding author.
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+\section*{Code Availability}
+Code is publicly available at \url{https://doi.org/10.5281/zenodo.18675630}.
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+\section*{Acknowledgements}
+The work has been supported in part by U.S. National Science Foundation (NSF) projects 2225590 and 2346487, by Digital Futures at KTH, and by the Future Research Leaders program (FFL-9) from the Swedish Foundation for Strategic Research (SSF).
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+\section*{Author Contributions Statement}
+S.P. and V.P. formulated experiments. S.P. performed experiments. S.P. and V.P. analyzed the results. J.J. supervised and directed the project. All the authors contributed to writing the manuscript.
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+\section*{Competing Interests Statement}
+The authors declare no competing interests.
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+\bibliography{references}
+
+\end{document}

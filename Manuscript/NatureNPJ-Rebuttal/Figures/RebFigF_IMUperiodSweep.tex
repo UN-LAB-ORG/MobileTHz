@@ -1,0 +1,50 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        width=\linewidth, height=5cm,
+        xlabel={IMU sampling period $T_{\text{IMU}}$ (ms)},
+        ylabel={Mean Capacity (Gbps)},
+        xmin=0.8, xmax=120,
+        ymin=20, ymax=85,
+        xmode=log,
+        log basis x=10,
+        legend style={font=\small, legend pos=south west, draw=black!50},
+    ]
+        % Hierarchical Search (independent of T_IMU)
+        \addplot+[color=cb_blue, mark=none, solid, very thick]
+            coordinates {
+                (1, 41.9) (2, 41.9) (5, 41.9) (10, 41.9)
+                (15, 41.9) (20, 41.9) (30, 41.9) (50, 41.9)
+                (75, 41.9) (100, 41.9)
+            };
+        \addlegendentry{Hierarchical Search}
+
+        % IMU-Assist
+        \addplot+[color=cb_orange, mark=none, solid, very thick]
+            coordinates {
+                (1, 43.2) (2, 43.1) (5, 43.0) (10, 42.8)
+                (15, 42.3) (20, 41.4) (30, 39.6) (50, 35.8)
+                (75, 31.3) (100, 27.7)
+            };
+        \addlegendentry{IMU-Assist}
+
+        % JIT
+        \addplot+[color=cb_green, mark=none, solid, very thick]
+            coordinates {
+                (1, 59.1) (2, 59.0) (5, 58.7) (10, 58.5)
+                (15, 57.5) (20, 55.3) (30, 50.9) (50, 43.8)
+                (75, 36.5) (100, 31.6)
+            };
+        \addlegendentry{JIT}
+
+        % Static reference
+        \addplot+[color=black, mark=none, densely dashdotted, very thick]
+            coordinates { (0.8, 26.0) (120, 26.0) };
+        \addlegendentry{Static}
+
+        % Perfect Alignment reference
+        \addplot+[color=cb_black, mark=none, dashed, very thick]
+            coordinates { (0.8, 82.0) (120, 82.0) };
+        \addlegendentry{Perfect Alignment}
+
+    \end{axis}
+\end{tikzpicture}

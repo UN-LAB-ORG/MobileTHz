@@ -1,0 +1,30 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        width=\linewidth, height=5cm,
+        xlabel={Hierarchical Search spiral growth factor $\gamma$},
+        ylabel={Mean Capacity (Gbps)},
+        xmin=0.95, xmax=2.05,
+        ymin=20, ymax=85,
+        legend style={font=\small, legend pos=south west, draw=black!50},
+    ]
+        % Hierarchical Search sensitivity sweep (illustrative, canonical scenario)
+        \addplot+[color=cb_blue, mark=none, solid, very thick]
+            coordinates {
+                (1.00, 27.4) (1.05, 32.1) (1.10, 36.2) (1.15, 39.0)
+                (1.20, 41.4) (1.25, 42.5) (1.30, 42.0) (1.35, 41.0)
+                (1.50, 38.4) (1.75, 35.0) (2.00, 31.8)
+            };
+        \addlegendentry{Hierarchical Search}
+
+        % Static reference (independent of $\gamma$)
+        \addplot+[color=black, mark=none, densely dashdotted, very thick]
+            coordinates { (0.95, 26.0) (2.05, 26.0) };
+        \addlegendentry{Static}
+
+        % Perfect Alignment reference (independent of $\gamma$)
+        \addplot+[color=cb_black, mark=none, dashed, very thick]
+            coordinates { (0.95, 82.0) (2.05, 82.0) };
+        \addlegendentry{Perfect Alignment}
+
+    \end{axis}
+\end{tikzpicture}

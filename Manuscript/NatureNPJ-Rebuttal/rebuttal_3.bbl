@@ -1,0 +1,842 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{Giordani2018ATO}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=2fd0b9bda578e5785327681e7f9efff9}{%
+           family={Giordani},
+           familyi={G\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=5c1d0dd5c0f6ba1f52fb3df510348300}{%
+           family={Polese},
+           familyi={P\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=21cf0c01da13d67388d069779cddd147}{%
+           family={Roy},
+           familyi={R\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=266b371d1971aa8ab60d3f061b9967c9}{%
+           family={Castor},
+           familyi={C\bibinitperiod},
+           given={D.\bibnamedelimi R.},
+           giveni={D\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=dfab6c0706cef7137c04f87f332b0b48}{%
+           family={Zorzi},
+           familyi={Z\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{01f8907384348686acba3c80c0f39e0e}
+      \strng{fullhash}{86e302738e2d1600476450e841f97206}
+      \strng{fullhashraw}{86e302738e2d1600476450e841f97206}
+      \strng{bibnamehash}{01f8907384348686acba3c80c0f39e0e}
+      \strng{authorbibnamehash}{01f8907384348686acba3c80c0f39e0e}
+      \strng{authornamehash}{01f8907384348686acba3c80c0f39e0e}
+      \strng{authorfullhash}{86e302738e2d1600476450e841f97206}
+      \strng{authorfullhashraw}{86e302738e2d1600476450e841f97206}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Commun. Surv. Tutor.}
+      \field{title}{A tutorial on beam management for {3GPP} {NR} at {mmWave} frequencies.}
+      \field{volume}{21}
+      \field{year}{2019}
+      \field{pages}{173\bibrangedash 196}
+      \range{pages}{24}
+      \verb{doi}
+      \verb 10.1109/COMST.2018.2869411
+      \endverb
+    \endentry
+    \entry{Heng2021SixChallenges}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=cdfde061d70c6eefe449b6487897efde}{%
+           family={Heng},
+           familyi={H\bibinitperiod},
+           given={Y.},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=4000160bd08cf8eda38ea74163cab988}{%
+           family={Andrews},
+           familyi={A\bibinitperiod},
+           given={J.\bibnamedelimi G.},
+           giveni={J\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=90ea73fdfbcad4fae4429b324ccab9ab}{%
+           family={Mo},
+           familyi={M\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=516623d41c9f8f11ca842f1b10cb04f5}{%
+           family={Va},
+           familyi={V\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+        {{hash=3a38e3aa72b7b31891ae1014817b0692}{%
+           family={Ali},
+           familyi={A\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=e04af26d15d095f39dada47d5fae0c2a}{%
+           family={Ng},
+           familyi={N\bibinitperiod},
+           given={B.\bibnamedelimi L.},
+           giveni={B\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=ec0c37858c450f10a1a3a887451bb2a0}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={J.\bibnamedelimi C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \strng{namehash}{dd17ba97af7c63089564beae32fbd765}
+      \strng{fullhash}{cbc820c3a87fc22fff8ad5fb7776f155}
+      \strng{fullhashraw}{cbc820c3a87fc22fff8ad5fb7776f155}
+      \strng{bibnamehash}{dd17ba97af7c63089564beae32fbd765}
+      \strng{authorbibnamehash}{dd17ba97af7c63089564beae32fbd765}
+      \strng{authornamehash}{dd17ba97af7c63089564beae32fbd765}
+      \strng{authorfullhash}{cbc820c3a87fc22fff8ad5fb7776f155}
+      \strng{authorfullhashraw}{cbc820c3a87fc22fff8ad5fb7776f155}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Commun. Mag.}
+      \field{title}{Six key challenges for beam management in {5.5G} and {6G} systems.}
+      \field{volume}{59}
+      \field{year}{2021}
+      \field{pages}{74\bibrangedash 79}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1109/MCOM.001.2001184
+      \endverb
+    \endentry
+    \entry{9838772}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=ae9c7710a5e548499c7c79aa32d8531d}{%
+           family={Abusara},
+           familyi={A\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=588e64cdbbdcd1c4ff363be91c84d64d}{%
+           family={Hassanein},
+           familyi={H\bibinitperiod},
+           given={H.\bibnamedelimi S.},
+           giveni={H\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=d708a860b44d9ea4735d1341fdc02d18}{%
+           family={Noureldin},
+           familyi={N\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=ed7b2e55c261746b2ec07d736cbc656d}{%
+           family={Sediq},
+           familyi={S\bibinitperiod},
+           given={A.\bibnamedelimi B.},
+           giveni={A\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+      }
+      \strng{namehash}{a797823a86bde8fba0769ad3de55a53e}
+      \strng{fullhash}{26b19625e9fe11afa96fe0c793747c39}
+      \strng{fullhashraw}{26b19625e9fe11afa96fe0c793747c39}
+      \strng{bibnamehash}{a797823a86bde8fba0769ad3de55a53e}
+      \strng{authorbibnamehash}{a797823a86bde8fba0769ad3de55a53e}
+      \strng{authornamehash}{a797823a86bde8fba0769ad3de55a53e}
+      \strng{authorfullhash}{26b19625e9fe11afa96fe0c793747c39}
+      \strng{authorfullhashraw}{26b19625e9fe11afa96fe0c793747c39}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{ICC 2022---IEEE Int. Conf. Communications}
+      \field{title}{Failure prediction for proactive beam recovery in millimeter-wave communication.}
+      \field{year}{2022}
+      \field{pages}{3617\bibrangedash 3622}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1109/ICC45855.2022.9838772
+      \endverb
+    \endentry
+    \entry{Alrabeiah2020DeepLearning}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=901919e6ef8924d707beb70cff719d3b}{%
+           family={Alrabeiah},
+           familyi={A\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=d35f0e906e52ba086cf498aa077c2c04}{%
+           family={Alkhateeb},
+           familyi={A\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{d954f8aac6fd4e2f5bf0b05ed25069ba}
+      \strng{fullhash}{d954f8aac6fd4e2f5bf0b05ed25069ba}
+      \strng{fullhashraw}{d954f8aac6fd4e2f5bf0b05ed25069ba}
+      \strng{bibnamehash}{d954f8aac6fd4e2f5bf0b05ed25069ba}
+      \strng{authorbibnamehash}{d954f8aac6fd4e2f5bf0b05ed25069ba}
+      \strng{authornamehash}{d954f8aac6fd4e2f5bf0b05ed25069ba}
+      \strng{authorfullhash}{d954f8aac6fd4e2f5bf0b05ed25069ba}
+      \strng{authorfullhashraw}{d954f8aac6fd4e2f5bf0b05ed25069ba}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Trans. Commun.}
+      \field{title}{Deep learning for {mmWave} beam and blockage prediction using sub-6~{GHz} channels.}
+      \field{volume}{68}
+      \field{year}{2020}
+      \field{pages}{5504\bibrangedash 5518}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1109/TCOMM.2020.3003670
+      \endverb
+    \endentry
+    \entry{Alkhateeb2023DeepSense}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=d35f0e906e52ba086cf498aa077c2c04}{%
+           family={Alkhateeb},
+           familyi={A\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=479067d8df7ed97a942d02047e50f695}{%
+           family={Charan},
+           familyi={C\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=509c55c5091c443bd858cf7a41e17048}{%
+           family={Osman},
+           familyi={O\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+        {{hash=21a43b2f271ad9af780ac46bac501d40}{%
+           family={Hredzak},
+           familyi={H\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=dd74b99f6962ff89db1293dd69670375}{%
+           family={Morais},
+           familyi={M\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=8afc5f9642316a92424aa53258a05432}{%
+           family={Demirhan},
+           familyi={D\bibinitperiod},
+           given={U.},
+           giveni={U\bibinitperiod}}}%
+        {{hash=d24b54817a9a7debaaee83a970b4070f}{%
+           family={Srinivas},
+           familyi={S\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{97e1a05c076efd3c21e9cca9ea1bb4fa}
+      \strng{fullhash}{fe955241d61b858b68c08b39a8c8b5ef}
+      \strng{fullhashraw}{fe955241d61b858b68c08b39a8c8b5ef}
+      \strng{bibnamehash}{97e1a05c076efd3c21e9cca9ea1bb4fa}
+      \strng{authorbibnamehash}{97e1a05c076efd3c21e9cca9ea1bb4fa}
+      \strng{authornamehash}{97e1a05c076efd3c21e9cca9ea1bb4fa}
+      \strng{authorfullhash}{fe955241d61b858b68c08b39a8c8b5ef}
+      \strng{authorfullhashraw}{fe955241d61b858b68c08b39a8c8b5ef}
+      \field{extraname}{1}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Commun. Mag.}
+      \field{title}{{DeepSense 6G}: a large-scale real-world multi-modal sensing and communication dataset.}
+      \field{volume}{61}
+      \field{year}{2023}
+      \field{pages}{122\bibrangedash 128}
+      \range{pages}{7}
+      \verb{doi}
+      \verb 10.1109/MCOM.006.2200730
+      \endverb
+    \endentry
+    \entry{Jiang2023LiDAR}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=969e89612b8c1fcb83d15a13b7447ff4}{%
+           family={Jiang},
+           familyi={J\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=479067d8df7ed97a942d02047e50f695}{%
+           family={Charan},
+           familyi={C\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=d35f0e906e52ba086cf498aa077c2c04}{%
+           family={Alkhateeb},
+           familyi={A\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{793bcccd5a69aea207b72dc98f717e2e}
+      \strng{fullhash}{793bcccd5a69aea207b72dc98f717e2e}
+      \strng{fullhashraw}{793bcccd5a69aea207b72dc98f717e2e}
+      \strng{bibnamehash}{793bcccd5a69aea207b72dc98f717e2e}
+      \strng{authorbibnamehash}{793bcccd5a69aea207b72dc98f717e2e}
+      \strng{authornamehash}{793bcccd5a69aea207b72dc98f717e2e}
+      \strng{authorfullhash}{793bcccd5a69aea207b72dc98f717e2e}
+      \strng{authorfullhashraw}{793bcccd5a69aea207b72dc98f717e2e}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Wirel. Commun. Lett.}
+      \field{title}{{LiDAR}-aided future beam prediction in real-world millimeter wave {V2I} communications.}
+      \field{volume}{12}
+      \field{year}{2023}
+      \field{pages}{212\bibrangedash 216}
+      \range{pages}{5}
+      \verb{doi}
+      \verb 10.1109/LWC.2022.3219708
+      \endverb
+    \endentry
+    \entry{Morais2023Position}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=dd74b99f6962ff89db1293dd69670375}{%
+           family={Morais},
+           familyi={M\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=768b3a232933ed83f4dae43d58451ba6}{%
+           family={Behboodi},
+           familyi={B\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=54cbd6bab48317d7b793e85a09cc09ad}{%
+           family={Pezeshki},
+           familyi={P\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod}}}%
+        {{hash=d35f0e906e52ba086cf498aa077c2c04}{%
+           family={Alkhateeb},
+           familyi={A\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{f93aeefcfc0a1cd28a56fa718e97251d}
+      \strng{fullhash}{53fd421a5981bff265387da6b0903d63}
+      \strng{fullhashraw}{53fd421a5981bff265387da6b0903d63}
+      \strng{bibnamehash}{f93aeefcfc0a1cd28a56fa718e97251d}
+      \strng{authorbibnamehash}{f93aeefcfc0a1cd28a56fa718e97251d}
+      \strng{authornamehash}{f93aeefcfc0a1cd28a56fa718e97251d}
+      \strng{authorfullhash}{53fd421a5981bff265387da6b0903d63}
+      \strng{authorfullhashraw}{53fd421a5981bff265387da6b0903d63}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{IEEE Int. Conf. Communications (ICC)}
+      \field{title}{Position-aided beam prediction in the real world: how useful {GPS} locations actually are?}
+      \field{year}{2023}
+      \field{pages}{1824\bibrangedash 1829}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1109/ICC45041.2023.10279280
+      \endverb
+    \endentry
+    \entry{Rezaie2022Orientation}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=4925976ea702f57a9bc82f9b57099565}{%
+           family={Rezaie},
+           familyi={R\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=f3437906421d43a343735f0c838b086c}{%
+           family={Carvalho},
+           familyi={C\bibinitperiod},
+           given={E.},
+           giveni={E\bibinitperiod},
+           prefix={de},
+           prefixi={d\bibinitperiod}}}%
+        {{hash=7df2d18cebc275cea83e0dfe621c1005}{%
+           family={Manchón},
+           familyi={M\bibinitperiod},
+           given={C.\bibnamedelimi N.},
+           giveni={C\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+      }
+      \strng{namehash}{16fc435c5afc4fe214cd1eedf2ca19ce}
+      \strng{fullhash}{16fc435c5afc4fe214cd1eedf2ca19ce}
+      \strng{fullhashraw}{16fc435c5afc4fe214cd1eedf2ca19ce}
+      \strng{bibnamehash}{16fc435c5afc4fe214cd1eedf2ca19ce}
+      \strng{authorbibnamehash}{16fc435c5afc4fe214cd1eedf2ca19ce}
+      \strng{authornamehash}{16fc435c5afc4fe214cd1eedf2ca19ce}
+      \strng{authorfullhash}{16fc435c5afc4fe214cd1eedf2ca19ce}
+      \strng{authorfullhashraw}{16fc435c5afc4fe214cd1eedf2ca19ce}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Trans. Wirel. Commun.}
+      \field{title}{A deep learning approach to location- and orientation-aided {3D} beam selection for {mmWave} communications.}
+      \field{volume}{21}
+      \field{year}{2022}
+      \field{pages}{11110\bibrangedash 11124}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1109/TWC.2022.3185325
+      \endverb
+    \endentry
+    \entry{Struye2023CoVRage}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=602686015a0cadeb0f2b27e761464ed7}{%
+           family={Struye},
+           familyi={S\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=970751bc2d399bc941062e73b386c2ab}{%
+           family={Lemic},
+           familyi={L\bibinitperiod},
+           given={F.},
+           giveni={F\bibinitperiod}}}%
+        {{hash=5140546a4c3dfb5ebdb9f03d019b98e8}{%
+           family={Famaey},
+           familyi={F\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{de3996ebe3f5fb82bb60712f667a1d37}
+      \strng{fullhash}{de3996ebe3f5fb82bb60712f667a1d37}
+      \strng{fullhashraw}{de3996ebe3f5fb82bb60712f667a1d37}
+      \strng{bibnamehash}{de3996ebe3f5fb82bb60712f667a1d37}
+      \strng{authorbibnamehash}{de3996ebe3f5fb82bb60712f667a1d37}
+      \strng{authornamehash}{de3996ebe3f5fb82bb60712f667a1d37}
+      \strng{authorfullhash}{de3996ebe3f5fb82bb60712f667a1d37}
+      \strng{authorfullhashraw}{de3996ebe3f5fb82bb60712f667a1d37}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Trans. Wirel. Commun.}
+      \field{title}{{CoVRage}: millimeter-wave beamforming for mobile interactive virtual reality.}
+      \field{volume}{22}
+      \field{year}{2023}
+      \field{pages}{3258\bibrangedash 3271}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1109/TWC.2022.3217039
+      \endverb
+    \endentry
+    \entry{Brambilla_2019}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=23974efbcbd100d18d3773503eb59023}{%
+           family={Brambilla},
+           familyi={B\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=55857788c8b9abd6220b92f1dc1a84e2}{%
+           family={Nicoli},
+           familyi={N\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=79a7f0f1ca877460fbf0dbef35995ccb}{%
+           family={Savaresi},
+           familyi={S\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=72b30c72980399a653b94e317fd012bd}{%
+           family={Spagnolini},
+           familyi={S\bibinitperiod},
+           given={U.},
+           giveni={U\bibinitperiod}}}%
+      }
+      \strng{namehash}{347acba2a5c1e5a6a304f71d97843f22}
+      \strng{fullhash}{7dd4a5acef9d140d1b8a33232688030f}
+      \strng{fullhashraw}{7dd4a5acef9d140d1b8a33232688030f}
+      \strng{bibnamehash}{347acba2a5c1e5a6a304f71d97843f22}
+      \strng{authorbibnamehash}{347acba2a5c1e5a6a304f71d97843f22}
+      \strng{authornamehash}{347acba2a5c1e5a6a304f71d97843f22}
+      \strng{authorfullhash}{7dd4a5acef9d140d1b8a33232688030f}
+      \strng{authorfullhashraw}{7dd4a5acef9d140d1b8a33232688030f}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{IEEE Int. Conf. Communications Workshops (ICC Workshops)}
+      \field{title}{Inertial sensor aided {mmWave} beam tracking to support cooperative autonomous driving.}
+      \field{year}{2019}
+      \verb{doi}
+      \verb 10.1109/ICCW.2019.8756931
+      \endverb
+    \endentry
+    \entry{Alkhateeb2018DLCB}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=d35f0e906e52ba086cf498aa077c2c04}{%
+           family={Alkhateeb},
+           familyi={A\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=8a4108d8610658f282267a704288398d}{%
+           family={Alex},
+           familyi={A\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=3062024cfb6115c68eed487ee4a4cdfe}{%
+           family={Varkey},
+           familyi={V\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+        {{hash=66d548e0e670e107fc4a80dc0c3825b3}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Y.},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=8d3597bc1587f7af3c8d17c6018f2f26}{%
+           family={Qu},
+           familyi={Q\bibinitperiod},
+           given={Q.},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=21eae860b1701eb786a8b193853e46cf}{%
+           family={Tujkovic},
+           familyi={T\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{97e1a05c076efd3c21e9cca9ea1bb4fa}
+      \strng{fullhash}{a5d03d5b7091bb81a037c74ac4202d96}
+      \strng{fullhashraw}{a5d03d5b7091bb81a037c74ac4202d96}
+      \strng{bibnamehash}{97e1a05c076efd3c21e9cca9ea1bb4fa}
+      \strng{authorbibnamehash}{97e1a05c076efd3c21e9cca9ea1bb4fa}
+      \strng{authornamehash}{97e1a05c076efd3c21e9cca9ea1bb4fa}
+      \strng{authorfullhash}{a5d03d5b7091bb81a037c74ac4202d96}
+      \strng{authorfullhashraw}{a5d03d5b7091bb81a037c74ac4202d96}
+      \field{extraname}{2}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Access}
+      \field{title}{Deep learning coordinated beamforming for highly-mobile millimeter wave systems.}
+      \field{volume}{6}
+      \field{year}{2018}
+      \field{pages}{37328\bibrangedash 37348}
+      \range{pages}{21}
+      \verb{doi}
+      \verb 10.1109/ACCESS.2018.2850226
+      \endverb
+    \endentry
+    \entry{Xue2023Standardization}{misc}{}{}
+      \name{author}{6}{}{%
+        {{hash=f2b64471367d618ccc4aef6ae2566ac1}{%
+           family={Xue},
+           familyi={X\bibinitperiod},
+           given={Q.},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=28f6068ba57e60c5e27fc2490a8e1ffd}{%
+           family={Guo},
+           familyi={G\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=4c178bbd5267e4fefacd4e0234a0688a}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod}}}%
+        {{hash=2efac453cb818e3e871c3147d9153d6d}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Y.},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=ae6f64f7b429f6425fbe070323390f1b}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Z.},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=5e538d7c5ab3d9762c299955fb081ce2}{%
+           family={Ma},
+           familyi={M\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{17b47860a30bb2a47ffe8193f88f6cd6}
+      \strng{fullhash}{c794c02c4c3085611ddb08f0a2dd1e6a}
+      \strng{fullhashraw}{c794c02c4c3085611ddb08f0a2dd1e6a}
+      \strng{bibnamehash}{17b47860a30bb2a47ffe8193f88f6cd6}
+      \strng{authorbibnamehash}{17b47860a30bb2a47ffe8193f88f6cd6}
+      \strng{authornamehash}{17b47860a30bb2a47ffe8193f88f6cd6}
+      \strng{authorfullhash}{c794c02c4c3085611ddb08f0a2dd1e6a}
+      \strng{authorfullhashraw}{c794c02c4c3085611ddb08f0a2dd1e6a}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Preprint at \url{https://arxiv.org/abs/2309.10575}}
+      \field{title}{{AI/ML} for beam management in {5G-Advanced}: a standardization perspective.}
+      \field{year}{2023}
+    \endentry
+    \entry{Brossard2020AIIMU}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=00651917959f5c07e8071c7b95815990}{%
+           family={Brossard},
+           familyi={B\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=69c1ff733ac5d242791e061ed1665081}{%
+           family={Barrau},
+           familyi={B\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=825b5483b0c3f85664effd90da0d770b}{%
+           family={Bonnabel},
+           familyi={B\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{3a829f9ef2ee12bb89b9eaa316fe308f}
+      \strng{fullhash}{3a829f9ef2ee12bb89b9eaa316fe308f}
+      \strng{fullhashraw}{3a829f9ef2ee12bb89b9eaa316fe308f}
+      \strng{bibnamehash}{3a829f9ef2ee12bb89b9eaa316fe308f}
+      \strng{authorbibnamehash}{3a829f9ef2ee12bb89b9eaa316fe308f}
+      \strng{authornamehash}{3a829f9ef2ee12bb89b9eaa316fe308f}
+      \strng{authorfullhash}{3a829f9ef2ee12bb89b9eaa316fe308f}
+      \strng{authorfullhashraw}{3a829f9ef2ee12bb89b9eaa316fe308f}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Trans. Intell. Veh.}
+      \field{number}{4}
+      \field{title}{{AI-IMU} dead-reckoning.}
+      \field{volume}{5}
+      \field{year}{2020}
+      \field{pages}{585\bibrangedash 595}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1109/TIV.2020.2980854
+      \endverb
+    \endentry
+    \entry{Chen2024DLInertial}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=01fea9ce6da32048c0096b4f19fc1c50}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod}}}%
+        {{hash=0f00bc6b37f7083f90edaa5fe6c022d6}{%
+           family={Pan},
+           familyi={P\bibinitperiod},
+           given={X.},
+           giveni={X\bibinitperiod}}}%
+      }
+      \strng{namehash}{03e42ed5baec5975bf8fb30d1ac13354}
+      \strng{fullhash}{03e42ed5baec5975bf8fb30d1ac13354}
+      \strng{fullhashraw}{03e42ed5baec5975bf8fb30d1ac13354}
+      \strng{bibnamehash}{03e42ed5baec5975bf8fb30d1ac13354}
+      \strng{authorbibnamehash}{03e42ed5baec5975bf8fb30d1ac13354}
+      \strng{authornamehash}{03e42ed5baec5975bf8fb30d1ac13354}
+      \strng{authorfullhash}{03e42ed5baec5975bf8fb30d1ac13354}
+      \strng{authorfullhashraw}{03e42ed5baec5975bf8fb30d1ac13354}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Trans. Intell. Transp. Syst.}
+      \field{title}{Deep learning for inertial positioning: a survey.}
+      \field{year}{2024}
+      \verb{doi}
+      \verb 10.1109/TITS.2024.3381161
+      \endverb
+    \endentry
+    \entry{Skog2010ZUPT}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=060bce1fe55c952d3276a71db9d05896}{%
+           family={Skog},
+           familyi={S\bibinitperiod},
+           given={I.},
+           giveni={I\bibinitperiod}}}%
+        {{hash=cab10df725e13dd83c8ffdcfceb9efac}{%
+           family={Händel},
+           familyi={H\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+        {{hash=532465192f3416b91a7c00cbe34ffc26}{%
+           family={Nilsson},
+           familyi={N\bibinitperiod},
+           given={J.-O.},
+           giveni={J\bibinithyphendelim O\bibinitperiod}}}%
+        {{hash=f917ed7d284179a9ae7fc3a280baa528}{%
+           family={Rantakokko},
+           familyi={R\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{091409584169224d98773f89643a0dab}
+      \strng{fullhash}{0a9a48a7377b9acbdfa1bcc0da950b66}
+      \strng{fullhashraw}{0a9a48a7377b9acbdfa1bcc0da950b66}
+      \strng{bibnamehash}{091409584169224d98773f89643a0dab}
+      \strng{authorbibnamehash}{091409584169224d98773f89643a0dab}
+      \strng{authornamehash}{091409584169224d98773f89643a0dab}
+      \strng{authorfullhash}{0a9a48a7377b9acbdfa1bcc0da950b66}
+      \strng{authorfullhashraw}{0a9a48a7377b9acbdfa1bcc0da950b66}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Trans. Biomed. Eng.}
+      \field{number}{11}
+      \field{title}{Zero-velocity detection---an algorithm evaluation.}
+      \field{volume}{57}
+      \field{year}{2010}
+      \field{pages}{2657\bibrangedash 2666}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1109/TBME.2010.2060723
+      \endverb
+    \endentry
+    \entry{photonics11060540}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=ef4e90e250b6b8fc32b6b061b4bc6386}{%
+           family={Skryja},
+           familyi={S\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+        {{hash=2371abea2e52f006ea052b0534d7ed11}{%
+           family={Barcik},
+           familyi={B\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{7571590941ac6c420e9aecb2a90ccc53}
+      \strng{fullhash}{7571590941ac6c420e9aecb2a90ccc53}
+      \strng{fullhashraw}{7571590941ac6c420e9aecb2a90ccc53}
+      \strng{bibnamehash}{7571590941ac6c420e9aecb2a90ccc53}
+      \strng{authorbibnamehash}{7571590941ac6c420e9aecb2a90ccc53}
+      \strng{authornamehash}{7571590941ac6c420e9aecb2a90ccc53}
+      \strng{authorfullhash}{7571590941ac6c420e9aecb2a90ccc53}
+      \strng{authorfullhashraw}{7571590941ac6c420e9aecb2a90ccc53}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Photonics}
+      \field{title}{Optimal scanning pattern for initial free-space optical-link alignment.}
+      \field{volume}{11}
+      \field{year}{2024}
+      \field{pages}{540}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/photonics11060540
+      \endverb
+    \endentry
+    \entry{s141019622}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=bf5507e679e92ee792e51d20679f4068}{%
+           family={Shim},
+           familyi={S\bibinitperiod},
+           given={D.-S.},
+           giveni={D\bibinithyphendelim S\bibinitperiod}}}%
+        {{hash=3f9b365679df06cceb81508d54dae05f}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={C.-K.},
+           giveni={C\bibinithyphendelim K\bibinitperiod}}}%
+        {{hash=22f004ba2a2fb15ca2272345a67a8156}{%
+           family={Kim},
+           familyi={K\bibinitperiod},
+           given={J.\bibnamedelimi H.},
+           giveni={J\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=16860afd19dcc31114d6c2ac74134abf}{%
+           family={Han},
+           familyi={H\bibinitperiod},
+           given={J.\bibnamedelimi P.},
+           giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=eb21e58a2ba59c996fbdec500c1bff43}{%
+           family={Cho},
+           familyi={C\bibinitperiod},
+           given={Y.\bibnamedelimi S.},
+           giveni={Y\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{cc7ef0ef153a192c9ef6e7661441f29e}
+      \strng{fullhash}{46fb0bcbd4f49882f60ccd1a4f290ba6}
+      \strng{fullhashraw}{46fb0bcbd4f49882f60ccd1a4f290ba6}
+      \strng{bibnamehash}{cc7ef0ef153a192c9ef6e7661441f29e}
+      \strng{authorbibnamehash}{cc7ef0ef153a192c9ef6e7661441f29e}
+      \strng{authornamehash}{cc7ef0ef153a192c9ef6e7661441f29e}
+      \strng{authorfullhash}{46fb0bcbd4f49882f60ccd1a4f290ba6}
+      \strng{authorfullhashraw}{46fb0bcbd4f49882f60ccd1a4f290ba6}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Sensors}
+      \field{title}{Application of motion sensors for beam-tracking of mobile stations in {mmWave} communication systems.}
+      \field{volume}{14}
+      \field{year}{2014}
+      \field{pages}{19622\bibrangedash 19638}
+      \range{pages}{17}
+      \verb{doi}
+      \verb 10.3390/s141019622
+      \endverb
+    \endentry
+    \entry{9391649}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=3a38e3aa72b7b31891ae1014817b0692}{%
+           family={Ali},
+           familyi={A\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=90ea73fdfbcad4fae4429b324ccab9ab}{%
+           family={Mo},
+           familyi={M\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=e04af26d15d095f39dada47d5fae0c2a}{%
+           family={Ng},
+           familyi={N\bibinitperiod},
+           given={B.\bibnamedelimi L.},
+           giveni={B\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=516623d41c9f8f11ca842f1b10cb04f5}{%
+           family={Va},
+           familyi={V\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+        {{hash=ec0c37858c450f10a1a3a887451bb2a0}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={J.\bibnamedelimi C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \strng{namehash}{22c377a9cc8ab271193ab9fe0b783998}
+      \strng{fullhash}{ecba67398888a339496ef1c735951d4b}
+      \strng{fullhashraw}{ecba67398888a339496ef1c735951d4b}
+      \strng{bibnamehash}{22c377a9cc8ab271193ab9fe0b783998}
+      \strng{authorbibnamehash}{22c377a9cc8ab271193ab9fe0b783998}
+      \strng{authornamehash}{22c377a9cc8ab271193ab9fe0b783998}
+      \strng{authorfullhash}{ecba67398888a339496ef1c735951d4b}
+      \strng{authorfullhashraw}{ecba67398888a339496ef1c735951d4b}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Access}
+      \field{title}{Orientation-assisted beam management for beyond {5G} systems.}
+      \field{volume}{9}
+      \field{year}{2021}
+      \field{pages}{51832\bibrangedash 51846}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1109/ACCESS.2021.3069733
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

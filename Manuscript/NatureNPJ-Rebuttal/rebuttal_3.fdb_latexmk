@@ -1,12 +1,12 @@
 # Fdb version 4
-["biber rebuttal_3"] 1779516031.57727 "rebuttal_3.bcf" "rebuttal_3.bbl" "rebuttal_3" 1779516052.99373 0
-  "rebuttal_3.bcf" 1779516052.80009 111095 1c8f7c80ac18739e1ff172bbb383e26b "pdflatex"
+["biber rebuttal_3"] 1779516031.57727 "rebuttal_3.bcf" "rebuttal_3.bbl" "rebuttal_3" 1779736664.59073 0
+  "rebuttal_3.bcf" 1779736664.39727 111095 1c8f7c80ac18739e1ff172bbb383e26b "pdflatex"
   "references.bib" 1779466517.77219 29445 6e4ad840a6c4eb6f9b6c6150729787a5 ""
   (generated)
   "rebuttal_3.bbl"
   "rebuttal_3.blg"
   (rewritten before read)
-["pdflatex"] 1779516042.78485 "/Users/sergeypetrushkevich/MobileTHz/Manuscript/NatureNPJ-Rebuttal/rebuttal_3.tex" "rebuttal_3.pdf" "rebuttal_3" 1779516052.99408 0
+["pdflatex"] 1779736654.43976 "/Users/sergeypetrushkevich/MobileTHz/Manuscript/NatureNPJ-Rebuttal/rebuttal_3.tex" "rebuttal_3.pdf" "rebuttal_3" 1779736664.59104 0
   "/Users/sergeypetrushkevich/MobileTHz/Manuscript/NatureNPJ-Rebuttal/rebuttal_3.tex" 1779516034.09465 42743 fb8aebf7f7f4755d0480e8ad1b1a86be ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1772380719 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/map/fontname/texfonts.map" 1772380719 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -325,10 +325,10 @@
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-var/web2c/pdftex/pdflatex.fmt" 1772380719 3636956 5168b884cb430e6a6336cfea08fa659a ""
   "Figures/RebFig_Robustness_TimeScales.tex" 1779514298.9275 103665 32724bd41738cd4f01642144a41a7885 ""
   "Figures/RebFig_Tuning_HSIMU.tex" 1779479084.94469 59950 1353fe5080bb30db44804c0fc265d0ec ""
-  "Figures/RebFig_Tuning_JITeta.tex" 1779482077.49406 61120 1bc8dfb42ceb78fa3b5ecc49c10b84b0 ""
-  "rebuttal_3.aux" 1779516052.79677 7602 6ef0cf0b03f3149e1ea7c4e1fb9f7890 "pdflatex"
+  "Figures/RebFig_Tuning_JITeta.tex" 1779736652.24665 61120 1bc8dfb42ceb78fa3b5ecc49c10b84b0 ""
+  "rebuttal_3.aux" 1779736664.39431 7602 6ef0cf0b03f3149e1ea7c4e1fb9f7890 "pdflatex"
   "rebuttal_3.bbl" 1779516032.50198 33861 e8debde33277ff47f3c72358714b8754 "biber rebuttal_3"
-  "rebuttal_3.run.xml" 1779516052.80118 2347 36aff09ed63462eb4e1d2474e269a7a6 "pdflatex"
+  "rebuttal_3.run.xml" 1779736664.39813 2347 36aff09ed63462eb4e1d2474e269a7a6 "pdflatex"
   "rebuttal_3.tex" 1779516034.09465 42743 fb8aebf7f7f4755d0480e8ad1b1a86be ""
   (generated)
   "rebuttal_3.aux"

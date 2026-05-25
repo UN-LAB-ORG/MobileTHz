@@ -31,11 +31,6 @@
         \draw[#1, #2, line width=1.5pt] (0,0) -- (0.5,0);
     }%
 }
-\newcommand{\inaxleg}[2]{%
-    \tikz[baseline=-0.5ex]{
-        \draw[#1, #2, line width=0.7pt] (0,0) -- (0.5,0);
-    }%
-}
 
 % Global pgfplots style
 \pgfplotsset{
@@ -197,7 +192,7 @@ Periodic IMU samples \\
 }
 \end{tcbremark}
 
-\noindent We have added three parameter-tuning figures and one timescale-robustness figure, each evaluated under both translational and rotational mobility: Fig.~\ref{fig:reb_tuning_hs} sweeps the Hierarchical Search spiral growth factor $\gamma$; Fig.~\ref{fig:reb_tuning_imu} sweeps the IMU-Assist refinement step factor $\beta$; Fig.~\ref{fig:reb_tuning_jiteta} sweeps JIT's guard fraction $\eta$; and Fig.~\ref{fig:reb_robustness} sweeps the IMU sampling period $T_{\text{IMU}}$. To rule out a cherry-picked operating point, each parameter sweep uses the same translational ($0.5$--$20$~m/s$^2$) and rotational ($0.5$--$700$~deg/s$^2$) peak acceleration grids used throughout the main paper, with the same $n = 5{,}000$ Monte-Carlo runs per data point. The full acceleration sweep is drawn as faint background lines; the Lower, Typical, and Upper Acceleration values are highlighted as bold lines ($0.5$, $9.5$, and $20$~m/s$^2$ for translational; $0.5$, $300$, and $700$~deg/s$^2$ for rotational).\\
+\noindent We have added three parameter-tuning figures and one timescale-robustness figure, each evaluated under both translational and rotational mobility: Fig.~\ref{fig:reb_tuning_hs} sweeps the Hierarchical Search spiral growth factor $\gamma$; Fig.~\ref{fig:reb_tuning_imu} sweeps the IMU-Assist refinement step factor $\beta$; Fig.~\ref{fig:reb_tuning_jiteta} sweeps JIT's guard fraction $\eta$; and Fig.~\ref{fig:reb_robustness} sweeps the IMU sampling period $T_{\text{IMU}}$. To rule out a cherry-picked operating point, each parameter sweep uses the same translational ($0.5$--$20$~m/s$^2$) and rotational ($0.5$--$700$~deg/s$^2$) peak acceleration grids used throughout the main paper, with the same $n = 5{,}000$ Monte-Carlo runs per data point. The full acceleration sweep is drawn as faint background lines; the Lower ($1$~m/s$^2$ or $1$~deg/s$^2$), Typical ($9.5$~m/s$^2$ or $300$~deg/s$^2$), and Upper ($20$~m/s$^2$ or $700$~deg/s$^2$) Acceleration values are highlighted as bold lines.\\
 
 \begin{figure}[ht!]
     \centering
@@ -212,6 +207,31 @@ Periodic IMU samples \\
         \vspace{-25pt}
         \caption{Rotational}
     \end{subfigure}
+
+    \vspace{4pt}
+    \centerline{%
+    \begin{tikzpicture}
+    \node[
+        draw=black, line width=0.25pt,
+        inner sep=3pt, rounded corners=0pt, align=center
+    ] {%
+        \footnotesize
+        \setlength{\tabcolsep}{0pt}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular*}{\dimexpr0.85\linewidth}{
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+        }
+            \legline{gray!50!black}{dotted} & Lower Acceleration &
+            \legline{gray!50!black}{solid} & Typical Acceleration &
+            \legline{gray!50!black}{densely dashed} & Upper Acceleration \\
+        \end{tabular*}
+    };
+    \end{tikzpicture}}
+
     \caption{Hierarchical Search parameter sensitivity to the spiral growth factor $\gamma$ ($d_{\text{link}} = 3$~m, Ideal Mechanical). Bold lines mark the Lower, Typical, and Upper Acceleration values: $0.5$, $9.5$, and $20$ m/s$^2$ (translational); $0.5$, $300$, and $700$ deg/s$^2$ (rotational).}
     \label{fig:reb_tuning_hs}
 \end{figure}
@@ -229,6 +249,31 @@ Periodic IMU samples \\
         \vspace{-25pt}
         \caption{Rotational}
     \end{subfigure}
+
+    \vspace{4pt}
+    \centerline{%
+    \begin{tikzpicture}
+    \node[
+        draw=black, line width=0.25pt,
+        inner sep=3pt, rounded corners=0pt, align=center
+    ] {%
+        \footnotesize
+        \setlength{\tabcolsep}{0pt}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular*}{\dimexpr0.85\linewidth}{
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+        }
+            \legline{gray!50!black}{dotted} & Lower Acceleration &
+            \legline{gray!50!black}{solid} & Typical Acceleration &
+            \legline{gray!50!black}{densely dashed} & Upper Acceleration \\
+        \end{tabular*}
+    };
+    \end{tikzpicture}}
+
     \caption{IMU-Assist parameter sensitivity to the refinement step factor $\beta$ ($d_{\text{link}} = 3$~m, Ideal Mechanical). Bold lines mark the Lower, Typical, and Upper Acceleration values: $0.5$, $9.5$, and $20$ m/s$^2$ (translational); $0.5$, $300$, and $700$ deg/s$^2$ (rotational).}
     \label{fig:reb_tuning_imu}
 \end{figure}
@@ -246,6 +291,31 @@ Periodic IMU samples \\
         \vspace{-25pt}
         \caption{Rotational}
     \end{subfigure}
+
+    \vspace{4pt}
+    \centerline{%
+    \begin{tikzpicture}
+    \node[
+        draw=black, line width=0.25pt,
+        inner sep=3pt, rounded corners=0pt, align=center
+    ] {%
+        \footnotesize
+        \setlength{\tabcolsep}{0pt}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular*}{\dimexpr0.85\linewidth}{
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+        }
+            \legline{gray!50!black}{dotted} & Lower Acceleration &
+            \legline{gray!50!black}{solid} & Typical Acceleration &
+            \legline{gray!50!black}{densely dashed} & Upper Acceleration \\
+        \end{tabular*}
+    };
+    \end{tikzpicture}}
+
     \caption{JIT guard fraction $\eta$ sensitivity ($d_{\text{link}} = 3$~m, Ideal Mechanical). Bold lines mark the Lower, Typical, and Upper Acceleration values: $0.5$, $9.5$, and $20$ m/s$^2$ (translational); $0.5$, $300$, and $700$ deg/s$^2$ (rotational).}
     \label{fig:reb_tuning_jiteta}
 \end{figure}
@@ -311,6 +381,15 @@ The IMU sampling period (\SI{10}{\milli\second} in this evaluation; commodity $\
             \legline{cb_blue}{solid} & Hierarchical Search &
             \legline{cb_orange}{solid} & IMU-Assist &
             \legline{cb_green}{solid} & JIT \\
+        \end{tabular*}
+        \vspace{2pt}\\
+        \begin{tabular*}{\dimexpr0.85\linewidth}{
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+        }
             \legline{gray!50!black}{dotted} & Lower Acceleration &
             \legline{gray!50!black}{solid} & Typical Acceleration &
             \legline{gray!50!black}{densely dashed} & Upper Acceleration \\
@@ -318,7 +397,7 @@ The IMU sampling period (\SI{10}{\milli\second} in this evaluation; commodity $\
     };
     \end{tikzpicture}}
 
-    \caption{Mean capacity vs.\ IMU sampling period $T_{\text{IMU}}$, Ideal Mechanical steering ($d_{\text{link}}=\SI{3}{m}$). Bold lines mark the Lower, Typical, and Upper Acceleration values: $0.5$, $9.5$, and $20$ m/s$^2$ (translational); $0.5$, $300$, and $700$ deg/s$^2$ (rotational); vertical dashed lines mark the Table~2 baseline $T_{\text{IMU}} = \SI{10}{ms}$.}
+    \caption{Mean capacity vs.\ IMU sampling period $T_{\text{IMU}}$, Ideal Mechanical steering ($d_{\text{link}}=\SI{3}{m}$). Bold lines mark the Lower, Typical, and Upper Acceleration values; vertical dashed lines mark the Table~2 baseline $T_{\text{IMU}} = \SI{10}{ms}$.}
     \label{fig:reb_robustness}
 \end{figure}
 
@@ -373,7 +452,7 @@ The EoC is the angle off the AP's beam axis at which the antenna gain has droppe
 }
 \end{tcbremark}
 
-\noindent We have added three parameter-tuning figures (Fig.~\ref{fig:reb_tuning_hs} sweeps $\gamma$; Fig.~\ref{fig:reb_tuning_imu} sweeps $\beta$; Fig.~\ref{fig:reb_tuning_jiteta} sweeps $\eta$), each evaluated under both translational and rotational mobility. Each parameter sweep uses the same translational ($0.5$--$20$~m/s$^2$) and rotational ($0.5$--$700$~deg/s$^2$) peak acceleration grids used throughout the main paper, with the same $n = 5{,}000$ Monte-Carlo runs per data point. The full sweep is drawn as faint background lines; the Lower, Typical, and Upper Acceleration values are highlighted as bold lines ($0.5$, $9.5$, and $20$~m/s$^2$ for translational; $0.5$, $300$, and $700$~deg/s$^2$ for rotational). The chosen baseline parameters ($\gamma = 1.25$, $\beta = 0.10$) lie within $\pm 10\%$ of the peak at every acceleration shown, confirming that the choice is not specific to one acceleration. JIT's mean capacity stays within $\pm 5\%$ of its maximum across the plateau $\eta \in [0.20, 0.50]$ for every acceleration. Even at the baselines' optima (HS at $\gamma = 1.25$: \SI{38.3}{Gbps}; IMU-Assist at $\beta = 0.10$: \SI{47.8}{Gbps}), JIT at $\eta = 0.36$ leads by at least $24$\,Gbps (\SI{71.7}{Gbps}) at typical translational acceleration, so the gain reflects the coordination mechanism rather than parameter tuning. The companion timescale sweep (Fig.~\ref{fig:reb_robustness}, $T_{\text{IMU}}$) is addressed in our response to the next remark, and confirms that JIT capacity stays within $3\%$ of its maximum for $T_{\text{IMU}} \leq 15$\,ms (commodity IMUs operate at $\geq 1$\,kHz, well inside this range).
+\noindent We have added three parameter-tuning figures (Fig.~\ref{fig:reb_tuning_hs} sweeps $\gamma$; Fig.~\ref{fig:reb_tuning_imu} sweeps $\beta$; Fig.~\ref{fig:reb_tuning_jiteta} sweeps $\eta$), each evaluated under both translational and rotational mobility. Each parameter sweep uses the same translational ($0.5$--$20$~m/s$^2$) and rotational ($0.5$--$700$~deg/s$^2$) peak acceleration grids used throughout the main paper, with the same $n = 5{,}000$ Monte-Carlo runs per data point. The full sweep is drawn as faint background lines; the Lower ($1$~m/s$^2$ or $1$~deg/s$^2$), Typical ($9.5$~m/s$^2$ or $300$~deg/s$^2$), and Upper ($20$~m/s$^2$ or $700$~deg/s$^2$) Acceleration values are highlighted as bold lines. The chosen baseline parameters ($\gamma = 1.25$, $\beta = 0.10$) lie within $\pm 10\%$ of the peak at every acceleration shown, confirming that the choice is not specific to one acceleration. JIT's mean capacity stays within $\pm 5\%$ of its maximum across the plateau $\eta \in [0.20, 0.50]$ for every acceleration. Even at the baselines' optima (HS at $\gamma = 1.25$: \SI{38.3}{Gbps}; IMU-Assist at $\beta = 0.10$: \SI{47.8}{Gbps}), JIT at $\eta = 0.36$ leads by at least $24$\,Gbps (\SI{71.7}{Gbps}) at typical translational acceleration, so the gain reflects the coordination mechanism rather than parameter tuning. The companion timescale sweep (Fig.~\ref{fig:reb_robustness}, $T_{\text{IMU}}$) is addressed in our response to the next remark, and confirms that JIT capacity stays within $3\%$ of its maximum for $T_{\text{IMU}} \leq 15$\,ms (commodity IMUs operate at $\geq 1$\,kHz, well inside this range).
 
 %-------------------------------------------------------------------%
 \begin{tcbremark}

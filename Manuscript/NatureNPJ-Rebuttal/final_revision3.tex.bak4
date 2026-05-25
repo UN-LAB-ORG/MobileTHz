@@ -43,11 +43,6 @@
         \draw[#1, #2, line width=1.5pt] (0,0) -- (0.5,0);
     }%
 }
-\newcommand{\inaxleg}[2]{%
-    \tikz[baseline=-0.5ex]{
-        \draw[#1, #2, line width=0.7pt] (0,0) -- (0.5,0);
-    }%
-}
 \newcommand{\legmark}[2]{%
     \tikz[baseline=-0.5ex]{
         \node[#2, fill=#1, draw=#1, inner sep=2pt, scale=0.8] at (0,0) {};
@@ -692,7 +687,32 @@ where $\Gamma_{0}$ is the initial margin, $R$ is the margin increase rate, and $
         \caption{Rotational}
         \label{fig:tuning_hs_rot}
     \end{subfigure}
-    \caption{\rev{Hierarchical Search parameter sensitivity to the spiral growth factor $\gamma$ ($d_{\text{link}} = 3$~m, Ideal Mechanical). Bold lines mark the Lower, Typical, and Upper Acceleration values: $0.5$, $9.5$, and $20$ m/s$^2$ (translational); $0.5$, $300$, and $700$ deg/s$^2$ (rotational).}}
+
+    \vspace{4pt}
+    \centerline{%
+    \begin{tikzpicture}
+    \node[
+        draw=black, line width=0.25pt,
+        inner sep=3pt, rounded corners=0pt, align=center
+    ] {%
+        \footnotesize
+        \setlength{\tabcolsep}{0pt}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular*}{\dimexpr0.85\linewidth}{
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+        }
+            \legline{gray!50!black}{dotted} & Lower Accel.\ ($1$\,m/s$^2$ or $1$\,deg/s$^2$) &
+            \legline{gray!50!black}{solid} & Typical Accel.\ ($9.5$\,m/s$^2$ or $300$\,deg/s$^2$) &
+            \legline{gray!50!black}{densely dashed} & Upper Accel.\ ($20$\,m/s$^2$ or $700$\,deg/s$^2$) \\
+        \end{tabular*}
+    };
+    \end{tikzpicture}}
+
+    \caption{\rev{Hierarchical Search parameter sensitivity to the spiral growth factor $\gamma$ ($d_{\text{link}} = 3$~m, Ideal Mechanical). Bold lines mark the Lower, Typical, and Upper Acceleration values.}}
     \label{fig:tuning_hs}
     \vspace{-5pt}
 \end{figure}
@@ -757,7 +777,32 @@ Unlike the expanding step size $HS_k$ used in the Hierarchical Search's Search P
         \caption{Rotational}
         \label{fig:tuning_imu_rot}
     \end{subfigure}
-    \caption{\rev{IMU-Assist parameter sensitivity to the refinement step factor $\beta$ ($d_{\text{link}} = 3$~m, Ideal Mechanical). Bold lines mark the Lower, Typical, and Upper Acceleration values: $0.5$, $9.5$, and $20$ m/s$^2$ (translational); $0.5$, $300$, and $700$ deg/s$^2$ (rotational).}}
+
+    \vspace{4pt}
+    \centerline{%
+    \begin{tikzpicture}
+    \node[
+        draw=black, line width=0.25pt,
+        inner sep=3pt, rounded corners=0pt, align=center
+    ] {%
+        \footnotesize
+        \setlength{\tabcolsep}{0pt}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular*}{\dimexpr0.85\linewidth}{
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+        }
+            \legline{gray!50!black}{dotted} & Lower Accel.\ ($1$\,m/s$^2$ or $1$\,deg/s$^2$) &
+            \legline{gray!50!black}{solid} & Typical Accel.\ ($9.5$\,m/s$^2$ or $300$\,deg/s$^2$) &
+            \legline{gray!50!black}{densely dashed} & Upper Accel.\ ($20$\,m/s$^2$ or $700$\,deg/s$^2$) \\
+        \end{tabular*}
+    };
+    \end{tikzpicture}}
+
+    \caption{\rev{IMU-Assist parameter sensitivity to the refinement step factor $\beta$ ($d_{\text{link}} = 3$~m, Ideal Mechanical). Bold lines mark the Lower, Typical, and Upper Acceleration values.}}
     \label{fig:tuning_imu}
     \vspace{-5pt}
 \end{figure}
@@ -800,7 +845,32 @@ The guard fraction $\eta$ trades off link robustness against control overhead: a
         \caption{Rotational}
         \label{fig:tuning_jit_eta_rot}
     \end{subfigure}
-    \caption{\rev{JIT guard fraction $\eta$ sensitivity ($d_{\text{link}} = 3$~m, Ideal Mechanical). Bold lines mark the Lower, Typical, and Upper Acceleration values: $0.5$, $9.5$, and $20$ m/s$^2$ (translational); $0.5$, $300$, and $700$ deg/s$^2$ (rotational).}}
+
+    \vspace{4pt}
+    \centerline{%
+    \begin{tikzpicture}
+    \node[
+        draw=black, line width=0.25pt,
+        inner sep=3pt, rounded corners=0pt, align=center
+    ] {%
+        \footnotesize
+        \setlength{\tabcolsep}{0pt}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular*}{\dimexpr0.85\linewidth}{
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+        }
+            \legline{gray!50!black}{dotted} & Lower Accel.\ ($1$\,m/s$^2$ or $1$\,deg/s$^2$) &
+            \legline{gray!50!black}{solid} & Typical Accel.\ ($9.5$\,m/s$^2$ or $300$\,deg/s$^2$) &
+            \legline{gray!50!black}{densely dashed} & Upper Accel.\ ($20$\,m/s$^2$ or $700$\,deg/s$^2$) \\
+        \end{tabular*}
+    };
+    \end{tikzpicture}}
+
+    \caption{\rev{JIT guard fraction $\eta$ sensitivity ($d_{\text{link}} = 3$~m, Ideal Mechanical). Bold lines mark the Lower, Typical, and Upper Acceleration values.}}
     \label{fig:tuning_jit_eta}
     \vspace{-5pt}
 \end{figure}
@@ -855,7 +925,7 @@ A mobile scenario consists of a set of mobile nodes, $\mathcal{M} = \{m_1, m_2, 
 f(\tau) = 6\tau^5 - 15\tau^4 + 10\tau^3,
 \label{eq:smootherstep}
 \end{equation}
-where $\tau = (t - t_k) / (t_{k+1} - t_k) \in [0, 1]$ is the normalized time. This function's $C^2$ continuity guarantees zero velocity, acceleration, and jerk at keyframe boundaries, producing physically plausible motion. \rev{The zero-velocity boundary condition models pause-resume mobility patterns such as walking with intermediate stops or beginning and ending a turn from rest, which are the primary motion classes considered in this study. Pause-resume motion is also the hardest case for predictive beam management: the velocity profile is unknown at the onset of motion, acceleration changes rapidly, and the system has the least time to react. Sustained-motion variants (e.g., walking at a steady speed) are easier to predict from a brief observation window, so the performance reported here lower-bounds what is achievable on those variants. Both the software simulator and the HIL testbed support trajectories without a stationary boundary (e.g., continuous walking through multiple checkpoints) by chaining smootherstep-interpolated segments whose endpoints exchange non-zero velocities, preserving slot-by-slot $C^1$ continuity.}
+where $\tau = (t - t_k) / (t_{k+1} - t_k) \in [0, 1]$ is the normalized time. This function's $C^2$ continuity guarantees zero velocity, acceleration, and jerk at keyframe boundaries, producing physically plausible motion. \rev{The zero-velocity boundary condition models pause-resume mobility patterns such as walking with intermediate stops or beginning and ending a turn from rest, which are the primary motion classes considered in this study. Pause-resume motion is also the hardest case for predictive beam management: the velocity profile is unknown at the onset of motion, acceleration changes rapidly, and the system has the least time to react. Sustained-motion variants (e.g., walking at a steady speed) are easier to predict from a brief observation window, so the performance reported here lower-bounds what is achievable on those variants. Both the software simulator and the HIL testbed support trajectories without a stationary boundary (e.g., continuous walking through multiple checkpoints) by chaining smootherstep-interpolated segments whose endpoints exchange non-zero velocities, preserving slot-by-slot $C^1$ continuity where required.}
 
 \rev{For a single smootherstep segment,} the maximum acceleration \rev{produced by Eq.~\eqref{eq:smootherstep}} over a displacement $D$ \rev{and} duration $T$ is:
 \begin{equation}
@@ -932,24 +1002,21 @@ This sequence of kinematics update, channel evaluation, hardware emulation, and 
         \footnotesize
         \setlength{\tabcolsep}{0pt}
         \renewcommand{\arraystretch}{1.3}
-        \begin{tabular*}{\dimexpr0.95\linewidth}{
+        \begin{tabular*}{\dimexpr0.85\linewidth}{
             c @{\extracolsep{0pt}\hspace{3pt}} l
             @{\extracolsep{\fill}}
             c @{\extracolsep{0pt}\hspace{3pt}} l
             @{\extracolsep{\fill}}
             c @{\extracolsep{0pt}\hspace{3pt}} l
         }
-            \legline{cb_blue}{solid} & Hierarchical Search &
-            \legline{cb_orange}{solid} & IMU-Assist &
-            \legline{cb_green}{solid} & JIT \\
-            \legline{gray!50!black}{dotted} & Lower Acceleration &
-            \legline{gray!50!black}{solid} & Typical Acceleration &
-            \legline{gray!50!black}{densely dashed} & Upper Acceleration \\
+            \legline{gray!50!black}{dotted} & Lower Accel.\ ($1$\,m/s$^2$ or $1$\,deg/s$^2$) &
+            \legline{gray!50!black}{solid} & Typical Accel.\ ($9.5$\,m/s$^2$ or $300$\,deg/s$^2$) &
+            \legline{gray!50!black}{densely dashed} & Upper Accel.\ ($20$\,m/s$^2$ or $700$\,deg/s$^2$) \\
         \end{tabular*}
     };
     \end{tikzpicture}}
 
-    \caption{\rev{Mean capacity vs.\ IMU sampling period $T_{\text{IMU}}$, Ideal Mechanical steering ($d_{\text{link}} = \SI{3}{m}$). Bold lines mark the Lower, Typical, and Upper Acceleration values: $0.5$, $9.5$, and $20$ m/s$^2$ (translational); $0.5$, $300$, and $700$ deg/s$^2$ (rotational); vertical dashed lines mark the Table~\ref{tab:system_parameters} baseline $T_{\text{IMU}} = \SI{10}{\milli\second}$.}}
+    \caption{\rev{Mean capacity vs.\ IMU sampling period $T_{\text{IMU}}$, Ideal Mechanical steering ($d_{\text{link}} = \SI{3}{m}$). Bold lines mark the Lower, Typical, and Upper Acceleration values; vertical dashed lines mark the Table~\ref{tab:system_parameters} baseline $T_{\text{IMU}} = \SI{10}{\milli\second}$.}}
     \label{fig:robustness_timescales}
     \vspace{-5pt}
 \end{figure}

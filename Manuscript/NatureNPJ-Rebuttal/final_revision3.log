@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.4.21)  14 MAY 2026 13:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.4.21)  25 MAY 2026 15:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1272,6 +1272,12 @@ kz/libraries\tikzlibrarypositioning.code.tex
 File: tikzlibrarypositioning.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )
 (C:\Users\Sergey\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/libs\tikzli
+brarypgfplots.groupplots.code.tex
+\pgfplots@group@current@plot=\count390
+\pgfplots@group@current@row=\count391
+\pgfplots@group@current@column=\count392
+)
+(C:\Users\Sergey\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/libs\tikzli
 brarypgfplots.fillbetween.code.tex
 (C:\Users\Sergey\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/pgfcontrib\
 tikzlibraryfillbetween.code.tex
@@ -1279,7 +1285,7 @@ tikzlibraryfillbetween.code.tex
 kz/libraries\tikzlibraryintersections.code.tex
 (C:\Users\Sergey\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflib
 raryintersections.code.tex
-\pgf@intersect@solutions=\count390
+\pgf@intersect@solutions=\count393
 ))
 (C:\Users\Sergey\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/pgfcontrib\
 tikzlibrarydecorations.softclip.code.tex
@@ -1291,7 +1297,12 @@ brarypgfplots.decorations.softclip.code.tex)) (final_revision3.aux
 (Figures/Fig4b.aux) (Figures/Fig4c.aux) (Figures/Fig5a.aux) (Figures/Fig5b.aux)
 (Figures/Fig6a.aux) (Figures/Fig6b.aux) (Figures/Fig7a.aux) (Figures/Fig7b.aux)
 (Figures/Fig7c.aux) (Figures/Fig8a.aux) (Figures/Fig8b.aux) (Figures/Fig8c.aux)
-(Figures/Fig8d.aux))
+(Figures/Fig8d.aux) (Figures/RebFig_Tuning_HS_trans.aux)
+(Figures/RebFig_Tuning_HS_rot.aux) (Figures/RebFig_Tuning_IMU_trans.aux)
+(Figures/RebFig_Tuning_IMU_rot.aux) (Figures/RebFig_Tuning_JITeta_trans.aux)
+(Figures/RebFig_Tuning_JITeta_rot.aux)
+(Figures/RebFig_Robustness_TimeScales_trans.aux)
+(Figures/RebFig_Robustness_TimeScales_rot.aux))
 \openout1 = `final_revision3.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 78.
@@ -1316,16 +1327,16 @@ LaTeX Font Info:    ... okay on input line 78.
 (C:\Users\Sergey\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.m
 kii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count391
+\scratchcounter=\count394
 \scratchdimen=\dimen357
 \scratchbox=\box86
-\nofMPsegments=\count392
-\nofMParguments=\count393
+\nofMPsegments=\count395
+\nofMParguments=\count396
 \everyMPshowfont=\toks57
-\MPscratchCnt=\count394
+\MPscratchCnt=\count397
 \MPscratchDim=\dimen358
-\MPnumerator=\count395
-\makeMPintoPDFobject=\count396
+\MPnumerator=\count398
+\makeMPintoPDFobject=\count399
 \everyMPtoPDFconversion=\toks58
 )
 (C:\Users\Sergey\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-
@@ -1693,44 +1704,106 @@ rid,axis ticks,axis lines,axis tick labels,pre main,main,axis descriptions,axis
 
 pdfTeX warning: pdflatex.exe (file ./Figures/Fig9.pdf): PDF inclusion: found PD
 F version <1.7>, but at most version <1.5> allowed
-<Figures/Fig9.pdf, id=355, 179.7114pt x 163.57109pt>
+<Figures/Fig9.pdf, id=354, 179.7114pt x 163.57109pt>
 File: Figures/Fig9.pdf Graphic file (type pdf)
 <use Figures/Fig9.pdf>
-Package pdftex.def Info: Figures/Fig9.pdf  used on input line 641.
+Package pdftex.def Info: Figures/Fig9.pdf  used on input line 637.
 (pdftex.def)             Requested size: 200.19054pt x 182.21747pt.
-[11]
+[11 <./Figures/Fig9.pdf>]
+\openout2 = `Figures/RebFig_Tuning_HS_trans.aux'.
+
+ (Figures/RebFig_Tuning_HS_trans.tex)
+\openout2 = `Figures/RebFig_Tuning_HS_rot.aux'.
+
+
+(Figures/RebFig_Tuning_HS_rot.tex)
 
 pdfTeX warning: pdflatex.exe (file ./Figures/Fig10.pdf): PDF inclusion: found P
 DF version <1.7>, but at most version <1.5> allowed
-<Figures/Fig10.pdf, id=373, 614.295pt x 794.97pt>
+<Figures/Fig10.pdf, id=395, 614.295pt x 794.97pt>
 File: Figures/Fig10.pdf Graphic file (type pdf)
 <use Figures/Fig10.pdf>
-Package pdftex.def Info: Figures/Fig10.pdf  used on input line 683.
+Package pdftex.def Info: Figures/Fig10.pdf  used on input line 724.
 (pdftex.def)             Requested size: 200.19054pt x 259.06573pt.
+\openout2 = `Figures/RebFig_Tuning_IMU_trans.aux'.
+
+(Figures/RebFig_Tuning_IMU_trans.tex)
+\openout2 = `Figures/RebFig_Tuning_IMU_rot.aux'.
+
+ (Figures/RebFig_Tuning_IMU_rot.tex)
+[12
+
+
+
+
+
+
+ <./Figures/Fig10.pdf>]
 LaTeX Font Info:    Font shape `T1/phv/b/it' in size <9> not available
-(Font)              Font shape `T1/phv/b/sl' tried instead on input line 729.
-(Figures/RebFigB_EoC.tex)
+(Font)              Font shape `T1/phv/b/sl' tried instead on input line 815.
+ [13
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[12 <./Figures/Fig9.pdf> <./Figures/Fig10.pdf>] [13] [14] [15]
+
+
+
+
+]
+\openout2 = `Figures/RebFig_Tuning_JITeta_trans.aux'.
+
+ (Figures/RebFig_Tuning_JITeta_trans.tex)
+\openout2 = `Figures/RebFig_Tuning_JITeta_rot.aux'.
+
+
+(Figures/RebFig_Tuning_JITeta_rot.tex) [14
+
+
+
+
+
+
+] [15]
+\openout2 = `Figures/RebFig_Robustness_TimeScales_trans.aux'.
+
+
+(Figures/RebFig_Robustness_TimeScales_trans.tex
+Package pgfplots info on input line 13: Using 'lua backend=false' for axis: xmo
+de=log unsupported (yet).
+)
+\openout2 = `Figures/RebFig_Robustness_TimeScales_rot.aux'.
+
+
+(Figures/RebFig_Robustness_TimeScales_rot.tex
+Package pgfplots info on input line 13: Using 'lua backend=false' for axis: xmo
+de=log unsupported (yet).
+)
 
 pdfTeX warning: pdflatex.exe (file ./Figures/Fig11.pdf): PDF inclusion: found P
 DF version <1.7>, but at most version <1.5> allowed
-<Figures/Fig11.pdf, id=489, 1061.88712pt x 383.51279pt>
+<Figures/Fig11.pdf, id=492, 1061.88712pt x 383.51279pt>
 File: Figures/Fig11.pdf Graphic file (type pdf)
 <use Figures/Fig11.pdf>
-Package pdftex.def Info: Figures/Fig11.pdf  used on input line 862.
+Package pdftex.def Info: Figures/Fig11.pdf  used on input line 1030.
 (pdftex.def)             Requested size: 500.484pt x 180.75429pt.
-[16 <./Figures/Fig11.pdf>]
-LaTeX Font Info:    Trying to load font information for U+bbm on input line 893
-.
+[16]
+Underfull \vbox (badness 1917) has occurred while \output is active []
+
+ [17
+
+
+
+
+
+
+ <./Figures/Fig11.pdf>]
+LaTeX Font Info:    Trying to load font information for U+bbm on input line 106
+1.
 
 (C:\Users\Sergey\AppData\Local\Programs\MiKTeX\tex/latex/bbm\ubbm.fd
 File: ubbm.fd 1999/03/15 V 1.2 Font definition for bbm font - TH
-) [17]
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 94
-0.
+) [18]
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 11
+08.
 
 (C:\Users\Sergey\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
@@ -1740,14 +1813,19 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-(final_revision3.bbl [18] [19] [20] [21]) [22]
+(final_revision3.bbl [19] [20] [21] [22]) [23]
 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (final_revision3.aux (Figures/Fig2a.aux) (Figures/Fig2b.aux) (Figures/Fig2c.aux
 ) (Figures/Fig4a.aux) (Figures/Fig4b.aux) (Figures/Fig4c.aux)
 (Figures/Fig5a.aux) (Figures/Fig5b.aux) (Figures/Fig6a.aux) (Figures/Fig6b.aux)
 (Figures/Fig7a.aux) (Figures/Fig7b.aux) (Figures/Fig7c.aux) (Figures/Fig8a.aux)
-(Figures/Fig8b.aux) (Figures/Fig8c.aux) (Figures/Fig8d.aux))
+(Figures/Fig8b.aux) (Figures/Fig8c.aux) (Figures/Fig8d.aux)
+(Figures/RebFig_Tuning_HS_trans.aux) (Figures/RebFig_Tuning_HS_rot.aux)
+(Figures/RebFig_Tuning_IMU_trans.aux) (Figures/RebFig_Tuning_IMU_rot.aux)
+(Figures/RebFig_Tuning_JITeta_trans.aux) (Figures/RebFig_Tuning_JITeta_rot.aux)
+(Figures/RebFig_Robustness_TimeScales_trans.aux)
+(Figures/RebFig_Robustness_TimeScales_rot.aux))
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
@@ -1756,13 +1834,13 @@ Package rerunfilecheck Info: File `final_revision3.out' has not changed.
 (rerunfilecheck)             Checksum: 7A354D04A5C5EB66026C1D2816DB801E;95.
  ) 
 Here is how much of TeX's memory you used:
- 58310 strings out of 467871
- 1415372 string characters out of 5417892
- 1917605 words of memory out of 5000000
- 85460 multiletter control sequences out of 15000+600000
- 760901 words of font info for 562 fonts, out of 8000000 for 9000
+ 58651 strings out of 467871
+ 1431796 string characters out of 5417892
+ 2666027 words of memory out of 5000000
+ 85723 multiletter control sequences out of 15000+600000
+ 766381 words of font info for 575 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 100i,21n,108p,2320b,2554s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 100i,21n,108p,2320b,2556s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\Sergey\AppData\Local\MiKTeX\fonts/pk/ljfour/public/bbm/dpi600\bbm1
 0.pk><C:/Users/Sergey/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
 /cm/cmex10.pfb><C:/Users/Sergey/AppData/Local/Programs/MiKTeX/fonts/type1/publi
@@ -1784,9 +1862,9 @@ rw/times/utmb8a.pfb><C:/Users/Sergey/AppData/Local/Programs/MiKTeX/fonts/type1/
 urw/times/utmbi8a.pfb><C:/Users/Sergey/AppData/Local/Programs/MiKTeX/fonts/type
 1/urw/times/utmr8a.pfb><C:/Users/Sergey/AppData/Local/Programs/MiKTeX/fonts/typ
 e1/urw/times/utmri8a.pfb>
-Output written on final_revision3.pdf (22 pages, 6462006 bytes).
+Output written on final_revision3.pdf (23 pages, 6533888 bytes).
 PDF statistics:
- 766 PDF objects out of 1000 (max. 8388607)
- 140 named destinations out of 1000 (max. 500000)
- 154153 words of extra memory for PDF output out of 184870 (max. 10000000)
+ 778 PDF objects out of 1000 (max. 8388607)
+ 144 named destinations out of 1000 (max. 500000)
+ 160297 words of extra memory for PDF output out of 184870 (max. 10000000)
 

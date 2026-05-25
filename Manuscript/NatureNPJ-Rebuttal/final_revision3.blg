@@ -37,11 +37,27 @@ Reallocating 'name_of_file' (item size: 1) to 18 items.
 A level-1 auxiliary file: Figures/Fig8c.aux
 Reallocating 'name_of_file' (item size: 1) to 18 items.
 A level-1 auxiliary file: Figures/Fig8d.aux
+Reallocating 'name_of_file' (item size: 1) to 35 items.
+A level-1 auxiliary file: Figures/RebFig_Tuning_HS_trans.aux
+Reallocating 'name_of_file' (item size: 1) to 33 items.
+A level-1 auxiliary file: Figures/RebFig_Tuning_HS_rot.aux
+Reallocating 'name_of_file' (item size: 1) to 36 items.
+A level-1 auxiliary file: Figures/RebFig_Tuning_IMU_trans.aux
+Reallocating 'name_of_file' (item size: 1) to 34 items.
+A level-1 auxiliary file: Figures/RebFig_Tuning_IMU_rot.aux
+Reallocating 'name_of_file' (item size: 1) to 39 items.
+A level-1 auxiliary file: Figures/RebFig_Tuning_JITeta_trans.aux
+Reallocating 'name_of_file' (item size: 1) to 37 items.
+A level-1 auxiliary file: Figures/RebFig_Tuning_JITeta_rot.aux
+Reallocating 'name_of_file' (item size: 1) to 47 items.
+A level-1 auxiliary file: Figures/RebFig_Robustness_TimeScales_trans.aux
+Reallocating 'name_of_file' (item size: 1) to 45 items.
+A level-1 auxiliary file: Figures/RebFig_Robustness_TimeScales_rot.aux
 Reallocating 'name_of_file' (item size: 1) to 11 items.
 Database file #1: references.bib
 You've used 78 entries,
             2380 wiz_defined-function locations,
-            1521 strings with 24742 characters,
+            1529 strings with 25040 characters,
 and the built_in function-call counts, 33319 in all, are:
 = -- 2395
 > -- 904

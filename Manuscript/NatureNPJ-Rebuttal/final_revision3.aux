@@ -144,38 +144,68 @@
 \citation{Giordani2018ATO,Heng2021SixChallenges}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Steering-model configurations.}}{11}{table.caption.9}\protected@file@percent }
 \newlabel{tab:steering_and_hardware}{{1}{11}{Steering-model configurations}{table.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Hierarchical Search spiral trajectory expanding outward from the reference beam direction with step sizes $HS_0, HS_1, \ldots  , HS_k$. Circles show the evaluation order; the scan ends when received power exceeds $P_{\text  {succ}}(\Delta t)$.}}{11}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:blind_spiral_search}{{9}{11}{Hierarchical Search spiral trajectory expanding outward from the reference beam direction with step sizes $HS_0, HS_1, \ldots , HS_k$. Circles show the evaluation order; the scan ends when received power exceeds $P_{\text {succ}}(\Delta t)$}{figure.caption.10}{}}
+\@input{Figures/RebFig_Tuning_HS_trans.aux}
+\@input{Figures/RebFig_Tuning_HS_rot.aux}
 \citation{8455289,9145366}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Hierarchical Search spiral trajectory expanding outward from the reference beam direction with step sizes $HS_0, HS_1, \ldots  , HS_k$. Circles show the evaluation order; the scan ends when received power exceeds $P_{\text  {succ}}(\Delta t)$.}}{12}{figure.caption.10}\protected@file@percent }
-\newlabel{fig:blind_spiral_search}{{9}{12}{Hierarchical Search spiral trajectory expanding outward from the reference beam direction with step sizes $HS_0, HS_1, \ldots , HS_k$. Circles show the evaluation order; the scan ends when received power exceeds $P_{\text {succ}}(\Delta t)$}{figure.caption.10}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces IMU-Assisted search trajectory. IMU corrections (green) shift the search center to the sensor-predicted LoS direction before each spiral step. The local refinement spiral (blue) scans around the corrected center.}}{12}{figure.caption.11}\protected@file@percent }
-\newlabel{fig:imu_local_search}{{10}{12}{IMU-Assisted search trajectory. IMU corrections (green) shift the search center to the sensor-predicted LoS direction before each spiral step. The local refinement spiral (blue) scans around the corrected center}{figure.caption.11}{}}
+\@input{Figures/RebFig_Tuning_IMU_trans.aux}
+\@input{Figures/RebFig_Tuning_IMU_rot.aux}
+\newlabel{fig:tuning_hs_trans}{{10a}{12}{Translational}{figure.caption.11}{}}
+\newlabel{sub@fig:tuning_hs_trans}{{a}{12}{Translational}{figure.caption.11}{}}
+\newlabel{fig:tuning_hs_rot}{{10b}{12}{Rotational}{figure.caption.11}{}}
+\newlabel{sub@fig:tuning_hs_rot}{{b}{12}{Rotational}{figure.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces {\color  {revblue}Hierarchical Search parameter sensitivity to the spiral growth factor $\gamma $ ($d_{\text  {link}} = 3$~m, Ideal Mechanical). Bold lines mark the min, typical, and max accelerations.}}}{12}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:tuning_hs}{{10}{12}{\rev {Hierarchical Search parameter sensitivity to the spiral growth factor $\gamma $ ($d_{\text {link}} = 3$~m, Ideal Mechanical). Bold lines mark the min, typical, and max accelerations.}}{figure.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces IMU-Assisted search trajectory. IMU corrections (green) shift the search center to the sensor-predicted LoS direction before each spiral step. The local refinement spiral (blue) scans around the corrected center.}}{12}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:imu_local_search}{{11}{12}{IMU-Assisted search trajectory. IMU corrections (green) shift the search center to the sensor-predicted LoS direction before each spiral step. The local refinement spiral (blue) scans around the corrected center}{figure.caption.12}{}}
 \citation{Brossard2020AIIMU}
 \citation{Chen2024DLInertial}
 \citation{Skog2010ZUPT}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces {\color  {revblue}Edge of Coverage (EoC, at $\pm \,\theta _{\text  {HPBW}}/2$ off boresight) and JIT's trigger boundary, defined implicitly by $\|\dot  {\boldsymbol  {\delta }}\|\,T_{\text  {react}} = \eta \,\theta _{\text  {HPBW}}$. The UE evaluates the trigger condition locally at every IMU sample. Faster motion contracts the boundary toward boresight; slower motion expands it toward the EoC.}}}{13}{figure.caption.12}\protected@file@percent }
-\newlabel{fig:eoc_trigger}{{11}{13}{\rev {Edge of Coverage (EoC, at $\pm \,\theta _{\text {HPBW}}/2$ off boresight) and JIT's trigger boundary, defined implicitly by $\|\dot {\boldsymbol {\delta }}\|\,T_{\text {react}} = \eta \,\theta _{\text {HPBW}}$. The UE evaluates the trigger condition locally at every IMU sample. Faster motion contracts the boundary toward boresight; slower motion expands it toward the EoC.}}{figure.caption.12}{}}
+\newlabel{fig:tuning_imu_trans}{{12a}{13}{Translational}{figure.caption.13}{}}
+\newlabel{sub@fig:tuning_imu_trans}{{a}{13}{Translational}{figure.caption.13}{}}
+\newlabel{fig:tuning_imu_rot}{{12b}{13}{Rotational}{figure.caption.13}{}}
+\newlabel{sub@fig:tuning_imu_rot}{{b}{13}{Rotational}{figure.caption.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces {\color  {revblue}IMU-Assist parameter sensitivity to the refinement step factor $\beta $ ($d_{\text  {link}} = 3$~m, Ideal Mechanical). Bold lines mark the min, typical, and max accelerations.}}}{13}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:tuning_imu}{{12}{13}{\rev {IMU-Assist parameter sensitivity to the refinement step factor $\beta $ ($d_{\text {link}} = 3$~m, Ideal Mechanical). Bold lines mark the min, typical, and max accelerations.}}{figure.caption.13}{}}
 \newlabel{eq:link_deviation_velocity}{{6}{13}{}{equation.6}{}}
-\newlabel{eq:trigger}{{7}{13}{}{equation.7}{}}
+\@input{Figures/RebFig_Tuning_JITeta_trans.aux}
+\@input{Figures/RebFig_Tuning_JITeta_rot.aux}
 \citation{9269931}
-\citation{Perlin2002}
+\newlabel{eq:trigger}{{7}{14}{}{equation.7}{}}
+\newlabel{fig:tuning_jit_eta_trans}{{13a}{14}{Translational}{figure.caption.14}{}}
+\newlabel{sub@fig:tuning_jit_eta_trans}{{a}{14}{Translational}{figure.caption.14}{}}
+\newlabel{fig:tuning_jit_eta_rot}{{13b}{14}{Rotational}{figure.caption.14}{}}
+\newlabel{sub@fig:tuning_jit_eta_rot}{{b}{14}{Rotational}{figure.caption.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces {\color  {revblue}JIT guard fraction $\eta $ sensitivity ($d_{\text  {link}} = 3$~m, Ideal Mechanical). Bold lines mark the min, typical, and max accelerations.}}}{14}{figure.caption.14}\protected@file@percent }
+\newlabel{fig:tuning_jit_eta}{{13}{14}{\rev {JIT guard fraction $\eta $ sensitivity ($d_{\text {link}} = 3$~m, Ideal Mechanical). Bold lines mark the min, typical, and max accelerations.}}{figure.caption.14}{}}
 \newlabel{eq:ewma_predict}{{8}{14}{}{equation.8}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Shared system parameters for the channel model, transceiver, IMU sensor, and beam-management algorithms. All values are common to the three steering configurations.}}{14}{table.caption.13}\protected@file@percent }
-\newlabel{tab:system_parameters}{{2}{14}{Shared system parameters for the channel model, transceiver, IMU sensor, and beam-management algorithms. All values are common to the three steering configurations}{table.caption.13}{}}
+\citation{Perlin2002}
 \citation{Shoemake1985SLERP}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Shared system parameters for the channel model, transceiver, IMU sensor, and beam-management algorithms. All values are common to the three steering configurations.}}{15}{table.caption.15}\protected@file@percent }
+\newlabel{tab:system_parameters}{{2}{15}{Shared system parameters for the channel model, transceiver, IMU sensor, and beam-management algorithms. All values are common to the three steering configurations}{table.caption.15}{}}
 \newlabel{eq:smootherstep}{{9}{15}{}{equation.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces MobileTHz HIL testbed. The UE (left) and AP (right) each pair a sub-THz RF front-end with a dual-axis rotary stage. A 9-axis IMU on the UE supplies inertial data for the IMU-Assisted and JIT algorithms.}}{16}{figure.caption.14}\protected@file@percent }
-\newlabel{fig1_algorithms}{{12}{16}{MobileTHz HIL testbed. The UE (left) and AP (right) each pair a sub-THz RF front-end with a dual-axis rotary stage. A 9-axis IMU on the UE supplies inertial data for the IMU-Assisted and JIT algorithms}{figure.caption.14}{}}
+\@input{Figures/RebFig_Robustness_TimeScales_trans.aux}
+\@input{Figures/RebFig_Robustness_TimeScales_rot.aux}
+\newlabel{fig:robustness_timescales_trans}{{14a}{17}{Translational}{figure.caption.16}{}}
+\newlabel{sub@fig:robustness_timescales_trans}{{a}{17}{Translational}{figure.caption.16}{}}
+\newlabel{fig:robustness_timescales_rot}{{14b}{17}{Rotational}{figure.caption.16}{}}
+\newlabel{sub@fig:robustness_timescales_rot}{{b}{17}{Rotational}{figure.caption.16}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces {\color  {revblue}Mean capacity vs.\ IMU sampling period $T_{\text  {IMU}}$, Ideal Mechanical steering ($d_{\text  {link}} = \SI {3}{m}$). Bold lines mark the min, typical, and max accelerations; vertical dashed lines mark the Table~\ref {tab:system_parameters} baseline $T_{\text  {IMU}} = \SI {10}{\milli \second }$.}}}{17}{figure.caption.16}\protected@file@percent }
+\newlabel{fig:robustness_timescales}{{14}{17}{\rev {Mean capacity vs.\ IMU sampling period $T_{\text {IMU}}$, Ideal Mechanical steering ($d_{\text {link}} = \SI {3}{m}$). Bold lines mark the min, typical, and max accelerations; vertical dashed lines mark the Table~\ref {tab:system_parameters} baseline $T_{\text {IMU}} = \SI {10}{\milli \second }$.}}{figure.caption.16}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces MobileTHz HIL testbed. The UE (left) and AP (right) each pair a sub-THz RF front-end with a dual-axis rotary stage. A 9-axis IMU on the UE supplies inertial data for the IMU-Assisted and JIT algorithms.}}{17}{figure.caption.17}\protected@file@percent }
+\newlabel{fig1_algorithms}{{15}{17}{MobileTHz HIL testbed. The UE (left) and AP (right) each pair a sub-THz RF front-end with a dual-axis rotary stage. A 9-axis IMU on the UE supplies inertial data for the IMU-Assisted and JIT algorithms}{figure.caption.17}{}}
 \citation{Proakis2008}
 \bibdata{references}
 \bibcite{Dang2020}{1}
 \bibcite{DeAlwis2021}{2}
 \bibcite{9766110}{3}
-\@writefile{toc}{\contentsline {section}{\hspace  *{-\tocsep }References}{18}{equation.25}\protected@file@percent }
 \bibcite{Ericsson2025}{4}
 \bibcite{10422992}{5}
 \bibcite{Azari2022}{6}
 \bibcite{Nokia2022}{7}
 \bibcite{Samsung2020}{8}
+\@writefile{toc}{\contentsline {section}{\hspace  *{-\tocsep }References}{19}{equation.25}\protected@file@percent }
 \bibcite{Boccardi2014}{9}
 \bibcite{Chataut2020}{10}
 \bibcite{Zhang2022OAM}{11}
@@ -247,7 +277,7 @@
 \bibcite{Shoemake1985SLERP}{77}
 \bibcite{Proakis2008}{78}
 \ttl@finishall
-\newlabel{LastPage}{{}{22}{}{page.22}{}}
-\gdef\lastpage@lastpage{22}
-\gdef\lastpage@lastpageHy{22}
-\gdef \@abspage@last{22}
+\newlabel{LastPage}{{}{23}{}{page.23}{}}
+\gdef\lastpage@lastpage{23}
+\gdef\lastpage@lastpageHy{23}
+\gdef \@abspage@last{23}

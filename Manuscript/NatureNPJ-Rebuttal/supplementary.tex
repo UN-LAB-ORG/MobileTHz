@@ -12,6 +12,13 @@
 \renewcommand{\familydefault}{\sfdefault}
 
 \pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots, fillbetween}
+
+\newcommand{\legline}[2]{%
+    \tikz[baseline=-0.5ex]{
+        \draw[#1, #2, line width=1.5pt] (0,0) -- (0.5,0);
+    }%
+}
 
 \definecolor{color1}{RGB}{0,0,0}
 \titleformat{\section}
@@ -47,6 +54,7 @@
 \definecolor{cb_green}{RGB}{113,178,112}
 \definecolor{cb_dark_gray}{RGB}{102,102,102}
 \definecolor{cb_gray}{RGB}{102,102,102}
+\definecolor{cb_red}{RGB}{213,94,0}
 
 \pgfplotsset{
     every axis/.append style={
@@ -115,6 +123,6 @@ The second experiment (Supplementary Fig.~2) isolates rotational-dominant motion
     \vspace{-5pt}
 \end{figure}
 
-These measured profiles directly informed the evaluation ranges in the main study. The combined-motion sweep (Fig. 8) spans up to \SI{5}{m/s^2} and \SI{200}{deg/s^2}, matching the upper range observed here, while the single-axis sweeps in Figs.~2 and~4 extend beyond the measured peaks to stress-test performance under extreme conditions. The ``Typical acceleration'' annotations in Figs.~2b and~4b mark the human-scale region captured by these experiments.
+These measured profiles directly informed the evaluation ranges in the main study. The combined-motion sweep (Fig.~8 of the main paper) spans up to \SI{5}{m/s^2} and \SI{200}{deg/s^2}, matching the upper range observed here, while the single-axis sweeps in Figs.~2 and~4 of the main paper extend beyond the measured peaks to stress-test performance under extreme conditions. The ``Typical acceleration'' annotations in Figs.~2b and~4b of the main paper mark the human-scale region captured by these experiments.
 
 \end{document}

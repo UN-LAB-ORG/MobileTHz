@@ -608,8 +608,8 @@
       \strng{authornamehash}{3a829f9ef2ee12bb89b9eaa316fe308f}
       \strng{authorfullhash}{3a829f9ef2ee12bb89b9eaa316fe308f}
       \strng{authorfullhashraw}{3a829f9ef2ee12bb89b9eaa316fe308f}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{IEEE Trans. Intell. Veh.}
@@ -644,8 +644,8 @@
       \strng{authornamehash}{03e42ed5baec5975bf8fb30d1ac13354}
       \strng{authorfullhash}{03e42ed5baec5975bf8fb30d1ac13354}
       \strng{authorfullhashraw}{03e42ed5baec5975bf8fb30d1ac13354}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{IEEE Trans. Intell. Transp. Syst.}
@@ -686,8 +686,8 @@
       \strng{authornamehash}{091409584169224d98773f89643a0dab}
       \strng{authorfullhash}{0a9a48a7377b9acbdfa1bcc0da950b66}
       \strng{authorfullhashraw}{0a9a48a7377b9acbdfa1bcc0da950b66}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{IEEE Trans. Biomed. Eng.}

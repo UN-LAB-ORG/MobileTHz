@@ -145,108 +145,37 @@
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Steering-model configurations.}}{11}{table.caption.9}\protected@file@percent }
 \newlabel{tab:steering_and_hardware}{{1}{11}{Steering-model configurations}{table.caption.9}{}}
 \citation{8455289,9145366}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Hierarchical Search spiral trajectory expanding outward from the reference beam direction with step sizes $HS_0, HS_1, \ldots  , HS_k$. Circles show the evaluation order; the scan ends when received power exceeds $P_{\text  {succ}}(\Delta t)$.}}{12}{figure.caption.10}\protected@file@percent }
-\newlabel{fig:blind_spiral_search}{{9}{12}{Hierarchical Search spiral trajectory expanding outward from the reference beam direction with step sizes $HS_0, HS_1, \ldots , HS_k$. Circles show the evaluation order; the scan ends when received power exceeds $P_{\text {succ}}(\Delta t)$}{figure.caption.10}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces IMU-Assisted search trajectory. IMU corrections (green) shift the search center to the sensor-predicted LoS direction before each spiral step. The local refinement spiral (blue) scans around the corrected center.}}{12}{figure.caption.11}\protected@file@percent }
-\newlabel{fig:imu_local_search}{{10}{12}{IMU-Assisted search trajectory. IMU corrections (green) shift the search center to the sensor-predicted LoS direction before each spiral step. The local refinement spiral (blue) scans around the corrected center}{figure.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Hierarchical Search spiral trajectory expanding outward from the reference beam direction with step sizes $HS_0, HS_1, \ldots  , HS_k$. Circles show the evaluation order; the scan ends when received power exceeds $P_{\text  {succ}}(\Delta t)$.}}{12}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:blind_spiral_search}{{9}{12}{Hierarchical Search spiral trajectory expanding outward from the reference beam direction with step sizes $HS_0, HS_1, \ldots , HS_k$. Circles show the evaluation order; the scan ends when received power exceeds $P_{\text {succ}}(\Delta t)$}{figure.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces IMU-Assisted search trajectory. IMU corrections (green) shift the search center to the sensor-predicted LoS direction before each spiral step. The local refinement spiral (blue) scans around the corrected center.}}{12}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:imu_local_search}{{10}{12}{IMU-Assisted search trajectory. IMU corrections (green) shift the search center to the sensor-predicted LoS direction before each spiral step. The local refinement spiral (blue) scans around the corrected center}{figure.caption.12}{}}
 \citation{Brossard2020AIIMU}
 \citation{Chen2024DLInertial}
 \citation{Skog2010ZUPT}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Edge of Coverage (EoC, at $\pm \,\theta _{\text  {HPBW}}/2$ off boresight) and JIT's trigger boundary, defined implicitly by $\|\dot  {\boldsymbol  {\delta }}\|\,T_{\text  {react}} = \eta \,\theta _{\text  {HPBW}}$. The UE evaluates the trigger condition locally at every IMU sample. Faster motion contracts the boundary toward boresight; slower motion expands it toward the EoC.}}{13}{figure.caption.12}\protected@file@percent }
-\newlabel{fig:eoc_trigger}{{11}{13}{\rev {Edge of Coverage (EoC, at $\pm \,\theta _{\text {HPBW}}/2$ off boresight) and JIT's trigger boundary, defined implicitly by $\|\dot {\boldsymbol {\delta }}\|\,T_{\text {react}} = \eta \,\theta _{\text {HPBW}}$. The UE evaluates the trigger condition locally at every IMU sample. Faster motion contracts the boundary toward boresight; slower motion expands it toward the EoC.}}{figure.caption.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Edge of Coverage (EoC, at $\pm \,\theta _{\text  {HPBW}}/2$ off boresight) and JIT's trigger boundary, defined implicitly by $\|\dot  {\boldsymbol  {\delta }}\|\,T_{\text  {react}} = \eta \,\theta _{\text  {HPBW}}$. The UE evaluates the trigger condition locally at every IMU sample. Faster motion contracts the boundary toward boresight; slower motion expands it toward the EoC.}}{13}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:eoc_trigger}{{11}{13}{\rev {Edge of Coverage (EoC, at $\pm \,\theta _{\text {HPBW}}/2$ off boresight) and JIT's trigger boundary, defined implicitly by $\|\dot {\boldsymbol {\delta }}\|\,T_{\text {react}} = \eta \,\theta _{\text {HPBW}}$. The UE evaluates the trigger condition locally at every IMU sample. Faster motion contracts the boundary toward boresight; slower motion expands it toward the EoC.}}{figure.caption.13}{}}
 \newlabel{eq:link_deviation_velocity}{{6}{13}{}{equation.6}{}}
-\newlabel{eq:trigger}{{7}{13}{}{equation.7}{}}
 \citation{9269931}
 \citation{Perlin2002}
+\newlabel{eq:trigger}{{7}{14}{}{equation.7}{}}
 \newlabel{eq:ewma_predict}{{8}{14}{}{equation.8}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Shared system parameters for the channel model, transceiver, IMU sensor, and beam-management algorithms. All values are common to the three steering configurations.}}{14}{table.caption.13}\protected@file@percent }
-\newlabel{tab:system_parameters}{{2}{14}{Shared system parameters for the channel model, transceiver, IMU sensor, and beam-management algorithms. All values are common to the three steering configurations}{table.caption.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Baseline parameter sensitivity, Ideal Mechanical steering. Rows: translational (top), rotational (bottom). Columns: (a,c)~Hierarchical Search vs.\ $\gamma $; (b,d)~IMU-Assist vs.\ $\beta $. Bold lines mark the min, typical, and max accelerations. The chosen $\gamma = 1.25$ and $\beta = 0.10$ lie within $\pm 10\%$ of the peak at every acceleration shown.}}{15}{figure.caption.14}\protected@file@percent }
+\newlabel{fig:tuning_hsimu}{{12}{15}{Baseline parameter sensitivity, Ideal Mechanical steering. Rows: translational (top), rotational (bottom). Columns: (a,c)~Hierarchical Search vs.\ $\gamma $; (b,d)~IMU-Assist vs.\ $\beta $. Bold lines mark the min, typical, and max accelerations. The chosen $\gamma = 1.25$ and $\beta = 0.10$ lie within $\pm 10\%$ of the peak at every acceleration shown}{figure.caption.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces JIT guard fraction $\eta $ sensitivity, Ideal Mechanical steering. (a)~Translational; (b)~Rotational. Each panel overlays mean capacity (left axis) and signaling overhead (right axis). Mean capacity stays within $\pm 5\%$ of the maximum across the plateau $\eta \in [0.20, 0.50]$ at every acceleration shown.}}{15}{figure.caption.15}\protected@file@percent }
+\newlabel{fig:tuning_jiteta}{{13}{15}{JIT guard fraction $\eta $ sensitivity, Ideal Mechanical steering. (a)~Translational; (b)~Rotational. Each panel overlays mean capacity (left axis) and signaling overhead (right axis). Mean capacity stays within $\pm 5\%$ of the maximum across the plateau $\eta \in [0.20, 0.50]$ at every acceleration shown}{figure.caption.15}{}}
 \citation{Shoemake1985SLERP}
-\newlabel{eq:smootherstep}{{9}{15}{}{equation.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces MobileTHz HIL testbed. The UE (left) and AP (right) each pair a sub-THz RF front-end with a dual-axis rotary stage. A 9-axis IMU on the UE supplies inertial data for the IMU-Assisted and JIT algorithms.}}{16}{figure.caption.14}\protected@file@percent }
-\newlabel{fig1_algorithms}{{12}{16}{MobileTHz HIL testbed. The UE (left) and AP (right) each pair a sub-THz RF front-end with a dual-axis rotary stage. A 9-axis IMU on the UE supplies inertial data for the IMU-Assisted and JIT algorithms}{figure.caption.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Mean capacity vs.\ IMU sampling period $T_{\text  {IMU}}$, Ideal Mechanical steering ($d_{\text  {link}}=\SI {3}{m}$). (a)~Translational; (b)~Rotational. Bold lines mark the min, typical, and max accelerations; vertical dashed lines mark the Table~\ref {tab:system_parameters} baseline $T_{\text  {IMU}} = \SI {10}{ms}$.}}{16}{figure.caption.16}\protected@file@percent }
+\newlabel{fig:tuning_timescales}{{14}{16}{Mean capacity vs.\ IMU sampling period $T_{\text {IMU}}$, Ideal Mechanical steering ($d_{\text {link}}=\SI {3}{m}$). (a)~Translational; (b)~Rotational. Bold lines mark the min, typical, and max accelerations; vertical dashed lines mark the Table~\ref {tab:system_parameters} baseline $T_{\text {IMU}} = \SI {10}{ms}$}{figure.caption.16}{}}
+\newlabel{eq:smootherstep}{{9}{16}{}{equation.9}{}}
 \citation{Proakis2008}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces MobileTHz HIL testbed. The UE (left) and AP (right) each pair a sub-THz RF front-end with a dual-axis rotary stage. A 9-axis IMU on the UE supplies inertial data for the IMU-Assisted and JIT algorithms.}}{18}{figure.caption.18}\protected@file@percent }
+\newlabel{fig1_algorithms}{{15}{18}{MobileTHz HIL testbed. The UE (left) and AP (right) each pair a sub-THz RF front-end with a dual-axis rotary stage. A 9-axis IMU on the UE supplies inertial data for the IMU-Assisted and JIT algorithms}{figure.caption.18}{}}
 \bibdata{references}
-\bibcite{Dang2020}{1}
-\bibcite{DeAlwis2021}{2}
-\bibcite{9766110}{3}
-\@writefile{toc}{\contentsline {section}{\hspace  *{-\tocsep }References}{18}{equation.25}\protected@file@percent }
-\bibcite{Ericsson2025}{4}
-\bibcite{10422992}{5}
-\bibcite{Azari2022}{6}
-\bibcite{Nokia2022}{7}
-\bibcite{Samsung2020}{8}
-\bibcite{Boccardi2014}{9}
-\bibcite{Chataut2020}{10}
-\bibcite{Zhang2022OAM}{11}
-\bibcite{Chen2020BeamSpace}{12}
-\bibcite{Liu2022ISAC}{13}
-\bibcite{Hoydis2021}{14}
-\bibcite{Tang2024FR3}{15}
-\bibcite{Chen2023}{16}
-\bibcite{fi14040117}{17}
-\bibcite{Rappaport2019}{18}
-\bibcite{10494372}{19}
-\bibcite{9269931}{20}
-\bibcite{Kleine-Ostmann2011}{21}
-\bibcite{10171235}{22}
-\bibcite{Yu2025Research}{23}
-\bibcite{Jornet2023}{24}
-\bibcite{10579941}{25}
-\bibcite{9798100}{26}
-\bibcite{10704668}{27}
-\bibcite{Sen2023}{28}
-\bibcite{Li2024THz84Gbps}{29}
-\bibcite{Samsung2021_140GHz}{30}
-\bibcite{Han2025THz_ISAC}{31}
-\bibcite{Petrov2023Mobile}{32}
-\bibcite{Stepanov2021}{33}
-\bibcite{Wang2022}{34}
-\bibcite{10036372}{35}
-\bibcite{Giordani2018ATO}{36}
-\bibcite{10422712}{37}
-\bibcite{8455289}{38}
-\bibcite{9145366}{39}
-\bibcite{10067030}{40}
-\bibcite{10123123}{41}
-\bibcite{5GPPP_Automotive_Vision_2015}{42}
-\bibcite{9391649}{43}
-\bibcite{electronics8020142}{44}
-\bibcite{s21082723}{45}
-\bibcite{9814507}{46}
-\bibcite{Alrabeiah2020DeepLearning}{47}
-\bibcite{Alkhateeb2023DeepSense}{48}
-\bibcite{Jiang2023LiDAR}{49}
-\bibcite{Morais2023Position}{50}
-\bibcite{Rezaie2022Orientation}{51}
-\bibcite{Struye2023CoVRage}{52}
-\bibcite{Alkhateeb2018DLCB}{53}
-\bibcite{Xue2023Standardization}{54}
-\bibcite{Heng2021SixChallenges}{55}
-\bibcite{9838772}{56}
-\bibcite{Brambilla_2019}{57}
-\bibcite{HOSSAIN2019100004}{58}
-\bibcite{10367974}{59}
-\bibcite{rose2015simone}{60}
-\bibcite{eckhardt2022modular}{61}
-\bibcite{tarboush2021teramimo}{62}
-\bibcite{bodet2023directional}{63}
-\bibcite{Abdulwahab2020}{64}
-\bibcite{Keshavamurthy2022}{65}
-\bibcite{AlAkkoumi2008}{66}
-\bibcite{photonics11060540}{67}
-\bibcite{s141019622}{68}
-\bibcite{9013236}{69}
-\bibcite{Jacobson1988}{70}
-\bibcite{our_code}{71}
-\bibcite{10758041}{72}
-\bibcite{Brossard2020AIIMU}{73}
-\bibcite{Chen2024DLInertial}{74}
-\bibcite{Skog2010ZUPT}{75}
-\bibcite{Perlin2002}{76}
-\bibcite{Shoemake1985SLERP}{77}
-\bibcite{Proakis2008}{78}
 \ttl@finishall
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Notation used throughout \emph  {Methods} and \emph  {Results}. Numerical values are listed in Table~\ref {tab:system_parameters} (system / algorithm parameters) and Table~\ref {tab:steering_and_hardware} (steering models).}}{21}{table.caption.10}\protected@file@percent }
+\newlabel{tab:notation}{{2}{21}{Notation used throughout \emph {Methods} and \emph {Results}. Numerical values are listed in Table~\ref {tab:system_parameters} (system / algorithm parameters) and Table~\ref {tab:steering_and_hardware} (steering models)}{table.caption.10}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Shared system parameters for the channel model, transceiver, IMU sensor, and beam-management algorithms. All values are common to the three steering configurations.}}{22}{table.caption.17}\protected@file@percent }
+\newlabel{tab:system_parameters}{{3}{22}{Shared system parameters for the channel model, transceiver, IMU sensor, and beam-management algorithms. All values are common to the three steering configurations}{table.caption.17}{}}
 \newlabel{LastPage}{{}{22}{}{page.22}{}}
 \gdef\lastpage@lastpage{22}
 \gdef\lastpage@lastpageHy{22}

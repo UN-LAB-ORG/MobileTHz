@@ -1,5 +1,5 @@
 \begin{tikzpicture}[
-        scale=1.0,
+        scale=0.95,
         every node/.style={font=\small},
         beamfill/.style={fill=cb_green!10, draw=cb_green!75!black, line width=0.5pt},
         trigfill/.style={fill=cb_orange!12, draw=cb_orange!85!black, line width=0.5pt, dashed},
@@ -15,31 +15,37 @@
 
     %---------- Beam (HPBW) cone ----------
     \fill[beamfill]
-        (AP) -- ++(16:8.5) arc[start angle=16, end angle=-16, radius=8.5] -- cycle;
+        (AP) -- ++(13:8.0) arc[start angle=13, end angle=-13, radius=8.0] -- cycle;
 
     %---------- Trigger boundary (inside EoC) ----------
     \fill[trigfill]
-        (AP) -- ++(10:8.2) arc[start angle=10, end angle=-10, radius=8.2] -- cycle;
+        (AP) -- ++(10:7.7) arc[start angle=10, end angle=-10, radius=7.7] -- cycle;
 
     %---------- Boresight ----------
-    \draw[line width=0.5pt, dashdotted, black!70] (AP) -- ++(0:8.7);
+    \draw[line width=0.5pt, dashdotted, black!70] (AP) -- ++(0:8.3);
 
     %---------- HPBW angle marker ----------
     \draw[<->, line width=0.4pt, black!70]
-        ($(AP)+(16:1.6)$) arc[start angle=16, end angle=-16, radius=1.6];
+        ($(AP)+(13:1.6)$) arc[start angle=13, end angle=-13, radius=1.6];
     \node[anchor=west, font=\scriptsize] at ($(AP)+(0:1.7)$) {$\theta_{\text{HPBW}}$};
 
-    %---------- Labels on the right edge of the cone ----------
-    \node[anchor=west, font=\small, text=cb_green!55!black]
-        at ($(AP)+(16:8.6)$) [xshift=2pt, yshift=4pt] {Edge of Coverage};
+    %---------- Labels on the right side, vertically separated shelves ----------
+    % EoC label (upper shelf, outside the green wedge)
+    \node[anchor=west, font=\small, text=cb_green!55!black] (EoCLab)
+        at (7.8, 2.05) {Edge of Coverage};
     \node[anchor=west, font=\scriptsize, text=cb_green!55!black]
-        at ($(AP)+(16:8.0)$) [xshift=4pt, yshift=-8pt] {($\pm \theta_{\text{HPBW}}/2$ off boresight)};
+        at (EoCLab.south west) [yshift=-2pt] {($\pm \theta_{\text{HPBW}}/2$ off boresight)};
+    \draw[line width=0.35pt, cb_green!55!black]
+        ($(AP)+(13:8.0)$) .. controls (8.0,1.9) and (7.8,2.0) .. (EoCLab.west);
 
-    \node[anchor=west, font=\small, text=cb_orange!85!black]
-        at ($(AP)+(10:8.2)$) [xshift=2pt, yshift=4pt] {Trigger boundary};
+    % Trigger boundary label (lower shelf, outside the orange wedge but below boresight)
+    \node[anchor=west, font=\small, text=cb_orange!85!black] (TrigLab)
+        at (7.8,-1.7) {Trigger boundary};
     \node[anchor=west, font=\scriptsize, text=cb_orange!85!black]
-        at ($(AP)+(10:7.6)$) [xshift=4pt, yshift=-8pt]
+        at (TrigLab.south west) [yshift=-2pt]
         {$\|\dot{\boldsymbol{\delta}}\|\,T_{\text{react}} = \eta\,\theta_{\text{HPBW}}$};
+    \draw[line width=0.35pt, cb_orange!85!black]
+        ($(AP)+(-10:7.7)$) .. controls (8.0,-1.55) and (7.85,-1.65) .. (TrigLab.west);
 
     %---------- UE inside the trigger boundary ----------
     \coordinate (UE) at (4.5, 0.45);

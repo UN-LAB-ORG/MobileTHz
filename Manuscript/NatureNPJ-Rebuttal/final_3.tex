@@ -6,7 +6,7 @@
 \usepackage{xcolor}
 \usetikzlibrary{scopes, backgrounds, matrix, shapes.geometric, patterns,
     decorations.markings, arrows.meta, calc, positioning}
-\usepgfplotslibrary{fillbetween}
+\usepgfplotslibrary{fillbetween, groupplots}
 
 \pgfplotsset{compat=1.18}
 
@@ -622,8 +622,89 @@ The MobileTHz platform comprises two main components: a modular C++ simulation e
 
 To assess the proposed JIT solution, we also implemented four alternative algorithms into the MobileTHz platform. The two primary comparison algorithms are described below in detail: (i)~\emph{``Hierarchical Search''}, a state-of-the-art sequential beam realignment approach not leveraging any IMU assistance; and (ii)~\emph{``IMU-Assist''}, an advanced solution leveraging IMU data to faster and better re-align the misaligned sub-THz beams but not utilizing the proactive mechanisms or control frames employed by JIT. The other two algorithms include the reference lower bound \emph{``Static''} (no realignment) approach and the reference upper bound \emph{``Perfect Alignment''}, employing an Oracle that continuously points both the AP and UE beams in the optimal direction.
 
-Across all four algorithms, the parameters reported in the subsections below were independently swept on a canonical translational pass-by ($D_{\text{initial}} = \SI{3}{m}$, $D_{\text{traversed}} = \SI{1.5}{m}$, peak acceleration $\SI{3}{m/s^2}$); the values listed in Table~\ref{tab:system_parameters} are the best-performing within $\pm 10\%$ of the optimum and are not specific to a single operating point.
+Across all four algorithms, the parameters reported in the subsections below were independently swept on a canonical translational pass-by ($D_{\text{initial}} = \SI{3}{m}$, $D_{\text{traversed}} = \SI{1.5}{m}$, peak acceleration $\SI{3}{m/s^2}$); the values listed in Table~\ref{tab:system_parameters} are the best-performing within $\pm 10\%$ of the optimum and are not specific to a single operating point. \rev{Table~\ref{tab:notation} summarises every symbol used in the equations below; numerical values for the parameters appear in Table~\ref{tab:system_parameters} (system parameters) and Table~\ref{tab:steering_and_hardware} (steering models).}
 
+\rev{
+\begin{table}[ht]
+\centering
+\small
+\caption{Notation used throughout \emph{Methods} and \emph{Results}. Numerical values are listed in Table~\ref{tab:system_parameters} (system / algorithm parameters) and Table~\ref{tab:steering_and_hardware} (steering models).}
+\label{tab:notation}
+\sisetup{per-mode=symbol}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}lX@{\hspace{10pt}}lX@{}}
+\toprule
+\textbf{Symbol} & \textbf{Description} & \textbf{Symbol} & \textbf{Description} \\
+\midrule
+\multicolumn{4}{@{}l}{\textbf{\textit{Coordinate frames, geometry, and kinematics}}} \\
+\cmidrule(r){1-2} \cmidrule(l){3-4}
+$X_W, Y_W, Z_W$ & AP-anchored world-frame axes & $\mathbf{q}_{\text{rotary}}$ & Rotary-stage orientation quaternion \\
+$\mathbf{x}_b, \mathbf{y}_b, \mathbf{z}_b$ & UE body-frame basis vectors & $\mathbf{q}_{\text{eff}}$ & Effective antenna orientation, $\mathbf{q}_{\text{body}} \otimes \mathbf{q}_{\text{rotary}}$ \\
+$\mathbf{p}_k, \mathbf{q}_k$ & $k$-th keyframe position / orientation & $d_{\text{link}}$ & Instantaneous AP--UE LoS distance \\
+$\mathbf{q}_{\text{body}}$ & UE body-frame orientation quaternion & $\hat{d}_{\text{link}}$ & Last known-good link distance estimate \\
+$\mathbf{v}, \mathbf{v}_{\parallel}, \mathbf{v}_{\perp}$ & UE velocity; LoS-parallel; LoS-perpendicular & $\theta$ & Off-axis angle in antenna's local frame \\
+$\boldsymbol{\omega}_{\text{UE}}$ & UE angular velocity (true) & $\theta_{\text{HPBW}}$ & Antenna half-power beamwidth \\
+$\dot{\boldsymbol{\delta}}$ & Link Deviation Velocity, $\boldsymbol{\omega}_{\text{UE}} + \mathbf{v}_{\perp}/d_{\text{link}}$ & $\Delta\mathbf{p}(t)$ & Integrated UE displacement vector \\
+$\Delta p_y, \Delta p_z$ & LoS-perpendicular displacement components & $\Delta\psi, \Delta\phi$ & Yaw and pitch changes since reference \\
+$\tau, f(\tau)$ & Normalised segment time; Perlin smootherstep & $a_{\max}$ & Peak acceleration on a smootherstep segment \\
+$\Theta$ & SLERP quaternion angle, $\arccos(\mathbf{q}_k\!\cdot\!\mathbf{q}_{k+1})$ & $D_{\text{initial}}, D_{\text{traversed}}$ & Canonical pass-by initial / traversed distance \\[2pt]
+
+\multicolumn{4}{@{}l}{\textbf{\textit{RF channel and antenna}}} \\
+\cmidrule(r){1-2} \cmidrule(l){3-4}
+$f_c, \lambda$ & Carrier frequency; wavelength $\lambda = c/f_c$ & $G_{\max}$ & Peak antenna gain, $\max_{\theta} G(\theta)$ \\
+$B$ & Channel bandwidth & $G_{tx}(\theta), G_{rx}(\theta)$ & Tx / Rx directional gains \\
+$T$ & System temperature & $\theta_{tx}, \theta_{rx}$ & Off-axis angle at Tx / Rx \\
+$k_B T B$ & Thermal noise power & $L_p$ & Free-space path loss (dB) \\
+$F$ & Rx noise factor & $P_{tx}, P_{rx}$ & Transmit / received power \\
+$G(\theta)$ & E-plane antenna gain pattern of the horn & $\text{SNR}, \text{SNR}_{\text{th}}$ & Instantaneous SNR; 64-QAM threshold (\SI{18.8}{\deci\bel}) \\
+$C(x), S(x)$ & Fresnel cosine / sine integrals & $M$ & QAM constellation order \\
+$r_0, r_1, r_2$ & Fresnel-integral arguments for $G(\theta)$ & BER & Bit error rate (target $10^{-3}$) \\
+$R_h, B_E$ & Horn slant length / E-plane aperture & $Q^{-1}(\cdot)$ & Inverse Gaussian Q-function \\
+$a_{\text{wg}}, b_{\text{wg}}$ & Waveguide width / height & $\beta_g$ & Guide propagation constant \\[2pt]
+
+\multicolumn{4}{@{}l}{\textbf{\textit{IMU sensor and bias model}}} \\
+\cmidrule(r){1-2} \cmidrule(l){3-4}
+$n$ & Discrete IMU time-slot index & $\sigma_{a,n}$ & Accelerometer noise density \\
+$\tilde{\mathbf{a}}[n], \tilde{\boldsymbol{\omega}}[n]$ & Raw accelerometer / gyroscope readings & $\sigma_{a,b}$ & Accelerometer bias random-walk std.\ dev.\ \\
+$\mathbf{a}_{\text{corr}}[n], \boldsymbol{\omega}_{\text{corr}}[n]$ & Bias-corrected acceleration / angular velocity & $\sigma_p$ & Random-walk position drift over $T_{\text{react}}$ \\
+$\mathbf{b}_a, \mathbf{b}_\omega$ & Accelerometer / gyroscope bias & $\mathbf{n}_a, \mathbf{w}_{b,a}$ & Accel.\ white noise; bias random-walk update \\
+$\mathbf{f}_{\text{ideal}}[n]$ & Ground-truth (noise-free) acceleration & $T_{\text{IMU}}$ & IMU sampling period (\SI{10}{\milli\second}) \\[2pt]
+
+\multicolumn{4}{@{}l}{\textbf{\textit{Beam-management timing}}} \\
+\cmidrule(r){1-2} \cmidrule(l){3-4}
+$T_{\text{frame}}$ & Control-frame transmission time (\SI{5}{\micro\second}) & $T_{\text{react}}$ & Total JIT reaction time, $T_{\text{frame}} + T_{\text{proc}}$ \\
+$T_{\text{proc}}$ & AP signal acquisition and processing delay & $\Delta t_{\text{sim}}$ & Simulation slot length (\SI{1}{\micro\second}) \\[2pt]
+
+\multicolumn{4}{@{}l}{\textbf{\textit{Hierarchical Search parameters}}} \\
+\cmidrule(r){1-2} \cmidrule(l){3-4}
+$\gamma$ & Spiral growth factor (1.25) & $\Gamma_{\text{fail}}$ & Failure margin below $P_{\text{ref}}$ \\
+$HS_0, HS_k$ & Initial / $k$-th ring step size & $\Gamma_0, R$ & Initial success margin; margin-relaxation rate \\
+$k$ & Spiral ring index & $P_{\text{succ}}(\Delta t)$ & Time-relaxing success threshold \\
+$P_{\text{ref}}, P_{\text{fail}}$ & Reference / failure-detection power & $\Delta t$ & Elapsed time since failure detection \\[2pt]
+
+\multicolumn{4}{@{}l}{\textbf{\textit{IMU-Assist and JIT parameters}}} \\
+\cmidrule(r){1-2} \cmidrule(l){3-4}
+$\beta$ & IMU-Assist refinement step factor (0.10) & $\bar{\mathbf{a}}_{\text{predict},k}$ & EWMA-filtered acceleration trend (sample $k$) \\
+$IA_k$ & IMU-Assist $k$-th refinement step size & $\mathbf{a}_k$ & Accelerometer sample at index $k$ \\
+$\theta_{\text{az}}^{\star}, \theta_{\text{el}}^{\star}$ & IMU-Assist predicted azimuth / elevation & $\alpha_{\text{short}}$ & EWMA coefficient (0.90) \\
+$\theta_{\text{az,0}}, \theta_{\text{el,0}}$ & Last known-good azimuth / elevation & $\eta$ & JIT guard fraction (0.36) \\[2pt]
+
+\multicolumn{4}{@{}l}{\textbf{\textit{Steering hardware}}} \\
+\cmidrule(r){1-2} \cmidrule(l){3-4}
+$\omega_{\max}, \alpha_{\max}$ & Stage max.\ angular velocity / acceleration & $\Delta\theta$ & Commanded angular displacement \\
+$a(t)$ & Stage trapezoidal acceleration profile & & \\[2pt]
+
+\multicolumn{4}{@{}l}{\textbf{\textit{Evaluation metrics (KPIs) and validation statistics}}} \\
+\cmidrule(r){1-2} \cmidrule(l){3-4}
+$C(t), \bar{C}$ & Instantaneous / mean Shannon capacity & $L_{\text{ctrl}}, N_{\text{pp}}$ & Foregone capacity; \# JIT control frames \\
+$\sigma_C, \mu_C$ & Capacity std.\ dev.\ and mean & $\mathbbm{1}(\cdot)$ & Indicator function \\
+CoV & Capacity coefficient of variation, $\sigma_C / \mu_C$ & MAPE & Mean absolute percentage error (sim vs HIL) \\
+$A_{\text{link}}$ & Link availability fraction (\%) & NRMSE & Normalised root-mean-square error \\
+$O_{\text{sig}}$ & Signaling overhead (\%) & $\bar{C}_{\text{sim},i}, \bar{C}_{\text{exp},i}$ & Sim.\ / HIL capacity at acceleration point $i$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+}
 
 
 %-------------------------------------------------------------------%
@@ -736,7 +817,7 @@ A stationary Zero Velocity Update (ZUPT) phase is performed at initialization to
 \end{equation}
 where $\boldsymbol{\omega}_{\text{UE}}$ is the UE's angular velocity, $\mathbf{v}_{\perp}$ is its translational velocity perpendicular to the LoS, and $d_{\text{link}}$ is the instantaneous link distance. This metric hence serves as a measure of ``how fast the UE movements are approaching the AP beam boundaries''. \rev{Both terms in Eq.~(\ref{eq:link_deviation_velocity}) are expressed in the AP-anchored world coordinate frame: the UE's body-frame angular velocity $\boldsymbol{\omega}_{\text{UE}}$ and translational velocity perpendicular to the LoS, $\mathbf{v}_{\perp}$, are transformed via the UE's orientation quaternion $\mathbf{q}_{\text{body}}$ (the same quaternion that contributes to $\mathbf{q}_{\text{eff}}$ in the antenna pattern evaluation discussed below). This common frame ensures that rotational and LoS-perpendicular translational contributions to beam deviation are summed consistently as a single 3D angular rate.}
 
-\rev{Two design choices bound the residual drift. The trigger condition (Eq.~\ref{eq:trigger}, below) uses the Link Deviation \emph{velocity} rather than an absolute position (single vs double accelerometer integration), and the control frame transmits only the displacement change since the last transmission, with the accumulator reset at each transmission so cumulative drift cannot grow with session length. Over the AP's per-prediction window $T_{\text{react}} \approx \SI{15}{\micro\second}$, the resulting position-prediction drift is bounded by $\sigma_{p} = \sigma_{a,n}\sqrt{T_{\text{react}}^{3}/3} \lesssim \SI{1}{\nano\meter}$ for the noise density in Table~\ref{tab:system_parameters}, an angular drift of order $10^{-8}$~degrees at $d_{\text{link}} = \SI{3}{m}$ and far below $\theta_{\text{HPBW}}$; across longer tracking sessions the accumulator reset bounds cumulative drift by a single inter-transmission interval rather than the full session duration. \rev{For multi-hour or multi-day operation, the ZUPT can be invoked opportunistically whenever the bias-corrected $\|\dot{\boldsymbol{\delta}}\| \approx 0$ persists for more than a few IMU samples (e.g., the device resting on a desk, charging, or in a pocket), re-estimating $\mathbf{b}_a, \mathbf{b}_\omega$ to within the sensor noise floor.} JIT specifically targets this initial, unpredictable phase of motion. For sustained continuous-mobility scenarios (e.g., a pedestrian walking continuously, or a vehicle in steady transit), complementary bias-tracking from the inertial-navigation literature such as learning-based dead-reckoning~\cite{Brossard2020AIIMU}, deep-learning drift compensation~\cite{Chen2024DLInertial}, or zero-velocity detection~\cite{Skog2010ZUPT} would augment JIT's calibration as future work.}
+\rev{Two design choices keep the residual drift small. The trigger condition (Eq.~\ref{eq:trigger}, below) uses the Link Deviation \emph{velocity} rather than an absolute position (single vs double accelerometer integration), and the control frame transmits only the displacement change since the last transmission, with the accumulator reset at each transmission so cumulative drift cannot grow with session length. Over the AP's per-prediction window $T_{\text{react}} \approx \SI{15}{\micro\second}$, the resulting position-prediction drift is bounded by $\sigma_{p} = \sigma_{a,n}\sqrt{T_{\text{react}}^{3}/3} \lesssim \SI{1}{\nano\meter}$ for the noise density in Table~\ref{tab:system_parameters}, an angular drift of order $10^{-8}$~degrees at $d_{\text{link}} = \SI{3}{m}$ and far below $\theta_{\text{HPBW}}$; across longer tracking sessions the accumulator reset bounds cumulative drift by a single inter-transmission interval rather than the full session duration. \rev{For multi-hour or multi-day operation, the ZUPT can be invoked opportunistically whenever the bias-corrected $\|\dot{\boldsymbol{\delta}}\| \approx 0$ persists for more than a few IMU samples (e.g., the device resting on a desk, charging, or in a pocket), re-estimating $\mathbf{b}_a, \mathbf{b}_\omega$ to within the sensor noise floor.} JIT specifically targets this initial, unpredictable phase of motion. For sustained continuous-mobility scenarios (e.g., a pedestrian walking continuously, or a vehicle in steady transit), complementary bias-tracking from the inertial-navigation literature such as learning-based dead-reckoning~\cite{Brossard2020AIIMU}, deep-learning drift compensation~\cite{Chen2024DLInertial}, or zero-velocity detection~\cite{Skog2010ZUPT} would augment JIT's calibration as future work.}
 
 Finally, a control frame is triggered when the projected angular displacement over the system's reaction time $T_{\text{react}}$ exceeds a fraction $\eta$ of the antenna's HPBW:
 \begin{equation}
@@ -756,6 +837,35 @@ Each control frame follows the IEEE~802.15.3d THz-SC structure\cite{9269931}, us
 
 Reliable decoding at the AP requires a minimum receive SNR of \SI{9.59}{\deci\bel}, corresponding to BPSK with 11/15 LDPC coding at a target $\text{BER} = 10^{-3}$. \rev{This SNR threshold also doubles as an RF-side fallback trigger:} if the instantaneous SNR falls below \SI{9.59}{\deci\bel}, the AP cannot decode the control frame and the system falls back to reactive recovery, with the UE continuing to steer using its local IMU data while the AP, lacking motion awareness, initiates a Hierarchical Search to restore alignment. \rev{Motion fast enough to outpace IMU-based prediction without already producing RF-side degradation is rare in practice (typical human-scale or vehicular motion develops over tens to hundreds of IMU samples, i.e., hundreds of milliseconds to seconds, well within the IMU detection window), so the IMU + RF combination provides defense in depth across realistic operating regimes.}
 
+
+\rev{
+%-------------------------------------------------------------------%
+\subsection*{Parameter Sensitivity and Robustness}
+To verify that JIT's gains do not depend on a cherry-picked operating point and that the two baselines are fairly tuned, we sweep the most influential parameter of each algorithm and the IMU sampling period $T_{\text{IMU}}$. Each sweep is reported across the same translational ($0.5$--$20$~m/s$^2$) and rotational ($0.5$--$700$~deg/s$^2$) peak-acceleration grids used in \emph{Results}, following the Monte-Carlo and motion-randomization protocol of \emph{Statistics and Reproducibility}. The full acceleration sweep is drawn as faint background lines; the min, typical ($3$~m/s$^2$ / $100$~deg/s$^2$), and max accelerations are highlighted as bold lines. All sweeps use Ideal Mechanical steering at $d_{\text{link}} = \SI{3}{m}$, and the vertical dashed line on each panel marks the Table~\ref{tab:system_parameters} setting. Since $\gamma$, $\beta$, $\eta$ are dimensionless or normalized to $\theta_{\text{HPBW}}$, the parameter optima are invariant to HPBW; only the absolute capacity changes with antenna gain.
+
+\begin{figure}[h!]
+\centering
+\input{Figures/RebFig_Tuning_HSIMU}
+\caption{Baseline parameter sensitivity, Ideal Mechanical steering. Rows: translational (top), rotational (bottom). Columns: (a,c)~Hierarchical Search vs.\ $\gamma$; (b,d)~IMU-Assist vs.\ $\beta$. Bold lines mark the min, typical, and max accelerations. The chosen $\gamma = 1.25$ and $\beta = 0.10$ lie within $\pm 10\%$ of the peak at every acceleration shown.}
+\label{fig:tuning_hsimu}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\input{Figures/RebFig_Tuning_JITeta}
+\caption{JIT guard fraction $\eta$ sensitivity, Ideal Mechanical steering. (a)~Translational; (b)~Rotational. Each panel overlays mean capacity (left axis) and signaling overhead (right axis). Mean capacity stays within $\pm 5\%$ of the maximum across the plateau $\eta \in [0.20, 0.50]$ at every acceleration shown.}
+\label{fig:tuning_jiteta}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\input{Figures/RebFig_Robustness_TimeScales}
+\caption{Mean capacity vs.\ IMU sampling period $T_{\text{IMU}}$, Ideal Mechanical steering ($d_{\text{link}}=\SI{3}{m}$). (a)~Translational; (b)~Rotational. Bold lines mark the min, typical, and max accelerations; vertical dashed lines mark the Table~\ref{tab:system_parameters} baseline $T_{\text{IMU}} = \SI{10}{ms}$.}
+\label{fig:tuning_timescales}
+\end{figure}
+
+The Hierarchical Search and IMU-Assist sweeps (Fig.~\ref{fig:tuning_hsimu}) confirm that the Table~\ref{tab:system_parameters} settings of $\gamma = 1.25$ and $\beta = 0.10$ sit at the peak of their sensitivity curves at every acceleration considered, so the comparison in \emph{Results} is not biased by a sub-optimal baseline choice. The JIT $\eta$ sweep (Fig.~\ref{fig:tuning_jiteta}) shows a wide plateau: across $\eta \in [0.20, 0.50]$, mean capacity stays within $\pm 5\%$ of the maximum and signaling overhead remains below $0.4\%$, so the choice $\eta = 0.36$ is one operating point on a flat region rather than a fragile tuning. The IMU sampling-period sweep (Fig.~\ref{fig:tuning_timescales}) confirms the sampling-rate decoupling discussed above: JIT's mean capacity stays within $3\%$ of its maximum across $T_{\text{IMU}} \in [1, 15]$\,ms, so $T_{\text{IMU}}$ is not the control-reaction bottleneck across the commodity range.
+}
 
 
 

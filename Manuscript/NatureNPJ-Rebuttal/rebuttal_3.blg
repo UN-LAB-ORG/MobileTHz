@@ -1,15 +1,15 @@
 [0] Config.pm:328> INFO - This is Biber 2.21
 [0] Config.pm:331> INFO - Logfile is 'rebuttal_3.blg'
-[52] biber:342> INFO - === Mon May 25, 2026, 16:00:49
-[65] Biber.pm:421> INFO - Reading 'rebuttal_3.bcf'
-[116] Biber.pm:1002> INFO - Found 18 citekeys in bib section 0
-[126] Biber.pm:4487> INFO - Processing section 0
-[133] Biber.pm:4678> INFO - Looking for bibtex file 'references.bib' for section 0
-[136] bibtex.pm:1713> INFO - LaTeX decoding ...
-[178] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
-[280] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[280] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[280] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'en-US'
-[280] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
-[287] bbl.pm:676> INFO - Writing 'rebuttal_3.bbl' with encoding 'UTF-8'
-[296] bbl.pm:779> INFO - Output to rebuttal_3.bbl
+[69] biber-MSWIN64:342> INFO - === 
+[99] Biber.pm:421> INFO - Reading 'rebuttal_3.bcf'
+[176] Biber.pm:1002> INFO - Found 18 citekeys in bib section 0
+[184] Biber.pm:4487> INFO - Processing section 0
+[191] Biber.pm:4678> INFO - Looking for bibtex file 'references.bib' for section 0
+[247] bibtex.pm:1713> INFO - LaTeX decoding ...
+[302] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
+[385] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[385] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[385] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'en-US'
+[385] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[392] bbl.pm:676> INFO - Writing 'rebuttal_3.bbl' with encoding 'UTF-8'
+[400] bbl.pm:779> INFO - Output to rebuttal_3.bbl

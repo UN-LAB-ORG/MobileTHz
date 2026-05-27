@@ -1,5 +1,5 @@
 \begin{tikzpicture}
-    \begin{axis}[width=\linewidth, height=4.5cm, xlabel={Spiral growth factor $\gamma$}, ylabel={Mean Cap. (Gbps)}, xmin=0.95, xmax=2.05, ymin=0, ymax=85, every axis plot/.append style={mark=none},]
+    \begin{axis}[width=\linewidth, height=4.5cm, xlabel={Spiral growth factor $\gamma$}, ylabel={Mean Cap. (Gbps)}, xmin=0.95, xmax=2, ymin=0, ymax=85, every axis plot/.append style={mark=none},]
             \addplot[color=cb_blue, mark=none, opacity=0.12, line width=0.4pt, solid] coordinates {(1.0,40.79) (1.05,41.47) (1.1,43.7) (1.15,44.9) (1.2,46.93) (1.25,47.08) (1.3,47.29) (1.35,44.59) (1.4,44.03) (1.5,39.55) (1.6,35.79) (1.75,30.91) (1.9,27.02) (2.0,26.19)};
             \addplot[color=cb_blue, mark=none, opacity=0.12, line width=0.4pt, solid] coordinates {(1.0,41.05) (1.05,42.83) (1.1,43.84) (1.15,46.0) (1.2,47.37) (1.25,45.78) (1.3,47.36) (1.35,46.25) (1.4,44.1) (1.5,40.04) (1.6,37.35) (1.75,30.83) (1.9,27.27) (2.0,26.21)};
             \addplot[color=cb_blue, mark=none, opacity=0.12, line width=0.4pt, solid] coordinates {(1.0,41.65) (1.05,43.16) (1.1,45.36) (1.15,46.55) (1.2,46.96) (1.25,48.28) (1.3,46.59) (1.35,46.14) (1.4,45.41) (1.5,41.18) (1.6,37.35) (1.75,31.35) (1.9,28.26) (2.0,26.26)};
@@ -54,9 +54,10 @@
             \addplot[color=cb_blue, mark=none, solid, very thick] coordinates {(1.0,33.27) (1.05,34.17) (1.1,35.48) (1.15,37.28) (1.2,37.76) (1.25,37.86) (1.3,37.32) (1.35,38.27) (1.4,36.92) (1.5,33.4) (1.6,30.5) (1.75,26.02) (1.9,22.93) (2.0,21.59)};
             \addplot[color=cb_blue, mark=none, densely dashed, line width=1.3pt, opacity=0.95] coordinates {(1.0,30.19) (1.05,32.83) (1.1,33.67) (1.15,35.0) (1.2,36.12) (1.25,35.04) (1.3,35.53) (1.35,34.97) (1.4,33.71) (1.5,30.27) (1.6,27.48) (1.75,23.38) (1.9,21.29) (2.0,20.65)};
             \draw[densely dashed, black, line width=0.6pt] (axis cs:1.25, 0) -- (axis cs:1.25, 85);
+            \node[anchor=south, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:1.25, 60) {$\gamma=1.25$};
         \node[anchor=north east, draw=black, line width=0.25pt, inner sep=3pt, fill=white, font=\small] at (rel axis cs:0.98, 0.98) {%
             \setlength{\tabcolsep}{0pt}\renewcommand{\arraystretch}{1.1}%
-            \begin{tabular}{@{}c@{\hspace{3pt}}l@{}}
+            \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
                 \tikz[baseline=-0.5ex]{\draw[gray!50!black, dotted, line width=1.5pt] (0,0) -- (0.3cm,0);} & Lower Accel. \\
                 \tikz[baseline=-0.5ex]{\draw[gray!50!black, solid, line width=1pt] (0,0) -- (0.3cm,0);} & Typical Accel. \\
                 \tikz[baseline=-0.5ex]{\draw[gray!50!black, densely dashed, line width=1.3pt] (0,0) -- (0.3cm,0);} & Upper Accel. \\

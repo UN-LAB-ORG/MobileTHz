@@ -494,7 +494,7 @@ Link availability over the same sweep is quantified in Fig.~\ref{fig:angle_avail
 
 
 %-------------------------------------------------------------------%
-\subsection*{Impact of Antenna Directivity on Combined Motion}
+\subsection*{Impact of Antenna Directivity on Combined Motion}\label{sec:combined_motion}
 
 The preceding sections evaluated each motion type independently. We now combine translational (\SI{1.5}{m} displacement) and rotational (\SI{90}{\degree} turn) motion simultaneously, with acceleration escalating from (\SI{0.5}{m/s^2}, \SI{0.5}{deg/s^2}) to (\SI{5}{m/s^2}, \SI{200}{deg/s^2}). We evaluate four antenna configurations with HPBWs of \SI{13}{\degree} (\SI{21}{dBi}), \SI{9}{\degree} (\SI{27}{dBi}), \SI{4}{\degree} (\SI{34}{dBi}), and \SI{1.3}{\degree} (\SI{40}{dBi}), using link availability to assess the gain-beamwidth trade-off under mobility.
 
@@ -776,7 +776,7 @@ The EoC is the angle off the AP's beam axis at which the antenna gain has droppe
 \end{equation}
 where $\boldsymbol{\omega}_{\text{UE}}$ is the UE's angular velocity, $\mathbf{v}_{\perp}$ is its translational velocity perpendicular to the LoS, and $d_{\text{link}}$ is the instantaneous link distance. This metric hence serves as a measure of ``how fast the UE movements are approaching the AP beam boundaries''. \rev{Both terms in Eq.~(\ref{eq:link_deviation_velocity}) are expressed in the AP-anchored world coordinate frame: the UE's body-frame angular velocity $\boldsymbol{\omega}_{\text{UE}}$ and translational velocity perpendicular to the LoS, $\mathbf{v}_{\perp}$, are transformed via the UE's orientation quaternion $\mathbf{q}_{\text{body}}$ (the same quaternion that contributes to $\mathbf{q}_{\text{eff}}$ in the antenna pattern evaluation discussed below). This common frame ensures that rotational and LoS-perpendicular translational contributions to beam deviation are summed consistently as a single 3D angular rate.}
 
-\rev{Two design choices bound the residual drift. The trigger condition (Eq.~\ref{eq:trigger}, below) uses the Link Deviation \emph{velocity} rather than an absolute position (single vs double accelerometer integration), and the control frame transmits only the displacement change since the last transmission, with the accumulator reset at each transmission so cumulative drift cannot grow with session length. Over the AP's per-prediction window $T_{\text{react}} \approx \SI{15}{\micro\second}$, the resulting position-prediction drift is bounded by $\sigma_{p} = \sigma_{a,n}\sqrt{T_{\text{react}}^{3}/3} \lesssim \SI{1}{\nano\meter}$ for the noise density in Table~\ref{tab:system_parameters}, an angular drift of order $10^{-8}$~degrees at $d_{\text{link}} = \SI{3}{m}$ and far below $\theta_{\text{HPBW}}$; across longer tracking sessions the accumulator reset bounds cumulative drift by a single inter-transmission interval rather than the full session duration. For multi-hour or multi-day operation, the ZUPT can be invoked opportunistically whenever the bias-corrected $\|\dot{\boldsymbol{\delta}}\| \approx 0$ persists for more than a few IMU samples (e.g., the device resting on a desk, charging, or in a pocket), re-estimating $\mathbf{b}_a, \mathbf{b}_\omega$ to within the sensor noise floor. JIT specifically targets this initial, unpredictable phase of motion. For sustained continuous-mobility scenarios (e.g., a pedestrian walking continuously, or a vehicle in steady transit), complementary bias-tracking from the inertial-navigation literature such as learning-based dead-reckoning~\cite{Brossard2020AIIMU}, deep-learning drift compensation~\cite{Chen2024DLInertial}, or zero-velocity detection~\cite{Skog2010ZUPT} would augment JIT's calibration as future work.}
+\rev{Two design choices limit the residual time-accumulated IMU drift in JIT. First, the trigger condition (Eq.~\ref{eq:trigger}, below) uses the Link Deviation \emph{velocity} rather than an absolute position, requiring only a single accelerometer integration and avoiding the double-integration drift that would otherwise accumulate with session length. Second, JIT is not IMU-only: the RF link provides closed-loop verification at every slot, and a localized Hierarchical Search runs as a fallback whenever the IMU-based prediction underestimates a beam-edge crossing, so the link is never lost silently. JIT specifically targets this initial, unpredictable phase of motion. For sustained continuous-mobility scenarios (e.g., a pedestrian walking continuously, or a vehicle in steady transit), complementary bias-tracking from the inertial-navigation literature such as learning-based dead-reckoning~\cite{Brossard2020AIIMU}, deep-learning drift compensation~\cite{Chen2024DLInertial}, or zero-velocity detection~\cite{Skog2010ZUPT} would augment JIT's calibration as future work.}
 
 Finally, a control frame is triggered when the projected angular displacement over the system's reaction time $T_{\text{react}}$ exceeds a fraction $\eta$ of the antenna's HPBW:
 \begin{equation}
@@ -787,20 +787,47 @@ The guard fraction $\eta$ trades off link robustness against control overhead: a
 
 \begin{figure}[ht!]
     \centering
-    \begin{subfigure}{0.495\linewidth}
+    \hspace{-15pt}%
+    \begin{subfigure}{0.425\linewidth}
         \include{Figures/RebFig_Tuning_JITeta_trans}
         \vspace{-25pt}
         \caption{Translational}
-        \label{fig:tuning_jit_eta_trans}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.495\linewidth}
+    \end{subfigure}%
+    \hspace{30pt}%
+    \begin{subfigure}{0.425\linewidth}
         \include{Figures/RebFig_Tuning_JITeta_rot}
         \vspace{-25pt}
         \caption{Rotational}
-        \label{fig:tuning_jit_eta_rot}
     \end{subfigure}
-    \caption{\rev{JIT guard fraction $\eta$ sensitivity ($d_{\text{link}} = 3$~m, Ideal Mechanical). Bold lines mark the Lower, Typical, and Upper Acceleration values: $0.5$, $9.5$, and $20$ m/s$^2$ (translational); $0.5$, $300$, and $700$ deg/s$^2$ (rotational).}}
+
+    \vspace{4pt}
+    \centerline{%
+    \begin{tikzpicture}
+    \node[
+        draw=black, line width=0.25pt,
+        inner sep=3pt, rounded corners=0pt, align=center
+    ] {%
+        \footnotesize
+        \setlength{\tabcolsep}{0pt}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular*}{\dimexpr0.95\linewidth}{
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+        }
+            \legline{gray!50!black}{dotted} & Lower Acceleration &
+            \legline{gray!50!black}{solid} & Typical Acceleration &
+            \legline{gray!50!black}{densely dashed} & Upper Acceleration \\
+        \end{tabular*}%
+    };
+    \end{tikzpicture}}
+
+    \vspace{-5pt}
+    \caption{JIT guard fraction $\eta$ sensitivity ($d_{\text{link}} = 3$~m, Ideal Mechanical). Lower, Typical, and Upper Acceleration values are bolded: $0.5$, $9.5$, and $20$ m/s$^2$ (translational); $0.5$, $300$, and $700$ deg/s$^2$ (rotational).}
     \label{fig:tuning_jit_eta}
     \vspace{-5pt}
 \end{figure}
@@ -812,7 +839,55 @@ Upon triggering, the UE transmits a control frame containing its integrated disp
 \end{equation}
 with $\alpha_{\text{short}} = 0.90$ as listed in Table~\ref{tab:system_parameters}. This low-pass cutoff suppresses high-frequency IMU sensor noise while preserving the underlying acceleration trend, and the AP then extrapolates the UE's position at steering completion using $\bar{\mathbf{a}}_{\text{predict},k}$.} By steering to this predicted future location rather than the last known position, the system maintains SNR continuity despite rapid motion.
 
-Each control frame follows the IEEE~802.15.3d THz-SC structure\cite{9269931}, using a short Preamble Acquisition Preamble (PAP) of \SI{1.89}{\micro\second} and the minimum 2048-byte frame payload. With worst-case BPSK modulation and 11/15 LDPC coding, each control frame occupies approximately $T_{\text{frame}} \approx \SI{5}{\micro\second}$. The end-to-end reaction latency comprises the control frame transmission time ($T_{\text{frame}}$) and the AP's signal acquisition and processing delay ($T_{\text{proc}} = \SI{10}{\micro\second}$), giving a total signaling latency of $T_{\text{react}} = T_{\text{frame}} + T_{\text{proc}} \approx \SI{15}{\micro\second}$ before the AP can issue a steering command. \rev{The IMU sampling period (\SI{10}{\milli\second} in this evaluation; commodity $\geq$\SI{1}{\kilo\hertz} IMUs such as the Bosch BMI270 are widely available) gates only the rate at which Eq.~(\ref{eq:trigger}) is evaluated (Fig.~\ref{fig:robustness_timescales}); once a trigger fires, the control-frame transmission, AP processing, and steering actuation all proceed on their own clocks, decoupled from the IMU sample interval.}
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}{0.495\linewidth}
+        \include{Figures/RebFig_Robustness_TimeScales_trans}
+        \vspace{-25pt}
+        \caption{Translational}
+        \label{fig:robustness_timescales_trans}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.495\linewidth}
+        \include{Figures/RebFig_Robustness_TimeScales_rot}
+        \vspace{-25pt}
+        \caption{Rotational}
+        \label{fig:robustness_timescales_rot}
+    \end{subfigure}
+
+    \vspace{4pt}
+    \centerline{%
+    \begin{tikzpicture}
+    \node[
+        draw=black, line width=0.25pt,
+        inner sep=3pt, rounded corners=0pt, align=center
+    ] {%
+        \footnotesize
+        \setlength{\tabcolsep}{0pt}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular*}{\dimexpr0.95\linewidth}{
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+            @{\extracolsep{\fill}}
+            c @{\extracolsep{0pt}\hspace{3pt}} l
+        }
+            & &
+            \legline{cb_orange}{solid} & IMU-Assist &
+            \legline{cb_green}{solid} & JIT \\
+            \legline{gray!50!black}{dotted} & Lower Acceleration &
+            \legline{gray!50!black}{solid} & Typical Acceleration &
+            \legline{gray!50!black}{densely dashed} & Upper Acceleration \\
+        \end{tabular*}
+    };
+    \end{tikzpicture}}
+
+    \caption{\rev{Mean capacity vs.\ IMU sampling period $T_{\text{IMU}}$, Ideal Mechanical steering ($d_{\text{link}} = \SI{3}{m}$). Bold lines mark the Lower, Typical, and Upper Acceleration values: $0.5$, $9.5$, and $20$ m/s$^2$ (translational); $0.5$, $300$, and $700$ deg/s$^2$ (rotational); vertical dashed lines mark the Table~\ref{tab:system_parameters} baseline $T_{\text{IMU}} = \SI{10}{\milli\second}$.}}
+    \label{fig:robustness_timescales}
+    \vspace{-5pt}
+\end{figure}
+
+Each control frame follows the IEEE~802.15.3d THz-SC structure\cite{9269931}, using a short Preamble Acquisition Preamble (PAP) of \SI{1.89}{\micro\second} and the minimum 2048-byte frame payload. With worst-case BPSK modulation and 11/15 LDPC coding, each control frame occupies approximately $T_{\text{frame}} \approx \SI{5}{\micro\second}$. The end-to-end reaction latency comprises the control frame transmission time ($T_{\text{frame}}$) and the AP's signal acquisition and processing delay ($T_{\text{proc}} = \SI{10}{\micro\second}$), giving a total signaling latency of $T_{\text{react}} = T_{\text{frame}} + T_{\text{proc}} \approx \SI{15}{\micro\second}$ before the AP can issue a steering command. \rev{Figure~\ref{fig:robustness_timescales} sweeps the IMU sampling period $T_{\text{IMU}}$ for both IMU-Assist and JIT under translational and rotational mobility. Mean capacity is flat up to $T_{\text{IMU}} \approx \SI{10}{\milli\second}$, so faster sampling adds no benefit. Beyond this point both algorithms degrade, but JIT retains a clear margin at low acceleration: coordinated AP/UE realignment tolerates a longer prediction window than unilateral IMU-Assist correction. By $T_{\text{IMU}} = \SI{300}{\milli\second}$ this margin collapses, as the inter-sample angular increment exceeds what one realignment can recover.}
 
 Reliable decoding at the AP requires a minimum receive SNR of \SI{9.59}{\deci\bel}, corresponding to BPSK with 11/15 LDPC coding at a target $\text{BER} = 10^{-3}$. \rev{This SNR threshold also doubles as an RF-side fallback trigger:} if the instantaneous SNR falls below \SI{9.59}{\deci\bel}, the AP cannot decode the control frame and the system falls back to reactive recovery, with the UE continuing to steer using its local IMU data while the AP, lacking motion awareness, initiates a Hierarchical Search to restore alignment. \rev{Motion fast enough to outpace IMU-based prediction without already producing RF-side degradation is rare in practice (typical human-scale or vehicular motion develops over tens to hundreds of IMU samples, i.e., hundreds of milliseconds to seconds, well within the IMU detection window), so the IMU + RF combination provides defense in depth across realistic operating regimes.}
 
@@ -855,7 +930,7 @@ A mobile scenario consists of a set of mobile nodes, $\mathcal{M} = \{m_1, m_2, 
 f(\tau) = 6\tau^5 - 15\tau^4 + 10\tau^3,
 \label{eq:smootherstep}
 \end{equation}
-where $\tau = (t - t_k) / (t_{k+1} - t_k) \in [0, 1]$ is the normalized time. This function's $C^2$ continuity guarantees zero velocity, acceleration, and jerk at keyframe boundaries, producing physically plausible motion. \rev{The zero-velocity boundary condition models pause-resume mobility patterns such as walking with intermediate stops or beginning and ending a turn from rest, which are the primary motion classes considered in this study. Pause-resume motion is also the hardest case for predictive beam management: the velocity profile is unknown at the onset of motion, acceleration changes rapidly, and the system has the least time to react. Sustained-motion variants (e.g., walking at a steady speed) are easier to predict from a brief observation window, so the performance reported here lower-bounds what is achievable on those variants. Both the software simulator and the HIL testbed support trajectories without a stationary boundary (e.g., continuous walking through multiple checkpoints) by chaining smootherstep-interpolated segments whose endpoints exchange non-zero velocities, preserving slot-by-slot $C^1$ continuity.}
+where $\tau = (t - t_k) / (t_{k+1} - t_k) \in [0, 1]$ is the normalized time. This function's $C^2$ continuity guarantees zero velocity, acceleration, and jerk at keyframe boundaries, producing physically plausible motion. \rev{The zero-velocity boundary models pause-resume mobility, the primary motion class in this study (walking with intermediate stops, or beginning and ending a turn from rest). Such single-component trajectories also support a controlled evaluation in which a single parameter (e.g., peak acceleration) is varied per scenario, and the same trajectory replays in both the simulator and the HIL testbed. Translational and rotational components use independent keyframes, so the combined-motion scenarios (Sec.~\ref{sec:combined_motion}) can have rotation in progress while translation is at rest (or vice versa), producing trajectories that are less predictable but more representative of real-world motion (e.g., taking a step while turning the head). The platform also supports sustained trajectories (e.g., continuous walking through multiple checkpoints) by chaining segments with non-zero endpoint velocities while preserving slot-by-slot $C^1$ continuity.}
 
 \rev{For a single smootherstep segment,} the maximum acceleration \rev{produced by Eq.~\eqref{eq:smootherstep}} over a displacement $D$ \rev{and} duration $T$ is:
 \begin{equation}
@@ -905,54 +980,6 @@ Beyond mechanical steering, the hardware abstraction layer captures two addition
 The bias $\mathbf{b}_{a}[n]$ evolves as a random walk: $\mathbf{b}_{a}[n] = \mathbf{b}_{a}[n-1] + \mathbf{w}_{b,a}[n]$, where the update term $\mathbf{w}_{b,a} \sim \mathcal{N}(0, \sigma_{a,b}^2 \Delta t_{\text{sim}} \cdot \mathbf{I}_3)$ and the white noise is $\mathbf{n}_{a}[n] \sim \mathcal{N}(0, (\sigma_{a,n}^2 / \Delta t_{\text{sim}}) \cdot \mathbf{I}_3)$. A similar noise model is applied to the gyroscope readings. The noise density parameters $\sigma_{a,n}$ and bias random walk parameter $\sigma_{a,b}$ correspond to the Accelerometer Noise Density and Initial Bias values in Table~\ref{tab:system_parameters}, respectively.
 
 This sequence of kinematics update, channel evaluation, hardware emulation, and algorithm decision repeats at every \SI{1}{\micro\second}-long time slot, producing the continuous per-slot feedback loop that drives all simulated results in this article.
-
-\begin{figure}[ht!]
-    \centering
-    \begin{subfigure}{0.495\linewidth}
-        \include{Figures/RebFig_Robustness_TimeScales_trans}
-        \vspace{-25pt}
-        \caption{Translational}
-        \label{fig:robustness_timescales_trans}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.495\linewidth}
-        \include{Figures/RebFig_Robustness_TimeScales_rot}
-        \vspace{-25pt}
-        \caption{Rotational}
-        \label{fig:robustness_timescales_rot}
-    \end{subfigure}
-
-    \vspace{4pt}
-    \centerline{%
-    \begin{tikzpicture}
-    \node[
-        draw=black, line width=0.25pt,
-        inner sep=3pt, rounded corners=0pt, align=center
-    ] {%
-        \footnotesize
-        \setlength{\tabcolsep}{0pt}
-        \renewcommand{\arraystretch}{1.3}
-        \begin{tabular*}{\dimexpr0.95\linewidth}{
-            c @{\extracolsep{0pt}\hspace{3pt}} l
-            @{\extracolsep{\fill}}
-            c @{\extracolsep{0pt}\hspace{3pt}} l
-            @{\extracolsep{\fill}}
-            c @{\extracolsep{0pt}\hspace{3pt}} l
-        }
-            \legline{cb_blue}{solid} & Hierarchical Search &
-            \legline{cb_orange}{solid} & IMU-Assist &
-            \legline{cb_green}{solid} & JIT \\
-            \legline{gray!50!black}{dotted} & Lower Acceleration &
-            \legline{gray!50!black}{solid} & Typical Acceleration &
-            \legline{gray!50!black}{densely dashed} & Upper Acceleration \\
-        \end{tabular*}
-    };
-    \end{tikzpicture}}
-
-    \caption{\rev{Mean capacity vs.\ IMU sampling period $T_{\text{IMU}}$, Ideal Mechanical steering ($d_{\text{link}} = \SI{3}{m}$). Bold lines mark the Lower, Typical, and Upper Acceleration values: $0.5$, $9.5$, and $20$ m/s$^2$ (translational); $0.5$, $300$, and $700$ deg/s$^2$ (rotational); vertical dashed lines mark the Table~\ref{tab:system_parameters} baseline $T_{\text{IMU}} = \SI{10}{\milli\second}$.}}
-    \label{fig:robustness_timescales}
-    \vspace{-5pt}
-\end{figure}
 
 %-------------------------------------------------------------------%
 \subsection*{The Experimental Platform}

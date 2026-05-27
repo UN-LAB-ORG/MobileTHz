@@ -1,5 +1,5 @@
 \begin{tikzpicture}
-    \begin{axis}[width=\linewidth, height=4.5cm, xlabel={Refinement step factor $\beta$}, ylabel={Mean Cap. (Gbps)}, xmin=0.04, xmax=0.55, ymin=0, ymax=85, every axis plot/.append style={mark=none},]
+    \begin{axis}[width=\linewidth, height=4.5cm, xlabel={Refinement step factor $\beta$}, ylabel={Mean Cap. (Gbps)}, xmin=0.04, xmax=0.5, ymin=0, ymax=85, every axis plot/.append style={mark=none},]
             \addplot[color=cb_orange, mark=none, opacity=0.12, line width=0.4pt, solid] coordinates {(0.05,35.44) (0.06,39.6) (0.07,41.63) (0.08,43.65) (0.09,43.66) (0.1,43.19) (0.115,44.63) (0.13,42.56) (0.15,42.13) (0.18,37.53) (0.22,34.45) (0.27,29.38) (0.33,23.32) (0.4,19.5) (0.45,16.74) (0.5,15.0)};
             \addplot[color=cb_orange, mark=none, opacity=0.12, line width=0.4pt, solid] coordinates {(0.05,36.02) (0.06,40.19) (0.07,40.94) (0.08,43.37) (0.09,44.5) (0.1,43.07) (0.115,42.77) (0.13,43.37) (0.15,40.73) (0.18,37.65) (0.22,33.68) (0.27,28.82) (0.33,23.99) (0.4,19.76) (0.45,16.7) (0.5,14.94)};
             \addplot[color=cb_orange, mark=none, opacity=0.12, line width=0.4pt, solid] coordinates {(0.05,36.35) (0.06,39.94) (0.07,42.08) (0.08,44.09) (0.09,43.96) (0.1,43.88) (0.115,44.88) (0.13,43.4) (0.15,41.37) (0.18,38.54) (0.22,33.65) (0.27,28.73) (0.33,24.06) (0.4,20.09) (0.45,16.87) (0.5,15.27)};
@@ -54,9 +54,10 @@
             \addplot[color=cb_orange, mark=none, solid, very thick] coordinates {(0.05,38.95) (0.06,42.05) (0.07,45.54) (0.08,47.26) (0.09,48.25) (0.1,46.78) (0.115,48.54) (0.13,46.31) (0.15,44.23) (0.18,41.06) (0.22,37.14) (0.27,31.37) (0.33,25.82) (0.4,21.25) (0.45,18.09) (0.5,16.29)};
             \addplot[color=cb_orange, mark=none, densely dashed, line width=1.3pt, opacity=0.95] coordinates {(0.05,40.16) (0.06,44.44) (0.07,45.84) (0.08,49.09) (0.09,49.66) (0.1,49.16) (0.115,49.45) (0.13,46.94) (0.15,47.16) (0.18,42.9) (0.22,37.5) (0.27,32.6) (0.33,27.32) (0.4,21.62) (0.45,18.42) (0.5,16.36)};
             \draw[densely dashed, black, line width=0.6pt] (axis cs:0.1, 0) -- (axis cs:0.1, 85);
+            \node[anchor=south, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.1, 5) {$\beta=0.10$};
         \node[anchor=north east, draw=black, line width=0.25pt, inner sep=3pt, fill=white, font=\small] at (rel axis cs:0.98, 0.98) {%
             \setlength{\tabcolsep}{0pt}\renewcommand{\arraystretch}{1.1}%
-            \begin{tabular}{@{}c@{\hspace{3pt}}l@{}}
+            \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
                 \tikz[baseline=-0.5ex]{\draw[gray!50!black, dotted, line width=1.5pt] (0,0) -- (0.3cm,0);} & Lower Accel. \\
                 \tikz[baseline=-0.5ex]{\draw[gray!50!black, solid, line width=1pt] (0,0) -- (0.3cm,0);} & Typical Accel. \\
                 \tikz[baseline=-0.5ex]{\draw[gray!50!black, densely dashed, line width=1.3pt] (0,0) -- (0.3cm,0);} & Upper Accel. \\

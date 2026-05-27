@@ -2413,12 +2413,15 @@
     <bcf:citekey order="20" intorder="1">Brambilla_2019</bcf:citekey>
     <bcf:citekey order="21" intorder="1">Alkhateeb2018DLCB</bcf:citekey>
     <bcf:citekey order="21" intorder="2">Xue2023Standardization</bcf:citekey>
-    <bcf:citekey order="22" intorder="1">photonics11060540</bcf:citekey>
-    <bcf:citekey order="23" intorder="1">Giordani2018ATO</bcf:citekey>
-    <bcf:citekey order="23" intorder="2">Heng2021SixChallenges</bcf:citekey>
-    <bcf:citekey order="24" intorder="1">s141019622</bcf:citekey>
-    <bcf:citekey order="24" intorder="2">Brambilla_2019</bcf:citekey>
-    <bcf:citekey order="24" intorder="3">9391649</bcf:citekey>
+    <bcf:citekey order="22" intorder="1">Brossard2020AIIMU</bcf:citekey>
+    <bcf:citekey order="23" intorder="1">Chen2024DLInertial</bcf:citekey>
+    <bcf:citekey order="24" intorder="1">Skog2010ZUPT</bcf:citekey>
+    <bcf:citekey order="25" intorder="1">photonics11060540</bcf:citekey>
+    <bcf:citekey order="26" intorder="1">Giordani2018ATO</bcf:citekey>
+    <bcf:citekey order="26" intorder="2">Heng2021SixChallenges</bcf:citekey>
+    <bcf:citekey order="27" intorder="1">s141019622</bcf:citekey>
+    <bcf:citekey order="27" intorder="2">Brambilla_2019</bcf:citekey>
+    <bcf:citekey order="27" intorder="3">9391649</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">

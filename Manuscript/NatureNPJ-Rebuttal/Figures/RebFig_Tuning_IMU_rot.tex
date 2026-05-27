@@ -1,5 +1,5 @@
 \begin{tikzpicture}
-    \begin{axis}[width=\linewidth, height=4.5cm, xlabel={Refinement step factor $\beta$}, ylabel={Mean Cap. (Gbps)}, xmin=0.04, xmax=0.55, ymin=0, ymax=85, every axis plot/.append style={mark=none},]
+    \begin{axis}[width=\linewidth, height=4.5cm, xlabel={Refinement step factor $\beta$}, ylabel={Mean Cap. (Gbps)}, xmin=0.04, xmax=0.5, ymin=0, ymax=85, every axis plot/.append style={mark=none},]
             \addplot[color=cb_orange, mark=none, opacity=0.12, line width=0.4pt, solid] coordinates {(0.05,64.99) (0.06,71.59) (0.07,76.16) (0.08,78.79) (0.09,79.63) (0.1,79.8) (0.115,80.63) (0.13,78.18) (0.15,74.62) (0.18,68.38) (0.22,59.63) (0.27,51.13) (0.33,43.08) (0.4,35.97) (0.45,30.01) (0.5,27.42)};
             \addplot[color=cb_orange, mark=none, opacity=0.12, line width=0.4pt, solid] coordinates {(0.05,57.65) (0.06,64.02) (0.07,68.39) (0.08,69.89) (0.09,72.09) (0.1,72.42) (0.115,71.66) (0.13,71.03) (0.15,66.82) (0.18,61.65) (0.22,56.05) (0.27,46.23) (0.33,39.77) (0.4,32.01) (0.45,27.89) (0.5,23.83)};
             \addplot[color=cb_orange, mark=none, opacity=0.12, line width=0.4pt, solid] coordinates {(0.05,48.88) (0.06,51.88) (0.07,54.83) (0.08,56.69) (0.09,58.84) (0.1,60.31) (0.115,57.67) (0.13,56.92) (0.15,53.96) (0.18,50.99) (0.22,44.73) (0.27,37.42) (0.33,31.97) (0.4,25.44) (0.45,22.58) (0.5,19.6)};
@@ -54,5 +54,6 @@
             \addplot[color=cb_orange, mark=none, solid, very thick] coordinates {(0.05,22.82) (0.06,24.22) (0.07,26.79) (0.08,27.0) (0.09,28.0) (0.1,27.36) (0.115,27.33) (0.13,27.05) (0.15,25.34) (0.18,23.43) (0.22,21.41) (0.27,18.21) (0.33,15.12) (0.4,12.35) (0.45,10.72) (0.5,9.26)};
             \addplot[color=cb_orange, mark=none, densely dashed, line width=1.3pt, opacity=0.95] coordinates {(0.05,25.34) (0.06,28.12) (0.07,30.12) (0.08,30.59) (0.09,32.25) (0.1,32.45) (0.115,30.83) (0.13,30.42) (0.15,30.11) (0.18,27.81) (0.22,23.94) (0.27,20.66) (0.33,17.53) (0.4,14.1) (0.45,12.0) (0.5,10.82)};
             \draw[densely dashed, black, line width=0.6pt] (axis cs:0.1, 0) -- (axis cs:0.1, 85);
+            \node[anchor=south, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.1, 5) {$\beta=0.10$};
     \end{axis}
 \end{tikzpicture}
